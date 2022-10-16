@@ -1,18 +1,29 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
 import { ref, onMounted, markRaw } from "vue";
-import {
-  ArcGisMapServerImageryProvider,
-  Camera,
-  Viewer,
-  Rectangle,
-} from "cesium";
+import { Viewer, Ion, SceneMode } from "cesium";
 
 import { useViewStore } from "./stores/earth";
 const containerRef = ref();
 onMounted(() => {
-  const viewer = new Viewer(containerRef.value);
-  console.log(containerRef.value);
+  let defaultAccessToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyMGE1MDBiMS0xY2MyLTRmZmUtOTFiNy0xYWVmZjUxYjEzM2IiLCJpZCI6NDQ3NjgsImlhdCI6MTYxNDMyODY0MX0.GqhvtZhSC93LRwbLByGDPqIBji566Lqsha7-ZOArTN0";
+  Ion.defaultAccessToken = defaultAccessToken;
+  const viewer = new Viewer(containerRef.value, {
+    animation: false, //是否创建动画小器件，左下角仪表
+    baseLayerPicker: false, //是否显示图层选择器
+    fullscreenButton: false, //是否显示全屏按钮
+    geocoder: false, //是否显示geocoder小器件，右上角查询按钮
+    homeButton: false, //是否显示Home按钮
+    infoBox: false, //是否显示信息框
+    sceneModePicker: false, //是否显示3D/2D选择器
+    selectionIndicator: false, //是否显示选取指示器组件
+    timeline: false, //是否显示时间轴
+    sceneMode: SceneMode.SCENE3D, //设定3维地图的默认场景模式:Cesium.SceneMode.SCENE2D、Cesium.SceneMode.SCENE3D、Cesium.SceneMode.MORPHING
+    navigationHelpButton: false, //是否显示右上角的帮助按钮
+    scene3DOnly: true, //如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源
+    navigationInstructionsInitiallyVisible: false,
+    showRenderLoopErrors: false, //是否显示渲染错误
+  });
 
   const rawViewer = markRaw(viewer);
   useViewStore.setCesiumViewer(rawViewer);
@@ -20,91 +31,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header> -->
   <div class="cesiumContainer" ref="containerRef"></div>
-  <!-- <RouterView /> -->
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 .cesiumContainer {
   width: 100vw;
   height: 100vh;
-}
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>
