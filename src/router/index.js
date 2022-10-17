@@ -8,14 +8,37 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
+      beforeEnter: (to) => {
+        const auth = localStorage.getItem("isAuth");
+        // reject the navigation
+        if (
+          // 检查用户是否已登录
+          !auth &&
+          // ❗️ 避免无限重定向
+          to.name !== "login"
+        ) {
+          // 将用户重定向到登录页面
+          return { name: "login" };
+        }
+      },
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
+      path: "/login",
+      name: "login",
+      beforeEnter: (to) => {
+        const auth = localStorage.getItem("isAuth");
+        // reject the navigation
+        if (
+          // 检查用户是否已登录
+          auth &&
+          // ❗️ 避免无限重定向
+          to.name !== "home"
+        ) {
+          // 将用户重定向到登录页面
+          return { name: "home" };
+        }
+      },
+      component: () => import("../views/LoginView.vue"),
     },
   ],
 });
