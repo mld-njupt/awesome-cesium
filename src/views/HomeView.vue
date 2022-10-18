@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, markRaw } from "vue";
 import { Viewer, Ion, SceneMode } from "cesium";
+import ControlItem from "../components/ControlItem.vue";
 
 import { useViewStore } from "../stores/earth";
 const containerRef = ref();
@@ -32,10 +33,27 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="header">黄山丰乐水库水雨情测报系统</div>
   <div class="cesiumContainer" ref="containerRef"></div>
+  <ControlItem />
 </template>
 
 <style scoped>
+.header {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  width: 100vw;
+  background-color: #112e51;
+  color: #fff;
+  padding: 0px 5px 0px 15px;
+  font-family: "Merriweather", serif;
+  font-size: 22px;
+  margin: 0;
+  line-height: 50px;
+  font-weight: 400;
+  height: 50px;
+}
 .cesiumContainer {
   width: 100vw;
   height: 100vh;
