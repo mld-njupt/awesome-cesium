@@ -9,8 +9,9 @@ import {
   HomeOutlined,
 } from "@ant-design/icons-vue";
 // 放大
+const viewerStore = useViewStore()
 function zoomIn() {
-  const viewer = useViewStore().cesiumViewer;
+  const viewer = viewerStore.cesiumViewer;
   let position = viewer.camera.position;
   let cameraHeight =
     viewer.scene.globe.ellipsoid.cartesianToCartographic(position).height;
@@ -19,7 +20,7 @@ function zoomIn() {
 }
 //缩小
 function zoomOut() {
-  const viewer = useViewStore().cesiumViewer;
+  const viewer = viewerStore.cesiumViewer;
   let position = viewer.camera.position;
   let cameraHeight =
     viewer.scene.globe.ellipsoid.cartesianToCartographic(position).height;
@@ -28,7 +29,7 @@ function zoomOut() {
 }
 // 复位：复位到指定位置
 function reset() {
-  const viewer = useViewStore().cesiumViewer;
+  const viewer = viewerStore.cesiumViewer;
     viewer.camera.flyTo({
         destination: Cartesian3.fromDegrees(104, 30, 15682725)
     });

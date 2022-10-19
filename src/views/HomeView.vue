@@ -2,7 +2,7 @@
 import { ref, onMounted, markRaw } from "vue";
 import { Viewer, Ion, SceneMode } from "cesium";
 import ControlItem from "../components/ControlItem.vue";
-
+import LocationItem from "../components/LocationItem.vue";
 import { useViewStore } from "../stores/earth";
 const containerRef = ref();
 const view = useViewStore();
@@ -36,6 +36,7 @@ onMounted(() => {
   <div class="header">黄山丰乐水库水雨情测报系统</div>
   <div class="cesiumContainer" ref="containerRef"></div>
   <ControlItem />
+  <LocationItem v-if="view.cesiumViewer" />
 </template>
 
 <style scoped>
