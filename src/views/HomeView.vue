@@ -35,7 +35,7 @@ onMounted(() => {
 <template>
   <div class="header">黄山丰乐水库水雨情测报系统</div>
   <div class="cesiumContainer" ref="containerRef"></div>
-  <ControlItem />
+  <ControlItem v-if="view.cesiumViewer" />
   <LocationItem v-if="view.cesiumViewer" />
 </template>
 

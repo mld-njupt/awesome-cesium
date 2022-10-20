@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons-vue";
 import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
+import SubItem4 from "../components/control/SubItem4.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
@@ -41,19 +42,39 @@ function reset() {
     destination: Cartesian3.fromDegrees(104, 30, 15682725),
   });
 }
+//menu相关
 const selectedKeys = ref(["1"]);
 const openKeys = ref(["sub1"]);
 
 const handleClick = (e) => {
-  console.log("click", e);
+  switch (e.key) {
+    case "10":
+      showDrawer("reservoir");
+      break;
+
+    default:
+      console.log(e.key);
+      break;
+  }
 };
 
 const titleClick = (e) => {
   console.log("titleClick", e);
 };
+//水库调度相关
+const reservoirVis = ref(false);
+const closeResVis = () => {
+  reservoirVis.value = false;
+};
+//drawer相关
+const showDrawer = (key) => {
+  if (key === "reservoir") {
+    reservoirVis.value = true;
+  }
+};
 
 watch(
-  () => openKeys,
+  () => reservoirVis,
   (val) => {
     console.log("openKeys", val);
   }
@@ -110,12 +131,17 @@ watch(
             <SettingOutlined />
           </template>
           <template #title>水库调度</template>
-          <a-menu-item key="9">底孔闸</a-menu-item>
-          <a-menu-item key="10">泄洪洞闸</a-menu-item>
-          <a-menu-item key="11">发电引水隧洞</a-menu-item>
+          <a-menu-item key="10">底孔闸</a-menu-item>
+          <a-menu-item key="11">泄洪洞闸</a-menu-item>
+          <a-menu-item key="12">发电引水隧洞</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </div>
+    <SubItem4
+      v-if="reservoirVis"
+      @close="closeResVis"
+      :visible="reservoirVis"
+    />
   </div>
 </template>
 <style scoped>
