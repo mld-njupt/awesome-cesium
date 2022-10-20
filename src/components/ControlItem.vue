@@ -1,5 +1,12 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
+import { ref, watch } from "vue";
+import {
+  MailOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
+  AlertOutlined,
+} from "@ant-design/icons-vue";
 import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
 import {
@@ -9,7 +16,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons-vue";
 // 放大
-const viewerStore = useViewStore()
+const viewerStore = useViewStore();
 function zoomIn() {
   const viewer = viewerStore.cesiumViewer;
   let position = viewer.camera.position;
@@ -30,13 +37,30 @@ function zoomOut() {
 // 复位：复位到指定位置
 function reset() {
   const viewer = viewerStore.cesiumViewer;
-    viewer.camera.flyTo({
-        destination: Cartesian3.fromDegrees(104, 30, 15682725)
-    });
+  viewer.camera.flyTo({
+    destination: Cartesian3.fromDegrees(104, 30, 15682725),
+  });
 }
+const selectedKeys = ref(["1"]);
+const openKeys = ref(["sub1"]);
+
+const handleClick = (e) => {
+  console.log("click", e);
+};
+
+const titleClick = (e) => {
+  console.log("titleClick", e);
+};
+
+watch(
+  () => openKeys,
+  (val) => {
+    console.log("openKeys", val);
+  }
+);
 </script>
 <template>
-  <div class="dashboard-icon">
+  <div class="dashboard">
     <div class="pack icon-item">
       <double-left-outlined />
     </div>
@@ -45,10 +69,57 @@ function reset() {
       <div class="small icon-item" v-on:click="zoomOut"><minus-outlined /></div>
     </div>
     <div class="home icon-item" v-on:click="reset"><home-outlined /></div>
+    <div class="dashboard-content">
+      <a-menu
+        id="dddddd"
+        v-model:openKeys="openKeys"
+        v-model:selectedKeys="selectedKeys"
+        style="width: 256px"
+        mode="inline"
+        @click="handleClick"
+      >
+        <a-sub-menu key="sub1" @titleClick="titleClick">
+          <template #icon>
+            <MailOutlined />
+          </template>
+          <template #title>流域信息</template>
+          <a-menu-item key="1">水系</a-menu-item>
+          <a-menu-item key="2">DEM</a-menu-item>
+          <a-menu-item key="3">土地利用</a-menu-item>
+        </a-sub-menu>
+        <a-sub-menu key="sub2" @titleClick="titleClick">
+          <template #icon>
+            <AppstoreOutlined />
+          </template>
+          <template #title>水库信息</template>
+          <a-menu-item key="4">基本信息</a-menu-item>
+          <a-menu-item key="5">特征信息</a-menu-item>
+          <a-menu-item key="6">水利工程</a-menu-item>
+          <a-menu-item key="7">调度规则</a-menu-item>
+        </a-sub-menu>
+        <a-sub-menu key="sub3">
+          <template #icon>
+            <AlertOutlined />
+          </template>
+          <template #title>预报预警</template>
+          <a-menu-item key="8">预报</a-menu-item>
+          <a-menu-item key="9">预警</a-menu-item>
+        </a-sub-menu>
+        <a-sub-menu key="sub4">
+          <template #icon>
+            <SettingOutlined />
+          </template>
+          <template #title>水库调度</template>
+          <a-menu-item key="9">底孔闸</a-menu-item>
+          <a-menu-item key="10">泄洪洞闸</a-menu-item>
+          <a-menu-item key="11">发电引水隧洞</a-menu-item>
+        </a-sub-menu>
+      </a-menu>
+    </div>
   </div>
 </template>
 <style scoped>
-.dashboard-icon {
+.dashboard {
   position: fixed;
   z-index: 999;
   top: 100px;
@@ -72,18 +143,22 @@ function reset() {
   align-items: center;
   transition: background-color 125ms ease-in-out;
 }
-.pack {
-  margin-bottom: 10px;
+.dashboard-content {
+  position: fixed;
+  z-index: 999;
+  top: 100px;
+  left: 55px;
+  z-index: 10;
+  width: 259px;
+  height: 555px;
+  background-color: #fff;
+  border: 1px #000;
+  border-style: solid;
+  overflow: auto;
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
-.control {
-  width: 32px;
-  height: 64px;
-  margin-bottom: 10px;
-}
-.big {
-}
-.small {
-}
-.home {
+.dashboard-content::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 </style>
