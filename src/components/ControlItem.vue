@@ -6,16 +6,23 @@ import {
   AppstoreOutlined,
   SettingOutlined,
   AlertOutlined,
+  MenuOutlined,
 } from "@ant-design/icons-vue";
 import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
 import SubItem4 from "../components/control/SubItem4.vue";
+import MenuItem8 from "../components/control/MenuItem8.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
   MinusOutlined,
   HomeOutlined,
 } from "@ant-design/icons-vue";
+//dashboard是否收起
+const dashboardVis = ref(true);
+const handleDashboard = () => {
+  dashboardVis.value = !dashboardVis.value;
+};
 // 放大
 const viewerStore = useViewStore();
 function zoomIn() {
@@ -51,7 +58,9 @@ const handleClick = (e) => {
     case "10":
       showDrawer("reservoir");
       break;
-
+    case "8":
+      showDrawer("forecast");
+      break;
     default:
       console.log(e.key);
       break;
@@ -66,10 +75,17 @@ const reservoirVis = ref(false);
 const closeResVis = () => {
   reservoirVis.value = false;
 };
+//预报相关
+const forecastrVis = ref(false);
+const closeForeVis = () => {
+  forecastrVis.value = false;
+};
 //drawer相关
 const showDrawer = (key) => {
   if (key === "reservoir") {
     reservoirVis.value = true;
+  } else if (key === "forecast") {
+    forecastrVis.value = true;
   }
 };
 
@@ -82,15 +98,16 @@ watch(
 </script>
 <template>
   <div class="dashboard">
-    <div class="pack icon-item">
-      <double-left-outlined />
+    <div class="pack icon-item" v-on:click="handleDashboard">
+      <double-left-outlined v-if="dashboardVis" />
+      <menu-outlined v-if="!dashboardVis" />
     </div>
     <div class="control">
       <div class="big icon-item" v-on:click="zoomIn"><plus-outlined /></div>
       <div class="small icon-item" v-on:click="zoomOut"><minus-outlined /></div>
     </div>
     <div class="home icon-item" v-on:click="reset"><home-outlined /></div>
-    <div class="dashboard-content">
+    <div class="dashboard-content" v-if="dashboardVis">
       <a-menu
         id="dddddd"
         v-model:openKeys="openKeys"
@@ -141,6 +158,11 @@ watch(
       v-if="reservoirVis"
       @close="closeResVis"
       :visible="reservoirVis"
+    />
+    <MenuItem8
+      v-if="forecastrVis"
+      @close="closeForeVis"
+      :visible="forecastrVis"
     />
   </div>
 </template>

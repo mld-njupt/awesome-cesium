@@ -2,7 +2,6 @@
 import { reactive } from "vue";
 const emit = defineEmits(["close"]);
 const props = defineProps(["visible"]);
-console.log(emit);
 const form = reactive({
   switch: "",
   degree: "",
@@ -37,7 +36,6 @@ const rules = {
 };
 
 const onClose = () => {
-  console.log(emit("close"));
   emit("close");
 };
 </script>

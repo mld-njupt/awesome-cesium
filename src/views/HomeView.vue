@@ -4,8 +4,16 @@ import { Viewer, Ion, SceneMode } from "cesium";
 import ControlItem from "../components/ControlItem.vue";
 import LocationItem from "../components/LocationItem.vue";
 import { useViewStore } from "../stores/earth";
+import { ExportOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const containerRef = ref();
 const view = useViewStore();
+const logout = () => {
+  localStorage.removeItem("isAuth");
+  router.push("/login");
+};
 onMounted(() => {
   let defaultAccessToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyMGE1MDBiMS0xY2MyLTRmZmUtOTFiNy0xYWVmZjUxYjEzM2IiLCJpZCI6NDQ3NjgsImlhdCI6MTYxNDMyODY0MX0.GqhvtZhSC93LRwbLByGDPqIBji566Lqsha7-ZOArTN0";
@@ -33,7 +41,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="header">黄山丰乐水库水雨情测报系统</div>
+  <div class="header">
+    黄山丰乐水库水雨情测报系统
+    <div class="logout" v-on:click="logout">
+      <export-outlined />
+    </div>
+  </div>
   <div class="cesiumContainer" ref="containerRef"></div>
   <ControlItem v-if="view.cesiumViewer" />
   <LocationItem v-if="view.cesiumViewer" />
@@ -43,17 +56,23 @@ onMounted(() => {
 .header {
   position: fixed;
   z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   top: 0;
   width: 100vw;
   background-color: #112e51;
   color: #fff;
-  padding: 0px 5px 0px 15px;
+  padding: 0px 15px 0px 15px;
   font-family: "Merriweather", serif;
   font-size: 22px;
   margin: 0;
   line-height: 50px;
   font-weight: 400;
   height: 50px;
+}
+.logout {
+  cursor: pointer;
 }
 .cesiumContainer {
   width: 100vw;
