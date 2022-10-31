@@ -11,6 +11,7 @@ import {
 import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
 import SubItem4 from "../components/control/SubItem4.vue";
+import MenuItem4 from "../components/control/MenuItem4.vue";
 import MenuItem8 from "../components/control/MenuItem8.vue";
 import {
   DoubleLeftOutlined,
@@ -46,7 +47,7 @@ function zoomOut() {
 function reset() {
   const viewer = viewerStore.cesiumViewer;
   viewer.camera.flyTo({
-    destination: Cartesian3.fromDegrees(104, 30, 15682725),
+    destination: Cartesian3.fromDegrees(118.2443, 29.9171, 1500),
   });
 }
 //menu相关
@@ -54,12 +55,18 @@ const selectedKeys = ref(["1"]);
 const openKeys = ref(["sub1"]);
 
 const handleClick = (e) => {
+  if (e.key != "8") {
+    closeReservoirInfo();
+  }
   switch (e.key) {
     case "10":
       showDrawer("reservoir");
       break;
     case "8":
       showDrawer("forecast");
+      break;
+    case "4":
+      openReservoirInfo();
       break;
     default:
       console.log(e.key);
@@ -74,6 +81,14 @@ const titleClick = (e) => {
 const reservoirVis = ref(false);
 const closeResVis = () => {
   reservoirVis.value = false;
+};
+// 水库信息
+const showReservoirInfo = ref(false);
+const closeReservoirInfo = () => {
+  showReservoirInfo.value = false;
+};
+const openReservoirInfo = () => {
+  showReservoirInfo.value = true;
 };
 //预报相关
 const forecastrVis = ref(false);
@@ -164,6 +179,11 @@ watch(
       @close="closeForeVis"
       :visible="forecastrVis"
     />
+    <MenuItem4
+      v-if="showReservoirInfo"
+      @close="closeReservoirInfo"
+      :visible="showReservoirInfo"
+    />
   </div>
 </template>
 <style scoped>
@@ -208,5 +228,17 @@ watch(
 }
 .dashboard-content::-webkit-scrollbar {
   display: none; /* Chrome Safari */
+}
+.reservoir-info-wrapper {
+  position: fixed;
+  top: 100px;
+  left: 55px;
+  width: 100%;
+  height: 100%;
+  margin-left: 0;
+  transition: margin-left 0.3s;
+}
+.reservoir-info-active {
+  margin-left: 255px;
 }
 </style>
