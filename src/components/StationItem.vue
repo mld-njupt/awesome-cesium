@@ -1,10 +1,6 @@
 <script setup>
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
-import { reactive, ref, watch } from "vue";
+import { reactive, watch } from "vue";
 
-const emit = defineEmits(["close"]);
-const props = defineProps(["visible"]);
-const formRef = ref();
 const dynamicValidateForm = reactive({
   sights: [],
 });
@@ -12,9 +8,13 @@ watch(() => {
   dynamicValidateForm.sights = [];
 });
 const checked = reactive({
+  //雨量
   checked1: false,
+  //水位
   checked2: false,
+  //气象
   checked3: false,
+  //插值
   checked4: false,
 });
 </script>

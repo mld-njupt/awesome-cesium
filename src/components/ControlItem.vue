@@ -11,7 +11,6 @@ import {
 import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
 import SubItem4 from "../components/control/SubItem4.vue";
-import MenuItem4 from "../components/control/MenuItem4.vue";
 import MenuItem8 from "../components/control/MenuItem8.vue";
 import {
   DoubleLeftOutlined,
@@ -178,11 +177,6 @@ watch(
       v-if="forecastrVis"
       @close="closeForeVis"
       :visible="forecastrVis"
-    />
-    <MenuItem4
-      v-if="showReservoirInfo"
-      @close="closeReservoirInfo"
-      :visible="showReservoirInfo"
     />
   </div>
 </template>

@@ -13,6 +13,7 @@ import {
 } from "cesium";
 import ControlItem from "../components/ControlItem.vue";
 import LocationItem from "../components/LocationItem.vue";
+import StationItem from "../components/StationItem.vue";
 import { useViewStore } from "../stores/earth";
 import { ExportOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
@@ -44,6 +45,7 @@ onMounted(() => {
     navigationInstructionsInitiallyVisible: false,
     showRenderLoopErrors: false, //是否显示渲染错误
   });
+  viewer.scene.postProcessStages.fxaa.enabled = false;
   viewer.camera.flyTo({
     destination: Cartesian3.fromDegrees(118.2443, 29.9171, 1500),
   });
@@ -132,6 +134,7 @@ onMounted(() => {
   <div class="cesiumContainer" ref="containerRef"></div>
   <ControlItem v-if="view.cesiumViewer" />
   <LocationItem v-if="view.cesiumViewer" />
+  <StationItem v-if="view.cesiumViewer" />
 </template>
 
 <style scoped>
