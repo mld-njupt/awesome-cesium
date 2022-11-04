@@ -6,14 +6,15 @@ import {
   DistanceDisplayCondition,
   HeightReference,
 } from "cesium";
-import { onMounted } from "vue";
+import { onMounted, onBeforeUnmount } from "vue";
 import { useViewStore } from "../../stores/earth";
-const props = defineProps(["position"]);
+const props = defineProps(["position", "id"]);
 const viewerStore = useViewStore();
 function addEntity(height = 500, position) {
   const viewer = viewerStore.cesiumViewer;
   viewer.entities.add({
-    position: Cartesian3.fromDegrees(position, height),
+    id: props.id,
+    position: Cartesian3.fromDegrees(...position, height),
     point: {
       show: true,
       pixelSize: 30,
@@ -25,6 +26,13 @@ function addEntity(height = 500, position) {
     },
   });
 }
+function removeEntity() {
+  const viewer = viewerStore.cesiumViewer;
+  viewer.entities.remove(viewer.entities.getById(props.id));
+}
+onBeforeUnmount(() => {
+  removeEntity();
+});
 onMounted(() => {
   addEntity(0, props.position);
 });

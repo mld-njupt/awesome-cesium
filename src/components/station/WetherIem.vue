@@ -14,12 +14,30 @@ const viewerStore = useViewStore();
 function addPolygon(position) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-  ctx.beginPath();
-  ctx.moveTo(100, 0);
-  ctx.lineTo(50, 140);
-  ctx.lineTo(0, 0);
-  ctx.fillStyle = "#ffffff";
-  ctx.fill();
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 2;
+  ctx.moveTo(0, 0);
+  ctx.lineTo(15, 10);
+  ctx.stroke();
+  ctx.moveTo(15, 10);
+  ctx.lineTo(0, 20);
+  ctx.stroke();
+  ctx.stroke();
+  ctx.moveTo(15, 10);
+  ctx.lineTo(70, 10);
+  ctx.stroke();
+  ctx.moveTo(70, 10);
+  ctx.lineTo(60, 4);
+  ctx.stroke();
+  ctx.moveTo(70, 10);
+  ctx.lineTo(60, 16);
+  ctx.stroke();
+  ctx.moveTo(37.5, 10);
+  ctx.lineTo(37.5, 70);
+  ctx.stroke();
+  ctx.moveTo(22.5, 70);
+  ctx.lineTo(52.5, 70);
+  ctx.stroke();
   let image = new Image();
   image.src = canvas.toDataURL("image/jpg");
   const viewer = viewerStore.cesiumViewer;
@@ -28,8 +46,8 @@ function addPolygon(position) {
     position: Cartesian3.fromDegrees(position[0], position[1], 0.1),
     billboard: {
       image: image,
-      height: 50,
-      width: 50,
+      height: 80,
+      width: 80,
       sizeInMeters: false,
       horizontalOrigin: HorizontalOrigin.LEFT,
       scale: 2,
