@@ -3246,7 +3246,7 @@ onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   const scene = viewer.scene;
   const handler = new ScreenSpaceEventHandler(scene.canvas);
-  // let click_point, c, isVisible, changedC, target_position, cartesian_2;
+  let click_point, c, isVisible, changedC, target_position, cartesian_2;
   //注册鼠标点击事件
   handler.setInputAction(function (e) {
     const pickedObject = scene.pick(e.position, 3, 3);
@@ -3266,7 +3266,10 @@ onMounted(() => {
     target_position = e.position;
     cartesian_2 = cartesian;
     if (defined(pickedObject) && defined(pickedObject.id)) {
-      showInfo(viewer.entities.getById(pickedObject.id.id), e.position);
+      if (!viewer.entities.getById(pickedObject.id.id)._polygon) {
+        showInfo(viewer.entities.getById(pickedObject.id.id), e.position);
+      }
+
       // viewer.trackedEntity = viewer.entities.getById(pickedObject.id.id);
     } else {
       hideInfo();

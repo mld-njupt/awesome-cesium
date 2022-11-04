@@ -17,11 +17,11 @@ function addEntity(height = 500, position) {
     position: Cartesian3.fromDegrees(...position, height),
     point: {
       show: true,
-      pixelSize: 30,
+      pixelSize: 38,
       heightReference: HeightReference.CLAMP_TO_GROUND,
       color: Color.ORANGE,
-      scaleByDistance: new NearFarScalar(1500, 1, 20000, 0.3),
-      translucencyByDistance: new NearFarScalar(1500, 1, 20000, 0.2),
+      scaleByDistance: new NearFarScalar(10000, 1, 20000, 0.3),
+      translucencyByDistance: new NearFarScalar(10000, 1, 20000, 0.2),
       distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
     },
   });

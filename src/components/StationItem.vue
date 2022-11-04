@@ -1,31 +1,11 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import {
-  PolygonGeometry,
-  PolygonHierarchy,
-  Cartesian3,
-  Math,
-  ImageMaterialProperty,
-} from "cesium";
-import kriging from "../kriging";
+import { ref } from "vue";
+
 import PointItem from "./station/PointItem.vue";
 import TriangleItem from "./station/TriangleItem.vue";
 import WetherIem from "./station/WetherIem.vue";
 import MessageItem from "./station/MessageItem.vue";
-import data from "../assets/test/data";
-import beijing from "../assets/test/bj";
-import { useViewStore } from "../stores/earth";
-const viewerStore = useViewStore();
-const lats = data.features.map((v) => {
-  return v.attributes.x;
-});
-const lngs = data.features.map((v) => {
-  return v.attributes.y;
-});
-const values = data.features.map((v) => {
-  return v.attributes.z;
-});
-const coords = beijing[0].flat(2);
+import InterItem from "./station/InterItem.vue";
 const checked = ref({
   //雨量
   checked1: false,
@@ -35,74 +15,6 @@ const checked = ref({
   checked3: false,
   //插值
   checked4: false,
-});
-function drawKriging(viewer, lats, lngs, values, coords, ex) {
-  if (values.length > 3) {
-    let colors = [
-      "#006837",
-      "#1a9850",
-      "#66bd63",
-      "#a6d96a",
-      "#d9ef8b",
-      "#ffffbf",
-      "#fee08b",
-      "#fdae61",
-      "#f46d43",
-      "#d73027",
-      "#a50026",
-    ];
-
-    // const polygon = new PolygonGeometry({
-    //   polygonHierarchy: new PolygonHierarchy(
-    //     Cartesian3.fromDegreesArray(coords)
-    //   ),
-    // }); //构造面，方便计算范围
-    let extent = PolygonGeometry.computeRectangle({
-      polygonHierarchy: new PolygonHierarchy(
-        Cartesian3.fromDegreesArray(coords)
-      ),
-    }); //范围（弧度）
-    let minx = Math.toDegrees(extent.west); //转换为经纬度
-    let miny = Math.toDegrees(extent.south);
-    let maxx = Math.toDegrees(extent.east);
-    let maxy = Math.toDegrees(extent.north);
-    let canvas = null; //画布
-    // eslint-disable-next-line no-inner-declarations
-    function getCanvas() {
-      //1.用克里金训练一个variogram对象
-      let variogram = kriging.train(values, lngs, lats, "exponential", 0, 100);
-      //2.使用刚才的variogram对象使polygons描述的地理位置内的格网元素具备不一样的预测值；
-      let grid = kriging.grid(ex, variogram, (maxy - miny) / 500);
-      canvas = document.createElement("canvas");
-      canvas.width = 800;
-      canvas.height = 800;
-      canvas.style.display = "block";
-      canvas.getContext("2d").globalAlpha = 0.75; //设置透明度
-      //3.将得到的格网预测值渲染到canvas画布上
-      kriging.plot(canvas, grid, [minx, maxx], [miny, maxy], colors);
-    }
-
-    getCanvas();
-    if (canvas != null) {
-      viewer.entities.add({
-        polygon: {
-          hierarchy: {
-            positions: Cartesian3.fromDegreesArray(coords),
-          },
-          material: new ImageMaterialProperty({
-            image: canvas, //使用贴图的方式将结果贴到面上
-          }),
-        },
-      });
-    }
-  }
-}
-// const handleCheck1 = (value) => {
-//   checked.value.checked1 = value;
-// };
-onMounted(() => {
-  const viewer = viewerStore.cesiumViewer;
-  drawKriging(viewer, lngs, lats, values, coords, beijing);
 });
 </script>
 <template>
@@ -152,23 +64,39 @@ onMounted(() => {
     <PointItem
       v-if="checked.checked1"
       :id="1"
-      :position="[118.2443, 29.9171]"
+      :position="[118.21457, 29.93643]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="2"
-      :position="[118.2463, 29.9191]"
+      :position="[118.20599, 29.9028]"
+    />
+    <PointItem
+      v-if="checked.checked1"
+      :id="3"
+      :position="[118.25967, 29.94161]"
+    />
+    <PointItem
+      v-if="checked.checked1"
+      :id="4"
+      :position="[118.29255, 29.91689]"
+    />
+    <PointItem
+      v-if="checked.checked1"
+      :id="5"
+      :position="[118.2567, 29.89155]"
     />
     <TriangleItem
       v-if="checked.checked2"
-      :id="3"
+      :id="6"
       :position="[118.2483, 29.9211]"
     />
     <WetherIem
       v-if="checked.checked3"
-      :id="4"
+      :id="7"
       :position="[118.2423, 29.9151]"
     />
+    <InterItem v-if="checked.checked4" />
     <MessageItem />
   </div>
 </template>

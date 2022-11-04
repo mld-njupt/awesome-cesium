@@ -55,8 +55,8 @@ function addPolygon(position) {
       Color: Color.WHITE,
       show: true,
       heightReference: HeightReference.CLAMP_TO_GROUND,
-      scaleByDistance: new NearFarScalar(1500, 1, 20000, 0.3),
-      translucencyByDistance: new NearFarScalar(1500, 1, 20000, 0.2),
+      scaleByDistance: new NearFarScalar(10000, 1, 20000, 0.3),
+      translucencyByDistance: new NearFarScalar(10000, 1, 20000, 0.2),
       distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
     },
   });
