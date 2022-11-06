@@ -2,8 +2,8 @@
 import {
   Cartesian3,
   Color,
-  NearFarScalar,
-  DistanceDisplayCondition,
+  // NearFarScalar,
+  // DistanceDisplayCondition,
   HeightReference,
 } from "cesium";
 import { onMounted, onBeforeUnmount } from "vue";
@@ -20,9 +20,9 @@ function addEntity(height = 500, position) {
       pixelSize: 38,
       heightReference: HeightReference.CLAMP_TO_GROUND,
       color: Color.ORANGE,
-      scaleByDistance: new NearFarScalar(10000, 1, 20000, 0.3),
-      translucencyByDistance: new NearFarScalar(10000, 1, 20000, 0.2),
-      distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
+      // scaleByDistance: new NearFarScalar(10000, 1, 20000, 0.3),
+      // translucencyByDistance: new NearFarScalar(10000, 1, 20000, 0.2),
+      // distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
     },
   });
 }

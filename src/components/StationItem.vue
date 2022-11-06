@@ -63,27 +63,27 @@ const checked = ref({
     </div>
     <PointItem
       v-if="checked.checked1"
-      :id="1"
+      :id="'yuliang/0'"
       :position="[118.21457, 29.93643]"
     />
     <PointItem
       v-if="checked.checked1"
-      :id="2"
+      :id="'yuliang/1'"
       :position="[118.20599, 29.9028]"
     />
     <PointItem
       v-if="checked.checked1"
-      :id="3"
+      :id="'yuliang/2'"
       :position="[118.25967, 29.94161]"
     />
     <PointItem
       v-if="checked.checked1"
-      :id="4"
+      :id="'yuliang/3'"
       :position="[118.29255, 29.91689]"
     />
     <PointItem
       v-if="checked.checked1"
-      :id="5"
+      :id="'yuliang/4'"
       :position="[118.2567, 29.89155]"
     />
     <TriangleItem

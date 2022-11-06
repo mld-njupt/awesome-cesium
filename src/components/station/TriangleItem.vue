@@ -4,8 +4,8 @@ import {
   Color,
   HorizontalOrigin,
   HeightReference,
-  NearFarScalar,
-  DistanceDisplayCondition,
+  // NearFarScalar,
+  // DistanceDisplayCondition,
 } from "cesium";
 import { onMounted, onBeforeUnmount } from "vue";
 import { useViewStore } from "../../stores/earth";
@@ -37,9 +37,9 @@ function addPolygon(position) {
       Color: Color.WHITE,
       show: true,
       heightReference: HeightReference.CLAMP_TO_GROUND,
-      scaleByDistance: new NearFarScalar(10000, 1, 20000, 0.3),
-      translucencyByDistance: new NearFarScalar(10000, 1, 20000, 0.2),
-      distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
+      // scaleByDistance: new NearFarScalar(10000, 1, 20000, 0.3),
+      // translucencyByDistance: new NearFarScalar(10000, 1, 20000, 0.2),
+      // distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
     },
   });
 }
