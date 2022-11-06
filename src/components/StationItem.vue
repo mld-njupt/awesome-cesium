@@ -88,12 +88,12 @@ const checked = ref({
     />
     <TriangleItem
       v-if="checked.checked2"
-      :id="6"
+      :id="'shuiwei/0'"
       :position="[118.2483, 29.9211]"
     />
     <WetherIem
       v-if="checked.checked3"
-      :id="7"
+      :id="'qixiang/0'"
       :position="[118.2423, 29.9151]"
     />
     <InterItem v-if="checked.checked4" />
