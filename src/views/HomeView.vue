@@ -45,6 +45,7 @@ onMounted(() => {
   viewer.camera.flyTo({
     destination: Cartesian3.fromDegrees(118.2443, 29.9171, 2000.0),
   });
+  viewer.scene.requestRenderMode = true;
   // viewer.scene.globe.depthTestAgainstTerrain = true;
   viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
     ScreenSpaceEventType.LEFT_DOUBLE_CLICK

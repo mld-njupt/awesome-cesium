@@ -48,6 +48,7 @@ const showConfig = ref({
   chart: false,
   msg: true,
 });
+const showPosition = ref();
 const showLoading = ref(false);
 const option = ref({
   // title: {
@@ -139,7 +140,7 @@ onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   const scene = viewer.scene;
   const handler = new ScreenSpaceEventHandler(scene.canvas);
-  let click_point, c, isVisible, changedC, target_position, cartesian_2;
+  let click_point, c, target_position, cartesian_2;
   //注册鼠标点击事件
   handler.setInputAction(function (e) {
     const pickedObject = scene.pick(e.position, 3, 3);
@@ -218,7 +219,8 @@ onMounted(() => {
           default:
             break;
         }
-        showInfo(viewer.entities.getById(pickedObject.id.id), e.position);
+        showPosition.value = e.position;
+        showInfo(e.position);
       }
 
       // viewer.trackedEntity = viewer.entities.getById(pickedObject.id.id);
@@ -227,8 +229,18 @@ onMounted(() => {
       // viewer.trackedEntity = undefined;
     }
   }, ScreenSpaceEventType.LEFT_CLICK);
+  viewer.scene.postRender.addEventListener(() => {
+    console.log("render");
+    if (showPosition.value) {
+      const position = SceneTransforms.wgs84ToWindowCoordinates(
+        viewer.scene,
+        cartesian_2
+      );
+      showInfo(position);
+    }
+  });
   const info = document.getElementById("info");
-  function showInfo(entity, position) {
+  function showInfo(position) {
     info.style.display = "block";
     info.style.left = position.x + 20 + "px";
     info.style.top = position.y - 200 + "px";
