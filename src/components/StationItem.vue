@@ -109,7 +109,7 @@ const checked = ref({
   /* height: 114px; */
   opacity: 1;
   border-radius: 3px;
-  background: rgba(204, 204, 204, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   /* background-color: rgba(0, 0, 0, .5); */
   z-index: 999;
 }
@@ -117,7 +117,7 @@ const checked = ref({
   width: 100%;
   height: 22px;
   opacity: 1;
-  background: rgba(204, 204, 204, 1);
+  background: rgb(255, 255, 255);
   /* border: 1px solid rgba(0, 0, 0, 1); */
   display: flex;
 }
@@ -141,7 +141,7 @@ const checked = ref({
   height: 24px;
   opacity: 1;
   border-radius: 3px;
-  background: rgba(204, 204, 204, 1);
+  background: rgb(255, 255, 255);
   display: flex;
   justify-content: space-between;
   font-size: 10px;

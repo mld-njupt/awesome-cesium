@@ -86,10 +86,14 @@ function drawKriging(viewer, lats, lngs, values, coords, ex) {
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   drawKriging(viewer, lngs, lats, values, coords, poly);
+
+  viewer.scene.requestRender();
 });
 function removeEntity() {
   const viewer = viewerStore.cesiumViewer;
   viewer.entities.remove(viewer.entities.getById("chazhi"));
+
+  viewer.scene.requestRender();
 }
 onBeforeUnmount(() => {
   removeEntity();

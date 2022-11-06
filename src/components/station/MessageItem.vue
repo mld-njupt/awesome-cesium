@@ -124,7 +124,7 @@ const option = ref({
   yAxis: {
     name: "Evaporation(m^3/s)",
     type: "value",
-    max: 500,
+    max: 10,
   },
 
   series: {
@@ -160,6 +160,7 @@ onMounted(() => {
     target_position = e.position;
     cartesian_2 = cartesian;
     if (defined(pickedObject) && pickedObject && defined(pickedObject.id)) {
+      console.log("xxx");
       if (!viewer.entities.getById(pickedObject.id.id)._polygon) {
         const station_type = viewer.entities
           .getById(pickedObject.id.id)
@@ -181,6 +182,7 @@ onMounted(() => {
                 const { timeData, resData } = handleData(data, "雨量");
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
+                option.value.yAxis.max = 10;
                 showLoading.value = false;
               });
             break;
@@ -197,6 +199,7 @@ onMounted(() => {
                 const { timeData, resData } = handleData(data, "水位");
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
+                option.value.yAxis.max = 400;
                 showLoading.value = false;
               });
             break;
@@ -204,6 +207,7 @@ onMounted(() => {
             station_msg.value = qixiang[station_id];
             option.value.xAxis.data = [];
             option.value.series.data = [];
+            option.value.yAxis.max = 20;
             showLoading.value = true;
             fetch(
               "http://43.142.17.108:9001/api/monitor/%E7%94%B5%E5%8E%8B%E6%B8%A9%E5%BA%A6%E8%A1%A8/1/20000101/20221010/100000"
@@ -248,6 +252,7 @@ onMounted(() => {
 
   function hideInfo() {
     info.style.display = "none";
+    showPosition.value = false;
   }
   fetch(
     "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
@@ -276,7 +281,7 @@ const showMsg = () => {
       <div class="tab-item" v-on:click="showChart">监测曲线</div>
     </div>
     <div class="content">
-      <div v-if="showLoading" class="loading">
+      <div v-if="showLoading && showConfig.chart" class="loading">
         <a-spin size="large" />
       </div>
       <div class="msg content-item" v-if="showConfig.msg">

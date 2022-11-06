@@ -42,10 +42,14 @@ function addPolygon(position) {
       // distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
     },
   });
+
+  viewer.scene.requestRender();
 }
 function removeEntity() {
   const viewer = viewerStore.cesiumViewer;
   viewer.entities.remove(viewer.entities.getById(props.id));
+
+  viewer.scene.requestRender();
 }
 onBeforeUnmount(() => {
   removeEntity();

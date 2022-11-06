@@ -41,10 +41,8 @@ onMounted(() => {
     scene3DOnly: true, //如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源
     navigationInstructionsInitiallyVisible: false,
     showRenderLoopErrors: false, //是否显示渲染错误
+    imageryProvider: new IonImageryProvider({ assetId: 4 }),
   });
-  viewer.imageryLayers.addImageryProvider(
-    new IonImageryProvider({ assetId: 4 })
-  );
   viewer.scene.postProcessStages.fxaa.enabled = false;
   viewer.camera.flyTo({
     destination: Cartesian3.fromDegrees(118.2443, 29.9171, 2000.0),
