@@ -6,6 +6,7 @@ import {
   SceneMode,
   Cartesian3,
   ScreenSpaceEventType,
+  IonImageryProvider,
 } from "cesium";
 import ControlItem from "../components/ControlItem.vue";
 import LocationItem from "../components/LocationItem.vue";
@@ -41,6 +42,9 @@ onMounted(() => {
     navigationInstructionsInitiallyVisible: false,
     showRenderLoopErrors: false, //是否显示渲染错误
   });
+  viewer.imageryLayers.addImageryProvider(
+    new IonImageryProvider({ assetId: 4 })
+  );
   viewer.scene.postProcessStages.fxaa.enabled = false;
   viewer.camera.flyTo({
     destination: Cartesian3.fromDegrees(118.2443, 29.9171, 2000.0),

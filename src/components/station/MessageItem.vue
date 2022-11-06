@@ -276,6 +276,9 @@ const showMsg = () => {
       <div class="tab-item" v-on:click="showChart">监测曲线</div>
     </div>
     <div class="content">
+      <div v-if="showLoading" class="loading">
+        <a-spin size="large" />
+      </div>
       <div class="msg content-item" v-if="showConfig.msg">
         <a-descriptions
           bordered
@@ -290,16 +293,11 @@ const showMsg = () => {
           >
         </a-descriptions>
       </div>
-      <div class="data-item">
-        <div class="loading">
-          <a-spin v-if="showLoading" size="large" />
-        </div>
-        <v-chart
-          class="chart content-item"
-          v-if="showConfig.chart"
-          :option="option"
-        ></v-chart>
-      </div>
+      <v-chart
+        class="chart content-item"
+        v-if="showConfig.chart"
+        :option="option"
+      ></v-chart>
     </div>
   </div>
 </template>
@@ -334,6 +332,7 @@ const showMsg = () => {
 .content {
   width: 100%;
   height: 350px;
+  position: relative;
 }
 
 .content-item {
@@ -341,10 +340,8 @@ const showMsg = () => {
   height: 350px;
   overflow: auto;
 }
-.data-item {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.msg {
+  z-index: 999;
 }
 .loading {
   position: absolute;
@@ -353,5 +350,6 @@ const showMsg = () => {
   justify-content: center;
   width: 100%;
   height: 100%;
+  z-index: 998;
 }
 </style>
