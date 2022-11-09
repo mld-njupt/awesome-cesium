@@ -19,7 +19,7 @@ const lats = data1.map((v) => {
 const lngs = data1.map((v) => {
   return v.lon;
 });
-const values = [46, 36, 20, 15, 5];
+const values = [100, 0, 800, 100, 200];
 const coords = poly[0].flat(2);
 function drawKriging(viewer, lats, lngs, values, coords, ex) {
   if (values.length > 3) {
