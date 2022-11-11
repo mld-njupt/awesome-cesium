@@ -211,11 +211,11 @@ watch(
   top: 100px;
   left: 55px;
   z-index: 10;
-  width: 259px;
+  /* width: 259px; */
   height: 555px;
   background-color: #fff;
-  border: 1px #000;
-  border-style: solid;
+  /* border: 1px #000; */
+  /* border-style: solid; */
   overflow: auto;
   scrollbar-width: none; /* firefox */
   -ms-overflow-style: none; /* IE 10+ */

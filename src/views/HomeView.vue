@@ -43,6 +43,7 @@ onMounted(() => {
     showRenderLoopErrors: false, //是否显示渲染错误
     imageryProvider: new IonImageryProvider({ assetId: 4 }),
   });
+  viewer.scene.fxaa = false;
   viewer.scene.postProcessStages.fxaa.enabled = false;
   viewer.camera.flyTo({
     destination: Cartesian3.fromDegrees(118.2443, 29.9171, 2000.0),
@@ -53,7 +54,15 @@ onMounted(() => {
     ScreenSpaceEventType.LEFT_DOUBLE_CLICK
   );
   // drawKriging(viewer, lngs, lats, values, coords, beijing);
-
+  const supportsImageRenderingPixelated =
+    viewer.cesiumWidget._supportsImageRenderingPixelated;
+  if (supportsImageRenderingPixelated) {
+    var vtxf_dpr = window.devicePixelRatio;
+    while (vtxf_dpr >= 2.0) {
+      vtxf_dpr /= 2.0;
+    }
+    viewer.resolutionScale = vtxf_dpr;
+  }
   const rawViewer = markRaw(viewer);
   view.setCesiumViewer(rawViewer);
 });
