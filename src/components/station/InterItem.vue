@@ -55,7 +55,7 @@ function drawKriging(viewer, lats, lngs, values, coords, ex) {
     // eslint-disable-next-line no-inner-declarations
     function getCanvas() {
       //1.用克里金训练一个variogram对象
-      let variogram = kriging.train(values, lngs, lats, "exponential", 0, 100);
+      let variogram = kriging.train(values, lats, lngs, "exponential", 0, 100);
       //2.使用刚才的variogram对象使polygons描述的地理位置内的格网元素具备不一样的预测值；
       let grid = kriging.grid(ex, variogram, (maxy - miny) / 500);
       canvas = document.createElement("canvas");
@@ -85,7 +85,7 @@ function drawKriging(viewer, lats, lngs, values, coords, ex) {
 }
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
-  drawKriging(viewer, lngs, lats, values, coords, poly);
+  drawKriging(viewer, lats, lngs, values, coords, poly);
 
   viewer.scene.requestRender();
 });
