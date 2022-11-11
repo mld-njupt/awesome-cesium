@@ -9,6 +9,7 @@ import {
 } from "cesium";
 import { onMounted, onBeforeUnmount } from "vue";
 import { useViewStore } from "../../stores/earth";
+import zhan1 from "../../assets/zhan1.png";
 const props = defineProps(["position", "id"]);
 const viewerStore = useViewStore();
 function addPolygon(position) {
@@ -45,7 +46,7 @@ function addPolygon(position) {
     id: props.id,
     position: Cartesian3.fromDegrees(position[0], position[1], 0.1),
     billboard: {
-      image: image,
+      image: zhan1,
       height: 80,
       width: 80,
       sizeInMeters: false,

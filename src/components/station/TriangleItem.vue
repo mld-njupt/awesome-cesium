@@ -18,7 +18,7 @@ function addPolygon(position) {
   ctx.moveTo(100, 0);
   ctx.lineTo(50, 140);
   ctx.lineTo(0, 0);
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#ffa500";
   ctx.fill();
   let image = new Image();
   image.src = canvas.toDataURL("image/jpg");
