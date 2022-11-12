@@ -24,17 +24,26 @@ const coords = poly[0].flat(2);
 function drawKriging(viewer, lats, lngs, values, coords, ex) {
   if (values.length > 3) {
     let colors = [
-      "#006837",
-      "#1a9850",
-      "#66bd63",
-      "#a6d96a",
-      "#d9ef8b",
-      "#ffffbf",
-      "#fee08b",
-      "#fdae61",
-      "#f46d43",
-      "#d73027",
-      "#a50026",
+      "#E80000",
+      "#FF2800",
+      "#FF5500",
+      "#FF8100",
+      "#FFAA00",
+      "#FFD700",
+      "#EAFF0C",
+      "#C7FF2F",
+      "#A0FF56",
+      "#7CFF79",
+      "#56FFA0",
+      "#2FFFC7",
+      "#0CF4EA",
+      "#00C4FF",
+      "#0094FF",
+      "#0068FF",
+      "#0038FF",
+      "#0008FF",
+      "#0000E8",
+      "#0000B1",
     ];
 
     // const polygon = new PolygonGeometry({
@@ -99,4 +108,16 @@ onBeforeUnmount(() => {
   removeEntity();
 });
 </script>
-<template><div></div></template>
+<template><div class="legend"></div></template>
+<style scoped>
+.legend {
+  position: fixed;
+  bottom: 80px;
+  right: 10px;
+  width: 24px;
+  height: 240px;
+  background-image: url("../../assets/legend.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+</style>

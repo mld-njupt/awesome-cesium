@@ -22,21 +22,21 @@ const checked = ref({
   //插值
   checked4: false,
 });
+const moveStack = ref([]);
+const clickStack = ref([]);
 const viewerStore = useViewStore();
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   const scene = viewer.scene;
   const handler = new ScreenSpaceEventHandler(scene.canvas);
-  let scaleStack = [];
   handler.setInputAction(function (movement) {
-    // let foundPosition = false;
-    // let pickedFeatureStart = viewer.scene.pick(movement.startPosition);
+    if (clickStack.value.length > 0) return;
+    // console.log(clickStack.value.length);
     let pickedObject = viewer.scene.pick(movement.endPosition);
     let pickEntity;
-    // if (viewer.scene.mode !== SceneMode.MORPHING) {
     if (defined(pickedObject) && pickedObject.id !== "") {
       const station_type = pickedObject.id.id.split("/")[0];
-      if (scaleStack.length != 0) return;
+      if (moveStack.value.length != 0) return;
       switch (station_type) {
         case "yuliang":
           // pickEntity = viewer.entities.getById(pickedObject.id.id);
@@ -45,7 +45,7 @@ onMounted(() => {
             Color.fromCssColorString("#0093ef");
           viewer._container.style.cursor = "pointer";
           viewer.scene.requestRender();
-          scaleStack.push({
+          moveStack.value.push({
             entity: pickedObject.id,
             id: pickedObject.id.id,
             prev: 17,
@@ -55,9 +55,11 @@ onMounted(() => {
         case "shuiwei":
           pickEntity = viewer.entities.getById(pickedObject.id.id);
           pickEntity._billboard._scale._value = 1.5;
+          pickedObject.id._label._fillColor._value =
+            Color.fromCssColorString("#0093ef");
           viewer._container.style.cursor = "pointer";
           viewer.scene.requestRender();
-          scaleStack.push({
+          moveStack.value.push({
             entity: pickedObject.id,
             id: pickedObject.id.id,
             prev: 1,
@@ -67,9 +69,11 @@ onMounted(() => {
         case "qixiang":
           pickEntity = viewer.entities.getById(pickedObject.id.id);
           pickEntity._billboard._scale._value = 1.5;
+          pickedObject.id._label._fillColor._value =
+            Color.fromCssColorString("#0093ef");
           viewer._container.style.cursor = "pointer";
           viewer.scene.requestRender();
-          scaleStack.push({
+          moveStack.value.push({
             entity: pickedObject.id,
             id: pickedObject.id.id,
             prev: 1,
@@ -80,8 +84,8 @@ onMounted(() => {
           break;
       }
     } else {
-      if (scaleStack.length == 0) return;
-      const prevEntityMsg = scaleStack.pop();
+      if (moveStack.value.length == 0) return;
+      const prevEntityMsg = moveStack.value.pop();
       if (prevEntityMsg) {
         if (prevEntityMsg.id.includes("yuliang")) {
           //雨量站
@@ -94,12 +98,106 @@ onMounted(() => {
           //水位站和气象站都用此即可
           const prevEntity = viewer.entities.getById(prevEntityMsg.id);
           prevEntity._billboard._scale._value = prevEntityMsg.prev;
+          prevEntityMsg.entity._label._fillColor._value =
+            Color.fromCssColorString("#000000");
           viewer._container.style.cursor = "default";
           viewer.scene.requestRender();
         }
       }
     }
   }, ScreenSpaceEventType.MOUSE_MOVE);
+  handler.setInputAction(function (e) {
+    let pickedObject = viewer.scene.pick(e.position, 3, 3);
+    let pickEntity;
+    if (defined(pickedObject) && pickedObject.id !== "") {
+      const station_type = pickedObject.id.id.split("/")[0];
+      if (clickStack.value.length > 0) {
+        const prevEntityMsg = clickStack.value.pop();
+        if (prevEntityMsg) {
+          if (prevEntityMsg.id.includes("yuliang")) {
+            //雨量站
+            prevEntityMsg.entity._point._pixelSize._value = 17;
+            prevEntityMsg.entity._label._fillColor._value =
+              Color.fromCssColorString("#000000");
+            viewer._container.style.cursor = "default";
+            viewer.scene.requestRender();
+          } else {
+            //水位站和气象站都用此即可
+            const prevEntity = viewer.entities.getById(prevEntityMsg.id);
+            prevEntity._billboard._scale._value = prevEntityMsg.prev;
+            viewer._container.style.cursor = "default";
+            viewer.scene.requestRender();
+          }
+        }
+      }
+      switch (station_type) {
+        case "yuliang":
+          pickedObject.id._point._pixelSize._value = 21;
+          pickedObject.id._label._fillColor._value =
+            Color.fromCssColorString("#0093ef");
+          viewer._container.style.cursor = "pointer";
+          viewer.scene.requestRender();
+          clickStack.value.push({
+            entity: pickedObject.id,
+            id: pickedObject.id.id,
+            prev: 17,
+            cur: 21,
+          });
+          break;
+        case "shuiwei":
+          pickEntity = viewer.entities.getById(pickedObject.id.id);
+          pickEntity._billboard._scale._value = 1.5;
+          pickedObject.id._label._fillColor._value =
+            Color.fromCssColorString("#0093ef");
+          viewer._container.style.cursor = "pointer";
+          viewer.scene.requestRender();
+          clickStack.value.push({
+            entity: pickedObject.id,
+            id: pickedObject.id.id,
+            prev: 1,
+            cur: 1.5,
+          });
+          break;
+        case "qixiang":
+          pickEntity = viewer.entities.getById(pickedObject.id.id);
+          pickEntity._billboard._scale._value = 1.5;
+          pickedObject.id._label._fillColor._value =
+            Color.fromCssColorString("#0093ef");
+          viewer._container.style.cursor = "pointer";
+          viewer.scene.requestRender();
+          clickStack.value.push({
+            entity: pickedObject.id,
+            id: pickedObject.id.id,
+            prev: 1,
+            cur: 1.5,
+          });
+          break;
+        default:
+          break;
+      }
+    } else {
+      if (clickStack.value.length == 0) return;
+      const prevEntityMsg = clickStack.value.pop();
+      if (prevEntityMsg) {
+        if (prevEntityMsg.id.includes("yuliang")) {
+          //雨量站
+          prevEntityMsg.entity._point._pixelSize._value = 17;
+          prevEntityMsg.entity._label._fillColor._value =
+            Color.fromCssColorString("#000000");
+          viewer._container.style.cursor = "default";
+          viewer.scene.requestRender();
+        } else {
+          //水位站和气象站都用此即可
+          const prevEntity = viewer.entities.getById(prevEntityMsg.id);
+          prevEntity._billboard._scale._value = prevEntityMsg.prev;
+          prevEntityMsg.entity._label._fillColor._value =
+            Color.fromCssColorString("#000000");
+          viewer._container.style.cursor = "default";
+          viewer.scene.requestRender();
+        }
+      }
+    }
+  }, ScreenSpaceEventType.LEFT_CLICK);
 });
 </script>
 <template>
@@ -195,7 +293,7 @@ onMounted(() => {
 .reservoir-info-content {
   position: fixed;
   top: 100px;
-  right: 20px;
+  right: 10px;
   width: 254px;
   /* height: 114px; */
   opacity: 1;

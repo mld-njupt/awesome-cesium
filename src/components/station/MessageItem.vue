@@ -122,13 +122,13 @@ const option = ref({
     data: [],
   },
   yAxis: {
-    name: "Evaporation(m^3/s)",
+    name: "雨量",
     type: "value",
     max: 10,
   },
 
   series: {
-    name: "Evaporation",
+    name: "雨量",
     type: "line",
     symbolSize: 8,
     // prettier-ignore
@@ -181,6 +181,8 @@ onMounted(() => {
                 const { timeData, resData } = handleData(data, "雨量");
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
+                option.value.yAxis.name = "雨量";
+                option.value.series.name = "雨量";
                 option.value.yAxis.max = 10;
                 showLoading.value = false;
               });
@@ -198,6 +200,8 @@ onMounted(() => {
                 const { timeData, resData } = handleData(data, "水位");
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
+                option.value.yAxis.name = "水位";
+                option.value.series.name = "水位";
                 option.value.yAxis.max = 400;
                 showLoading.value = false;
               });
@@ -206,6 +210,8 @@ onMounted(() => {
             station_msg.value = qixiang[station_id];
             option.value.xAxis.data = [];
             option.value.series.data = [];
+            option.value.yAxis.name = "测站电压";
+                option.value.series.name = "测站电压";
             option.value.yAxis.max = 20;
             showLoading.value = true;
             fetch(
@@ -244,7 +250,7 @@ onMounted(() => {
   const info = document.getElementById("info");
   function showInfo(position) {
     info.style.display = "block";
-    info.style.left = position.x + 20 + "px";
+    info.style.left = position.x + 50 + "px";
     info.style.top = position.y - 200 + "px";
   }
 

@@ -52,12 +52,14 @@ onMounted(() => {
 .location-wrap {
   display: flex;
   justify-content: center;
+  align-items: center;
   position: fixed;
   bottom: 20px;
   right: 5px;
   width: 175px;
   text-align: center;
   border: 1px solid #fff;
+  height: 40px;
   border-radius: 4px;
   padding: 3px 5px 3px 5px;
   background-color: rgb(12, 12, 12);
