@@ -283,6 +283,7 @@ onMounted(() => {
     <WetherIem
       v-if="checked.checked3"
       :id="'qixiang/0'"
+      :name="'富溪'"
       :position="[118.2423, 29.9151]"
     />
     <InterItem v-if="checked.checked4" />

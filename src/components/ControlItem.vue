@@ -12,6 +12,9 @@ import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
 import SubItem4 from "../components/control/SubItem4.vue";
 import MenuItem8 from "../components/control/MenuItem8.vue";
+import MenuItem7 from "./control/MenuItem7.vue";
+import MenuItem6 from "./control/MeunItem6.vue";
+import MenuItem4 from "./control/MenuItem4.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
@@ -54,9 +57,6 @@ const selectedKeys = ref(["1"]);
 const openKeys = ref(["sub1"]);
 
 const handleClick = (e) => {
-  if (e.key != "8") {
-    closeReservoirInfo();
-  }
   switch (e.key) {
     case "10":
       showDrawer("reservoir");
@@ -64,8 +64,14 @@ const handleClick = (e) => {
     case "8":
       showDrawer("forecast");
       break;
+    case "7":
+      showDrawer("rule");
+      break;
+    case "6":
+      showDrawer("project");
+      break;
     case "4":
-      openReservoirInfo();
+      showDrawer("message");
       break;
     default:
       console.log(e.key);
@@ -81,25 +87,46 @@ const reservoirVis = ref(false);
 const closeResVis = () => {
   reservoirVis.value = false;
 };
-// 水库信息
-const showReservoirInfo = ref(false);
-const closeReservoirInfo = () => {
-  showReservoirInfo.value = false;
-};
-const openReservoirInfo = () => {
-  showReservoirInfo.value = true;
-};
 //预报相关
 const forecastrVis = ref(false);
 const closeForeVis = () => {
   forecastrVis.value = false;
 };
+//调度规则相关
+const ruleVis = ref(false);
+const closeRuleVis = () => {
+  ruleVis.value = false;
+};
+//水利工程相关
+const projectVis = ref(false);
+const closeProjectVis = () => {
+  projectVis.value = false;
+};
+//基本信息相关
+const messageVis = ref(false);
+const closeMessageVis = () => {
+  messageVis.value = false;
+};
 //drawer相关
 const showDrawer = (key) => {
-  if (key === "reservoir") {
-    reservoirVis.value = true;
-  } else if (key === "forecast") {
-    forecastrVis.value = true;
+  switch (key) {
+    case "reservoir":
+      reservoirVis.value = true;
+      break;
+    case "forecast":
+      forecastrVis.value = true;
+      break;
+    case "rule":
+      ruleVis.value = true;
+      break;
+    case "project":
+      projectVis.value = true;
+      break;
+    case "message":
+      messageVis.value = true;
+      break;
+    default:
+      break;
   }
 };
 
@@ -177,6 +204,17 @@ watch(
       v-if="forecastrVis"
       @close="closeForeVis"
       :visible="forecastrVis"
+    />
+    <MenuItem7 v-if="ruleVis" @close="closeRuleVis" :visible="ruleVis" />
+    <MenuItem6
+      v-if="projectVis"
+      @close="closeProjectVis"
+      :visible="projectVis"
+    />
+    <MenuItem4
+      v-if="messageVis"
+      @close="closeMessageVis"
+      :visible="messageVis"
     />
   </div>
 </template>
