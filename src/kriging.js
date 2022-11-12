@@ -508,11 +508,7 @@ kriging.plot = function (canvas, grid, xlim, ylim, colors) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Starting boundaries
-  let range = [
-    xlim[1] - xlim[0],
-    ylim[1] - ylim[0],
-    grid.zlim[1] - grid.zlim[0],
-  ];
+  let range = [xlim[1] - xlim[0], ylim[1] - ylim[0], 800 - 0];
   let i, j, x, y, z;
   let n = grid.length;
   let m = grid[0].length;

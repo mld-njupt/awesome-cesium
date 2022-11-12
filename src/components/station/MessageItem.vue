@@ -160,7 +160,6 @@ onMounted(() => {
     target_position = e.position;
     cartesian_2 = cartesian;
     if (defined(pickedObject) && pickedObject && defined(pickedObject.id)) {
-      console.log("xxx");
       if (!viewer.entities.getById(pickedObject.id.id)._polygon) {
         const station_type = viewer.entities
           .getById(pickedObject.id.id)
@@ -234,7 +233,6 @@ onMounted(() => {
     }
   }, ScreenSpaceEventType.LEFT_CLICK);
   viewer.scene.postRender.addEventListener(() => {
-    console.log("render");
     if (showPosition.value) {
       const position = SceneTransforms.wgs84ToWindowCoordinates(
         viewer.scene,

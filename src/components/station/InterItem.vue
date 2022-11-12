@@ -57,7 +57,7 @@ function drawKriging(viewer, lats, lngs, values, coords, ex) {
       //1.用克里金训练一个variogram对象
       let variogram = kriging.train(values, lats, lngs, "exponential", 0, 100);
       //2.使用刚才的variogram对象使polygons描述的地理位置内的格网元素具备不一样的预测值；
-      let grid = kriging.grid(ex, variogram, (maxy - miny) / 500);
+      let grid = kriging.grid(ex, variogram, (maxy - miny) / 1000);
       canvas = document.createElement("canvas");
       canvas.width = 800;
       canvas.height = 800;

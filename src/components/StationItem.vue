@@ -1,6 +1,12 @@
 <script setup>
-import { ref } from "vue";
-
+import { ref, onMounted } from "vue";
+import { useViewStore } from "../stores/earth";
+import {
+  ScreenSpaceEventHandler,
+  defined,
+  ScreenSpaceEventType,
+  Color,
+} from "cesium";
 import PointItem from "./station/PointItem.vue";
 import TriangleItem from "./station/TriangleItem.vue";
 import WetherIem from "./station/WetherIem.vue";
@@ -15,6 +21,85 @@ const checked = ref({
   checked3: false,
   //插值
   checked4: false,
+});
+const viewerStore = useViewStore();
+onMounted(() => {
+  const viewer = viewerStore.cesiumViewer;
+  const scene = viewer.scene;
+  const handler = new ScreenSpaceEventHandler(scene.canvas);
+  let scaleStack = [];
+  handler.setInputAction(function (movement) {
+    // let foundPosition = false;
+    // let pickedFeatureStart = viewer.scene.pick(movement.startPosition);
+    let pickedObject = viewer.scene.pick(movement.endPosition);
+    let pickEntity;
+    // if (viewer.scene.mode !== SceneMode.MORPHING) {
+    if (defined(pickedObject) && pickedObject.id !== "") {
+      const station_type = pickedObject.id.id.split("/")[0];
+      if (scaleStack.length != 0) return;
+      switch (station_type) {
+        case "yuliang":
+          // pickEntity = viewer.entities.getById(pickedObject.id.id);
+          pickedObject.id._point._pixelSize._value = 21;
+          pickedObject.id._label._fillColor._value =
+            Color.fromCssColorString("#0093ef");
+          viewer._container.style.cursor = "pointer";
+          viewer.scene.requestRender();
+          scaleStack.push({
+            entity: pickedObject.id,
+            id: pickedObject.id.id,
+            prev: 17,
+            cur: 21,
+          });
+          break;
+        case "shuiwei":
+          pickEntity = viewer.entities.getById(pickedObject.id.id);
+          pickEntity._billboard._scale._value = 1.5;
+          viewer._container.style.cursor = "pointer";
+          viewer.scene.requestRender();
+          scaleStack.push({
+            entity: pickedObject.id,
+            id: pickedObject.id.id,
+            prev: 1,
+            cur: 1.5,
+          });
+          break;
+        case "qixiang":
+          pickEntity = viewer.entities.getById(pickedObject.id.id);
+          pickEntity._billboard._scale._value = 1.5;
+          viewer._container.style.cursor = "pointer";
+          viewer.scene.requestRender();
+          scaleStack.push({
+            entity: pickedObject.id,
+            id: pickedObject.id.id,
+            prev: 1,
+            cur: 1.5,
+          });
+          break;
+        default:
+          break;
+      }
+    } else {
+      if (scaleStack.length == 0) return;
+      const prevEntityMsg = scaleStack.pop();
+      if (prevEntityMsg) {
+        if (prevEntityMsg.id.includes("yuliang")) {
+          //雨量站
+          prevEntityMsg.entity._point._pixelSize._value = 17;
+          prevEntityMsg.entity._label._fillColor._value =
+            Color.fromCssColorString("#000000");
+          viewer._container.style.cursor = "default";
+          viewer.scene.requestRender();
+        } else {
+          //水位站和气象站都用此即可
+          const prevEntity = viewer.entities.getById(prevEntityMsg.id);
+          prevEntity._billboard._scale._value = prevEntityMsg.prev;
+          viewer._container.style.cursor = "default";
+          viewer.scene.requestRender();
+        }
+      }
+    }
+  }, ScreenSpaceEventType.MOUSE_MOVE);
 });
 </script>
 <template>
@@ -64,31 +149,37 @@ const checked = ref({
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/0'"
+      :name="'岗村'"
       :position="[118.21457, 29.93643]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/1'"
+      :name="'芳村'"
       :position="[118.20599, 29.9028]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/2'"
+      :name="'洽舍'"
       :position="[118.25967, 29.94161]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/3'"
+      :name="'富溪'"
       :position="[118.29255, 29.91689]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/4'"
+      :name="'蒸发站'"
       :position="[118.2567, 29.89155]"
     />
     <TriangleItem
       v-if="checked.checked2"
       :id="'shuiwei/0'"
+      :name="'尾水'"
       :position="[118.2483, 29.9211]"
     />
     <WetherIem
