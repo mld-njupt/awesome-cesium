@@ -16,6 +16,7 @@ import MenuItem7 from "./control/MenuItem7.vue";
 import MenuItem6 from "./control/MeunItem6.vue";
 import MenuItem4 from "./control/MenuItem4.vue";
 import MenuItem1 from "./control/MenuItem1.vue";
+import MenuItem5 from "./control/MenuItem5.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
@@ -50,7 +51,7 @@ function zoomOut() {
 function reset() {
   const viewer = viewerStore.cesiumViewer;
   viewer.camera.flyTo({
-    destination: Cartesian3.fromDegrees(118.2443, 29.9171, 1500),
+    destination: Cartesian3.fromDegrees(118.2443, 29.9171, 5000),
   });
 }
 //menu相关
@@ -71,8 +72,23 @@ const handleClick = (e) => {
     case "6":
       showDrawer("project");
       break;
+    case "5":
+      showDrawer("curve");
+      break;
     case "4":
       showDrawer("message");
+      break;
+    case "3":
+      //001
+      drainageVis.value = 1;
+      break;
+    case "2":
+      //010
+      drainageVis.value = 2;
+      break;
+    case "1":
+      //100
+      drainageVis.value = 4;
       break;
     default:
       console.log(e.key);
@@ -83,6 +99,10 @@ const handleClick = (e) => {
 const titleClick = (e) => {
   console.log("titleClick", e);
 };
+//流域信息相关
+//100
+const drainageVis = ref(4);
+
 //水库调度相关
 const reservoirVis = ref(false);
 const closeResVis = () => {
@@ -108,6 +128,11 @@ const messageVis = ref(false);
 const closeMessageVis = () => {
   messageVis.value = false;
 };
+//特征曲线相关
+const curveVis = ref(false);
+const closeCurveVis = () => {
+  curveVis.value = false;
+};
 //drawer相关
 const showDrawer = (key) => {
   switch (key) {
@@ -125,6 +150,9 @@ const showDrawer = (key) => {
       break;
     case "message":
       messageVis.value = true;
+      break;
+    case "curve":
+      curveVis.value = true;
       break;
     default:
       break;
@@ -212,12 +240,13 @@ watch(
       @close="closeProjectVis"
       :visible="projectVis"
     />
+    <MenuItem5 v-if="curveVis" @close="closeCurveVis" :visible="curveVis" />
     <MenuItem4
       v-if="messageVis"
       @close="closeMessageVis"
       :visible="messageVis"
     />
-    <MenuItem1 />
+    <MenuItem1 v-if="drainageVis === 4" />
   </div>
 </template>
 <style scoped>

@@ -46,7 +46,7 @@ onMounted(() => {
   viewer.scene.fxaa = false;
   viewer.scene.postProcessStages.fxaa.enabled = false;
   viewer.camera.flyTo({
-    destination: Cartesian3.fromDegrees(118.2443, 29.9171, 2000.0),
+    destination: Cartesian3.fromDegrees(118.1758, 29.9970, 50000.0),
   });
   viewer.scene.requestRenderMode = true;
   // viewer.scene.globe.depthTestAgainstTerrain = true;

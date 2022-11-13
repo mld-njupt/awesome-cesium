@@ -159,7 +159,12 @@ onMounted(() => {
     c = new Cartesian2(e.position.x, e.position.y);
     target_position = e.position;
     cartesian_2 = cartesian;
-    if (defined(pickedObject) && pickedObject && defined(pickedObject.id)) {
+    if (
+      defined(pickedObject) &&
+      pickedObject &&
+      defined(pickedObject.id) &&
+      !pickedObject.id.id.includes("polyline")
+    ) {
       if (!viewer.entities.getById(pickedObject.id.id)._polygon) {
         const station_type = viewer.entities
           .getById(pickedObject.id.id)
@@ -211,7 +216,7 @@ onMounted(() => {
             option.value.xAxis.data = [];
             option.value.series.data = [];
             option.value.yAxis.name = "测站电压";
-                option.value.series.name = "测站电压";
+            option.value.series.name = "测站电压";
             option.value.yAxis.max = 20;
             showLoading.value = true;
             fetch(
