@@ -217,7 +217,7 @@ watch(
       @close="closeMessageVis"
       :visible="messageVis"
     />
-    <!-- <MenuItem1 /> -->
+    <MenuItem1 />
   </div>
 </template>
 <style scoped>

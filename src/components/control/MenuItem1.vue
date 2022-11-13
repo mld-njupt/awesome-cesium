@@ -35,12 +35,32 @@ onMounted(() => {
     const lineArr = v.geometry.coordinates.reduce((pre, cur) => {
       return pre.concat(cur);
     }, []);
+    // viewer.entities.add({
+    //   id: `polyline${i}`,
+    //   polylineVolume: {
+    //     positions: Cartesian3.fromDegreesArray(lineArr),
+    //     shape: computeCircle(50.0),
+    //     material: Color.PALETURQUOISE,
+    //   },
+    // });
     viewer.entities.add({
       id: `polyline${i}`,
-      polylineVolume: {
+      polyline: {
+        // 鼠标移动绘制
+        // positions: new CallbackProperty(function () {
+        //     return positions
+        // }, false),
         positions: Cartesian3.fromDegreesArray(lineArr),
-        shape: computeCircle(50.0),
-        material: Color.PALETURQUOISE,
+        show: true,
+        material: Color.GREEN,
+        // depthFailMaterial: new PolylineOutlineMaterialProperty({
+        //   // 折线低于地形时用于绘制折线的材料
+        //   color: Color.RED,
+        // }),
+        width: 10,
+        clampToGround: true,
+        eyeOffset: new Cartesian3(0, 0, -100),
+        // heightReference: HeightReference.CLAMP_TO_GROUND,
       },
     });
   });
