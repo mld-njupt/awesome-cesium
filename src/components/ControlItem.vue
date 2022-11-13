@@ -15,6 +15,7 @@ import MenuItem8 from "../components/control/MenuItem8.vue";
 import MenuItem7 from "./control/MenuItem7.vue";
 import MenuItem6 from "./control/MeunItem6.vue";
 import MenuItem4 from "./control/MenuItem4.vue";
+import MenuItem1 from "./control/MenuItem1.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
@@ -172,7 +173,7 @@ watch(
           </template>
           <template #title>水库信息</template>
           <a-menu-item key="4">基本信息</a-menu-item>
-          <a-menu-item key="5">特征信息</a-menu-item>
+          <a-menu-item key="5">特征曲线</a-menu-item>
           <a-menu-item key="6">水利工程</a-menu-item>
           <a-menu-item key="7">调度规则</a-menu-item>
         </a-sub-menu>
@@ -216,6 +217,7 @@ watch(
       @close="closeMessageVis"
       :visible="messageVis"
     />
+    <!-- <MenuItem1 /> -->
   </div>
 </template>
 <style scoped>
