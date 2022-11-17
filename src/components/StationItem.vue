@@ -248,25 +248,25 @@ onMounted(() => {
       v-if="checked.checked1"
       :id="'yuliang/0'"
       :name="'岗村'"
-      :position="[118.21457, 29.93643]"
+      :position="[118.1259, 30.0262]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/1'"
       :name="'芳村'"
-      :position="[118.20599, 29.9028]"
+      :position="[118.1619, 30.0604]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/2'"
       :name="'洽舍'"
-      :position="[118.25967, 29.94161]"
+      :position="[118.2, 29.9333]"
     />
     <PointItem
       v-if="checked.checked1"
       :id="'yuliang/3'"
       :name="'富溪'"
-      :position="[118.29255, 29.91689]"
+      :position="[118.2144, 30.0017]"
     />
     <PointItem
       v-if="checked.checked1"
@@ -284,7 +284,7 @@ onMounted(() => {
       v-if="checked.checked3"
       :id="'qixiang/0'"
       :name="'富溪'"
-      :position="[118.2423, 29.9151]"
+      :position="[118.2144, 30.0017]"
     />
     <InterItem v-if="checked.checked4" />
     <MessageItem />
