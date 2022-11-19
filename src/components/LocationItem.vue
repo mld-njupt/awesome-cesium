@@ -55,16 +55,17 @@ onMounted(() => {
   align-items: center;
   position: fixed;
   bottom: 20px;
-  right: 5px;
-  width: 175px;
-  text-align: center;
-  border: 1px solid #fff;
+  right: 10px;
+  width: 225px;
   height: 40px;
-  border-radius: 4px;
-  padding: 3px 5px 3px 5px;
-  background-color: rgb(12, 12, 12);
-  font-size: 11px;
-  opacity: 0.6;
-  color: #fff;
+  padding: 10px;
+  font-weight: 36;
+  text-align: center;
+  box-sizing: border-box;
+  color: #323232;
+  font-size: 14px;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.3em;
+  background-color: #fff;
 }
 </style>

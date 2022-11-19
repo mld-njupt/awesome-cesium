@@ -21,9 +21,8 @@ export default defineConfig({
   // server: {
   //   proxy: {
   //     "/data": {
-  //       target: "http://http://43.142.17.108:9001",
+  //       target: "http://http://43.142.17.108:9000",
   //       changeOrigin: true,
-
   //       secure: false,
   //       rewrite: (path) => path.replace(/^\/data/, ""),
   //     },

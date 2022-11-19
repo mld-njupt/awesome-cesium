@@ -16,7 +16,9 @@ import MenuItem7 from "./control/MenuItem7.vue";
 import MenuItem6 from "./control/MeunItem6.vue";
 import MenuItem4 from "./control/MenuItem4.vue";
 import MenuItem1 from "./control/MenuItem1.vue";
+import MenuItem2 from "./control/MenuItem2.vue";
 import MenuItem5 from "./control/MenuItem5.vue";
+import MenuItem3 from "./control/MenuItem3.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
@@ -247,6 +249,8 @@ watch(
       :visible="messageVis"
     />
     <MenuItem1 v-if="drainageVis === 4" />
+    <Suspense> <MenuItem2 v-if="drainageVis === 2" /></Suspense>
+    <Suspense> <MenuItem3 v-if="drainageVis === 1" /></Suspense>
   </div>
 </template>
 <style scoped>
