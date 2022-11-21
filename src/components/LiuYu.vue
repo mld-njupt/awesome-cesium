@@ -10,14 +10,10 @@ onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   viewer.entities.add({
     id: "liuyu",
-    polygon: {
-      hierarchy: {
-        positions: Cartesian3.fromDegreesArray(coords),
-      },
-      fill: true,
-      material: Color.LIGHTPINK.withAlpha(0.5),
-      outlineColor: Color.RED,
-      outerWidth: 5,
+    polyline: {
+      positions: Cartesian3.fromDegreesArray(coords),
+      width: 10,
+      material: Color.YELLOW,
       zIndex: 1,
     },
   });

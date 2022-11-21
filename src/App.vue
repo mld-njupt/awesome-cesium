@@ -14,6 +14,7 @@ import { RouterView } from "vue-router";
   height: 100vh;
 }
 * {
+  user-select: none;
   font-family: "Microsoft Yahei" !important;
 }
 </style>

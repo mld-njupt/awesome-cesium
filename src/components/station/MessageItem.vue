@@ -144,7 +144,6 @@ const handleZoom = (t) => {
     option.value.dataZoom[0].end = t.end;
     option.value.dataZoom[1].start = t.start;
     option.value.dataZoom[1].end = t.end;
-    // }
   } else {
     if (option.value.series.type == "line") return;
     option.value.series.type = "line";

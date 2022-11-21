@@ -10,6 +10,7 @@ import {
 import kriging from "../../kriging";
 import data1 from "../../assets/test/data1";
 import poly from "../../assets/test/poly";
+import TimeSlider from "./TimeSlider.vue";
 import { useViewStore } from "../../stores/earth";
 // import shexian from "../assets/test/shexian.json"
 const viewerStore = useViewStore();
@@ -66,7 +67,8 @@ function drawKriging(viewer, lats, lngs, values, coords, ex) {
       //1.用克里金训练一个variogram对象
       let variogram = kriging.train(values, lats, lngs, "exponential", 0, 100);
       //2.使用刚才的variogram对象使polygons描述的地理位置内的格网元素具备不一样的预测值；
-      let grid = kriging.grid(ex, variogram, (maxy - miny) / 1000);
+      let grid = kriging.grid(ex, variogram, (maxy - miny) / 500);
+      console.log(grid);
       canvas = document.createElement("canvas");
       canvas.width = 800;
       canvas.height = 800;
@@ -108,7 +110,10 @@ onBeforeUnmount(() => {
   removeEntity();
 });
 </script>
-<template><div class="legend"></div></template>
+<template>
+  <TimeSlider />
+  <div class="legend"></div>
+</template>
 <style scoped>
 .legend {
   position: fixed;
