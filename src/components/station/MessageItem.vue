@@ -2,21 +2,21 @@
 import { ref } from "vue";
 import { useViewStore } from "../../stores/earth";
 import {
-  Cartesian3,
-  EllipsoidalOccluder,
-  Cartesian2,
+  // Cartesian3,
+  // EllipsoidalOccluder,
+  // Cartesian2,
   ScreenSpaceEventHandler,
-  Ellipsoid,
+  // Ellipsoid,
   defined,
   ScreenSpaceEventType,
   SceneTransforms,
-  Cartographic,
-  Math,
+  // Cartographic,
+  // Math,
 } from "cesium";
 import { onMounted } from "vue";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { PieChart, LineChart } from "echarts/charts";
+import { PieChart, LineChart, BarChart } from "echarts/charts";
 import { UniversalTransition } from "echarts/features";
 import {
   TitleComponent,
@@ -41,6 +41,7 @@ use([
   DataZoomComponent,
   LineChart,
   UniversalTransition,
+  BarChart,
 ]);
 
 const station_msg = ref();
@@ -124,7 +125,7 @@ const option = ref({
   yAxis: {
     name: "雨量",
     type: "value",
-    max: 10,
+    max: 20,
   },
 
   series: {
@@ -136,11 +137,25 @@ const option = ref({
   },
 });
 const viewerStore = useViewStore();
+const handleZoom = (t) => {
+  if (t.end - t.start <= 5) {
+    option.value.series.type = "bar";
+    option.value.dataZoom[0].start = t.start;
+    option.value.dataZoom[0].end = t.end;
+    option.value.dataZoom[1].start = t.start;
+    option.value.dataZoom[1].end = t.end;
+    // }
+  } else {
+    if (option.value.series.type == "line") return;
+    option.value.series.type = "line";
+  }
+};
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   const scene = viewer.scene;
   const handler = new ScreenSpaceEventHandler(scene.canvas);
-  let click_point, c, target_position, cartesian_2;
+  // let click_point, c, target_position,
+  let cartesian_2;
   //注册鼠标点击事件
   handler.setInputAction(function (e) {
     const pickedObject = scene.pick(e.position, 3, 3);
@@ -148,16 +163,16 @@ onMounted(() => {
     const ellipsoid = viewer.scene.globe.ellipsoid;
     const cartesian = viewer.camera.pickEllipsoid(e.position, ellipsoid);
     //将笛卡尔坐标转换为地理坐标
-    const cartographic = Cartographic.fromCartesian(cartesian);
+    // const cartographic = Cartographic.fromCartesian(cartesian);
     //将弧度转为度的十进制度表示
-    const lon = Math.toDegrees(cartographic.longitude);
-    const lat = Math.toDegrees(cartographic.latitude);
+    // const lon = Math.toDegrees(cartographic.longitude);
+    // const lat = Math.toDegrees(cartographic.latitude);
 
-    const point2 = { longitude: lon, latitude: lat };
-    click_point = Cartesian3.fromDegrees(point2.longitude, point2.latitude);
+    // const point2 = { longitude: lon, latitude: lat };
+    // click_point = Cartesian3.fromDegrees(point2.longitude, point2.latitude);
 
-    c = new Cartesian2(e.position.x, e.position.y);
-    target_position = e.position;
+    // c = new Cartesian2(e.position.x, e.position.y);
+    // target_position = e.position;
     cartesian_2 = cartesian;
     if (
       defined(pickedObject) &&
@@ -188,7 +203,7 @@ onMounted(() => {
                 option.value.series.data = resData;
                 option.value.yAxis.name = "雨量";
                 option.value.series.name = "雨量";
-                option.value.yAxis.max = 10;
+                option.value.yAxis.max = 20;
                 showLoading.value = false;
               });
             break;
@@ -311,6 +326,7 @@ const showMsg = () => {
         class="chart content-item"
         v-if="showConfig.chart"
         :option="option"
+        @datazoom="handleZoom"
       ></v-chart>
     </div>
   </div>

@@ -11,6 +11,7 @@ import {
 import ControlItem from "../components/ControlItem.vue";
 import LocationItem from "../components/LocationItem.vue";
 import StationItem from "../components/StationItem.vue";
+import LiuYu from "../components/Liuyu.vue";
 import { useViewStore } from "../stores/earth";
 import { ExportOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
@@ -46,7 +47,7 @@ onMounted(() => {
   viewer.scene.fxaa = false;
   viewer.scene.postProcessStages.fxaa.enabled = false;
   viewer.camera.flyTo({
-    destination: Cartesian3.fromDegrees(118.1758, 29.9970, 50000.0),
+    destination: Cartesian3.fromDegrees(118.1758, 29.997, 50000.0),
   });
   viewer.scene.requestRenderMode = true;
   // viewer.scene.globe.depthTestAgainstTerrain = true;
@@ -79,6 +80,7 @@ onMounted(() => {
   <ControlItem v-if="view.cesiumViewer" />
   <LocationItem v-if="view.cesiumViewer" />
   <StationItem v-if="view.cesiumViewer" />
+  <LiuYu v-if="view.cesiumViewer" />
 </template>
 
 <style scoped>

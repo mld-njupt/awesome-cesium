@@ -26,7 +26,7 @@ const onClose = () => {
 </template>
 <style scoped>
 span {
-  font-size: 24px;
+  /* font-size: 24px; */
   font-weight: 600;
 }
 .tab1 {

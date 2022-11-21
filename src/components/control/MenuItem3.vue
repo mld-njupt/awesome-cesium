@@ -11,7 +11,6 @@ const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
 const image = await tiff.getImage();
 const [red = [], green = red, blue = red] = await image.readRasters();
 // 将像素信息写入canvas
-console.log(red)
 const canvas = document.createElement("canvas");
 let width = image.getWidth();
 let height = image.getHeight();
@@ -38,8 +37,10 @@ onMounted(() => {
       material: new ImageMaterialProperty({
         image: canvas, //使用贴图的方式将结果贴到面上
       }),
+      zIndex: 2,
     },
   });
+  viewer.scene.requestRender();
 });
 function removeEntity() {
   const viewer = viewerStore.cesiumViewer;
