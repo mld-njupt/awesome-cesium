@@ -1,5 +1,9 @@
 <script setup>
-import { PlaySquareOutlined } from "@ant-design/icons-vue";
+import {
+  PlaySquareOutlined,
+  CaretLeftOutlined,
+  CaretRightOutlined,
+} from "@ant-design/icons-vue";
 import { ref, reactive } from "vue";
 const emit = defineEmits(["onChange"]);
 const selVal = ref("2022");
@@ -29,29 +33,40 @@ const debounce = (fn, delay) => {
     }, delay);
   };
 };
-
+//拖拽暂时不做了
 const handleMove = debounce((e) => {
   console.log(e.movementX);
   if (isDown.value && e.movementX > 0 && thumbPosition.index != 11) {
     thumbPosition.index++;
     thumbPosition.left = `${positions[thumbPosition.index]}px`;
-    emit("onChange",thumbPosition.index)
+    emit("onChange", thumbPosition.index);
   } else if (isDown.value && e.movementX < 0 && thumbPosition.index != 0) {
     thumbPosition.index--;
     thumbPosition.left = `${positions[thumbPosition.index]}px`;
-    emit("onChange",thumbPosition.index)
+    emit("onChange", thumbPosition.index);
   }
 }, 800);
 const handleClick = (index) => {
-    thumbPosition.left = `${positions[index]}px`;
-    emit("onChange",index)
+  thumbPosition.left = `${positions[index]}px`;
+  emit("onChange", index);
+};
+const handleLR = (type) => {
+  if (type == "left" && thumbPosition.index > 0) {
+    thumbPosition.index--;
+    thumbPosition.left = `${positions[thumbPosition.index]}px`;
+    emit("onChange", thumbPosition.index);
+  } else if (type == "right" && thumbPosition.index < 11) {
+    thumbPosition.index++;
+    thumbPosition.left = `${positions[thumbPosition.index]}px`;
+    emit("onChange", thumbPosition.index);
+  }
 };
 </script>
 <template>
   <div class="time-wrap">
-    <div class="go">
+    <!-- <div class="go">
       <play-square-outlined  />
-    </div>
+    </div> -->
     <div class="sel-year">
       <a-select
         ref="select"
@@ -73,7 +88,6 @@ const handleClick = (index) => {
         <div
           @mousedown="handleDown"
           @mouseup="handleUp"
-          @mousemove="handleMove"
           class="thumb"
           :style="thumbPosition"
         ></div>
@@ -129,6 +143,8 @@ const handleClick = (index) => {
         </div>
       </div>
     </div>
+    <div class="indicator" @click="handleLR('left')"><caret-left-outlined /></div>
+    <div class="indicator" @click="handleLR('right')"><caret-right-outlined /></div>
   </div>
 </template>
 <style scoped>
@@ -160,7 +176,7 @@ const handleClick = (index) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 110px;
+  width: 140px;
   height: 68px;
   background-color: #fff;
 }
@@ -219,5 +235,18 @@ const handleClick = (index) => {
   width: 20px;
   text-align: center;
   user-select: none;
+}
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 68px;
+  width: 64px;
+  height: 68px;
+  font-size: 28px;
+  background-color: #fff;
+  color: #6e6e6e;
+  cursor: pointer;
 }
 </style>
