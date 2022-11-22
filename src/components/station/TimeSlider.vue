@@ -1,8 +1,9 @@
 <script setup>
 import { PlaySquareOutlined } from "@ant-design/icons-vue";
 import { ref, reactive } from "vue";
+const emit = defineEmits(["onChange"]);
 const selVal = ref("2022");
-const postions = [
+const positions = [
   2, 39.27, 77.27, 114.27, 152.27, 188.27, 225.27, 263.27, 300.27, 338.27,
   374.27, 412.27,
 ];
@@ -30,18 +31,27 @@ const debounce = (fn, delay) => {
 };
 
 const handleMove = debounce((e) => {
+  console.log(e.movementX);
   if (isDown.value && e.movementX > 0 && thumbPosition.index != 11) {
     thumbPosition.index++;
-    thumbPosition.left = `${postions[thumbPosition.index]}px`;
+    thumbPosition.left = `${positions[thumbPosition.index]}px`;
+    emit("onChange",thumbPosition.index)
   } else if (isDown.value && e.movementX < 0 && thumbPosition.index != 0) {
     thumbPosition.index--;
-    thumbPosition.left = `${postions[thumbPosition.index]}px`;
+    thumbPosition.left = `${positions[thumbPosition.index]}px`;
+    emit("onChange",thumbPosition.index)
   }
 }, 800);
+const handleClick = (index) => {
+    thumbPosition.left = `${positions[index]}px`;
+    emit("onChange",index)
+};
 </script>
 <template>
   <div class="time-wrap">
-    <div class="go"><play-square-outlined /></div>
+    <div class="go">
+      <play-square-outlined  />
+    </div>
     <div class="sel-year">
       <a-select
         ref="select"
@@ -69,51 +79,51 @@ const handleMove = debounce((e) => {
         ></div>
       </div>
       <div class="scale-wrap">
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(0)">
           <div class="scale"></div>
           <div class="scale-label">1月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(1)">
           <div class="scale"></div>
           <div class="scale-label">2月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(2)">
           <div class="scale"></div>
           <div class="scale-label">3月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(3)">
           <div class="scale"></div>
           <div class="scale-label">4月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(4)">
           <div class="scale"></div>
           <div class="scale-label">5月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(5)">
           <div class="scale"></div>
           <div class="scale-label">6月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(6)">
           <div class="scale"></div>
           <div class="scale-label">7月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(7)">
           <div class="scale"></div>
           <div class="scale-label">8月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(8)">
           <div class="scale"></div>
           <div class="scale-label">9月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(9)">
           <div class="scale"></div>
           <div class="scale-label">10月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(10)">
           <div class="scale"></div>
           <div class="scale-label">11月</div>
         </div>
-        <div class="scale-item">
+        <div class="scale-item" @click="handleClick(11)">
           <div class="scale"></div>
           <div class="scale-label">12月</div>
         </div>
