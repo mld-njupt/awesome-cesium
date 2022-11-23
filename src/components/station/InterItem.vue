@@ -33,6 +33,18 @@ const values = [
   [100, 210, 240, 640, 200],
   [200, 80, 490, 720, 100],
   [300, 40, 700, 300, 200],
+  [100, 0, 800, 100, 200],
+  [200, 50, 0, 100, 400],
+  [100, 0, 800, 100, 500],
+  [100, 300, 200, 100, 200],
+  [500, 0, 800, 600, 200],
+  [100, 350, 200, 700, 200],
+  [250, 160, 600, 300, 200],
+  [700, 40, 700, 200, 100],
+  [100, 0, 500, 800, 300],
+  [100, 210, 240, 640, 200],
+  [200, 80, 490, 720, 100],
+  [300, 40, 700, 300, 200],
 ];
 const coords = poly[0].flat(2);
 function drawKriging(viewer, lats, lngs, values, coords, ex) {
@@ -109,7 +121,7 @@ function drawKriging(viewer, lats, lngs, values, coords, ex) {
   }
 }
 const handleTimeChange = (index) => {
-  removeEntity()
+  removeEntity();
   const viewer = viewerStore.cesiumViewer;
   drawKriging(viewer, lats, lngs, values[index], coords, poly);
 };

@@ -1,9 +1,5 @@
 <script setup>
-import {
-  PlaySquareOutlined,
-  CaretLeftOutlined,
-  CaretRightOutlined,
-} from "@ant-design/icons-vue";
+import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons-vue";
 import { ref, reactive } from "vue";
 const emit = defineEmits(["onChange"]);
 const selVal = ref("2022");
@@ -11,7 +7,7 @@ const positions = [
   2, 39.27, 77.27, 114.27, 152.27, 188.27, 225.27, 263.27, 300.27, 338.27,
   374.27, 412.27,
 ];
-const thumbPosition = reactive({ left: "2px", index: 0 });
+const thumbPosition = reactive({ left: "2px", index: 0, multiple: 0 });
 const years = [
   2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032,
 ];
@@ -48,18 +44,24 @@ const handleMove = debounce((e) => {
 }, 800);
 const handleClick = (index) => {
   thumbPosition.left = `${positions[index]}px`;
-  emit("onChange", index);
+  emit("onChange", thumbPosition.multiple * 12 + index);
 };
 const handleLR = (type) => {
   if (type == "left" && thumbPosition.index > 0) {
     thumbPosition.index--;
     thumbPosition.left = `${positions[thumbPosition.index]}px`;
-    emit("onChange", thumbPosition.index);
+    emit("onChange", thumbPosition.multiple * 12 + thumbPosition.index);
   } else if (type == "right" && thumbPosition.index < 11) {
     thumbPosition.index++;
     thumbPosition.left = `${positions[thumbPosition.index]}px`;
-    emit("onChange", thumbPosition.index);
+    emit("onChange", thumbPosition.multiple * 12 + thumbPosition.index);
   }
+};
+const handleSel = (v) => {
+  thumbPosition.left = "2px";
+  thumbPosition.index = 0;
+  thumbPosition.multiple = v;
+  emit("onChange", parseInt(v) * 12);
 };
 </script>
 <template>
@@ -73,12 +75,13 @@ const handleLR = (type) => {
         v-model:value="selVal"
         style="width: 120px"
         @focus="focus"
-        @change="handleChange"
+        @change="handleSel"
       >
         <a-select-option
           v-for="(year, index) in years"
           :key="index"
-          :value="year"
+          :value="index"
+          @change="handleSel"
           >{{ year }}</a-select-option
         >
       </a-select>
@@ -143,8 +146,12 @@ const handleLR = (type) => {
         </div>
       </div>
     </div>
-    <div class="indicator" @click="handleLR('left')"><caret-left-outlined /></div>
-    <div class="indicator" @click="handleLR('right')"><caret-right-outlined /></div>
+    <div class="indicator" @click="handleLR('left')">
+      <caret-left-outlined />
+    </div>
+    <div class="indicator" @click="handleLR('right')">
+      <caret-right-outlined />
+    </div>
   </div>
 </template>
 <style scoped>
