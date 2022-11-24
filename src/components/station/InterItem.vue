@@ -130,7 +130,7 @@ function drawKriging(viewer, lats, lngs, values, coords, ex) {
         }
       }
       reslove();
-    });
+    }, 100);
   });
 }
 const handleTimeChange = (index) => {
