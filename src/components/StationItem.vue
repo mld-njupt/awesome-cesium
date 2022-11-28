@@ -25,6 +25,17 @@ const checked = ref({
 const moveStack = ref([]);
 const clickStack = ref([]);
 const viewerStore = useViewStore();
+//站点三角形标志
+const canvas = document.createElement("canvas");
+const ctx = canvas.getContext("2d");
+ctx.beginPath();
+ctx.moveTo(100, 0);
+ctx.lineTo(50, 140);
+ctx.lineTo(0, 0);
+ctx.fillStyle = "#ffa500";
+ctx.fill();
+let image = new Image();
+image.src = canvas.toDataURL("image/jpg");
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   const scene = viewer.scene;
@@ -220,14 +231,16 @@ onMounted(() => {
           </div>
         </div>
         <div class="item">
-          <div class="sign" :class="{ active: checked.checked2 }"></div>
+          <div class="none-active" v-if="!checked.checked2"></div>
+          <div class="active1" v-if="checked.checked2"></div>
           <div class="name">水位站</div>
           <div class="switch">
             <a-switch v-model:checked="checked.checked2" size="small" />
           </div>
         </div>
         <div class="item">
-          <div class="sign" :class="{ active: checked.checked3 }"></div>
+          <div class="none-active" v-if="!checked.checked3"></div>
+          <div class="active2" v-if="checked.checked3"></div>
           <div class="name">气象站</div>
           <div class="switch">
             <a-switch v-model:checked="checked.checked3" size="small" />
@@ -236,7 +249,6 @@ onMounted(() => {
       </div>
       <div class="sub right">
         <div class="item">
-          <!-- <div class="sign" :class="{active: checked.checked3}"></div> -->
           <div class="name">雨量插值</div>
           <div class="switch">
             <a-switch v-model:checked="checked.checked4" size="small" />
@@ -327,6 +339,8 @@ onMounted(() => {
   padding: 6px 12px;
 }
 .item {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 24px;
   opacity: 1;
@@ -341,14 +355,39 @@ onMounted(() => {
   /* align-items: center; */
 }
 .item .sign {
-  width: 10px;
-  height: 10px;
-  margin-top: 6px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background-color: transparent;
 }
 .item .sign.active {
   background-color: rgba(255, 141, 26, 1);
+}
+/* .active1 {
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+.none-active {
+  width: 16px;
+  height: 16px;
+}
+.active1 {
+  width: 16px;
+  height: 20px;
+  background-image: url("../assets/tri.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  /* margin-top: 6px; */
+}
+.active2 {
+  width: 16px;
+  height: 20px;
+  background-image: url("../assets/zhan1.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  /* margin-top: 6px; */
 }
 .item .name {
   line-height: 22px;

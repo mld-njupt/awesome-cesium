@@ -2,16 +2,10 @@
 import { ref } from "vue";
 import { useViewStore } from "../../stores/earth";
 import {
-  // Cartesian3,
-  // EllipsoidalOccluder,
-  // Cartesian2,
   ScreenSpaceEventHandler,
-  // Ellipsoid,
   defined,
   ScreenSpaceEventType,
   SceneTransforms,
-  // Cartographic,
-  // Math,
 } from "cesium";
 import { onMounted } from "vue";
 import { use } from "echarts/core";
@@ -98,19 +92,6 @@ const option = ref({
       xAxisIndex: [0, 1],
     },
   ],
-  // grid: [
-  //   {
-  //     left: 60,
-  //     right: 50,
-  //     height: "35%",
-  //   },
-  //   {
-  //     left: 60,
-  //     right: 50,
-  //     top: "55%",
-  //     height: "35%",
-  //   },
-  // ],
   grid: {
     left: "12%",
     right: "15%",
@@ -161,17 +142,6 @@ onMounted(() => {
     // 屏幕坐标转世界坐标——关键点
     const ellipsoid = viewer.scene.globe.ellipsoid;
     const cartesian = viewer.camera.pickEllipsoid(e.position, ellipsoid);
-    //将笛卡尔坐标转换为地理坐标
-    // const cartographic = Cartographic.fromCartesian(cartesian);
-    //将弧度转为度的十进制度表示
-    // const lon = Math.toDegrees(cartographic.longitude);
-    // const lat = Math.toDegrees(cartographic.latitude);
-
-    // const point2 = { longitude: lon, latitude: lat };
-    // click_point = Cartesian3.fromDegrees(point2.longitude, point2.latitude);
-
-    // c = new Cartesian2(e.position.x, e.position.y);
-    // target_position = e.position;
     cartesian_2 = cartesian;
     if (
       defined(pickedObject) &&

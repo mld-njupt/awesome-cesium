@@ -12,7 +12,7 @@ onMounted(() => {
     id: "liuyu",
     polyline: {
       positions: Cartesian3.fromDegreesArray(coords),
-      width: 10,
+      width: 5,
       material: Color.YELLOW,
       zIndex: 1,
     },

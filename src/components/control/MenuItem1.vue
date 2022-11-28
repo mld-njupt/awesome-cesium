@@ -26,11 +26,11 @@ onMounted(() => {
       polyline: {
         positions: Cartesian3.fromDegreesArray(lineArr),
         show: true,
-        material: Color.DODGERBLUE,
+        material: Color.fromCssColorString("#0A93FC"),
         width: 5,
         clampToGround: true,
         eyeOffset: new Cartesian3(0, 0, -100),
-        zIndex: 2,
+        zIndex: 4,
       },
     });
   });

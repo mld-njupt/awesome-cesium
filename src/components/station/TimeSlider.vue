@@ -9,7 +9,7 @@ const positions = [
 ];
 const thumbPosition = reactive({ left: "2px", index: 0, multiple: 0 });
 const years = [
-  2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032,
+  2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
 ];
 const isDown = ref(false);
 const handleDown = (e) => {

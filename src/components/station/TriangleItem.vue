@@ -5,7 +5,6 @@ import {
   HorizontalOrigin,
   HeightReference,
   LabelStyle,
-  VerticalOrigin,
   Cartesian2,
 } from "cesium";
 import { onMounted, onBeforeUnmount } from "vue";
