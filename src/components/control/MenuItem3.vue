@@ -5,7 +5,7 @@ import { useViewStore } from "../../stores/earth";
 import poly from "../../assets/data/liuyu";
 const coords = poly[0].flat(2);
 const viewerStore = useViewStore();
-const response = await fetch("http://43.142.17.108:9000/tudiliyong.tif");
+const response = await fetch("http://43.142.17.108:9000/tudiliyong22.tif");
 const arrayBuffer = await response.arrayBuffer();
 const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
 const image = await tiff.getImage();
@@ -19,9 +19,9 @@ canvas.height = height;
 let ctx = canvas.getContext("2d");
 let imageData = ctx.createImageData(width, height);
 for (let i = 0; i < imageData.data.length / 4; i += 1) {
-  imageData.data[i * 4 + 0] = red[i];
-  imageData.data[i * 4 + 1] = green[i] || 0;
-  imageData.data[i * 4 + 2] = blue[i] || 0;
+  imageData.data[i * 4 + 0] = red[i] + 150;
+  imageData.data[i * 4 + 1] = green[i] + 200 || 0;
+  imageData.data[i * 4 + 2] = blue[i] + 40 || 0;
   imageData.data[i * 4 + 3] = red[i] === 255 ? 0 : 255;
   //   imageData.data[i * 4 + 3] = 0;
 }

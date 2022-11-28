@@ -19,6 +19,7 @@ import MenuItem1 from "./control/MenuItem1.vue";
 import MenuItem2 from "./control/MenuItem2.vue";
 import MenuItem5 from "./control/MenuItem5.vue";
 import MenuItem3 from "./control/MenuItem3.vue";
+import MenuItem13 from "./control/MenuItem13.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
@@ -79,6 +80,10 @@ const handleClick = (e) => {
       break;
     case "4":
       showDrawer("message");
+      break;
+    case "13":
+      //100
+      drainageVis.value = 0;
       break;
     case "3":
       //001
@@ -196,6 +201,7 @@ watch(
           <a-menu-item key="1">水系</a-menu-item>
           <a-menu-item key="2">DEM</a-menu-item>
           <a-menu-item key="3">土地利用</a-menu-item>
+          <a-menu-item key="13">土壤类型</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub2" @titleClick="titleClick">
           <template #icon>
@@ -251,6 +257,7 @@ watch(
     <MenuItem1 v-if="drainageVis === 4" />
     <Suspense> <MenuItem2 v-if="drainageVis === 2" /></Suspense>
     <Suspense> <MenuItem3 v-if="drainageVis === 1" /></Suspense>
+    <Suspense> <MenuItem13 v-if="drainageVis === 0" /></Suspense>
   </div>
 </template>
 <style scoped>

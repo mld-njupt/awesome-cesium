@@ -13,7 +13,6 @@ const handleData = (preData, key) => {
     tempArr.splice(7, 0, ".");
     return tempArr.join("");
   });
-  console.log(timeData);
   return { timeData: timeData, resData: resData };
 };
 export default handleData;

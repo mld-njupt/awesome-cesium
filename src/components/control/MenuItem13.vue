@@ -5,7 +5,7 @@ import { useViewStore } from "../../stores/earth";
 import poly from "../../assets/data/liuyu";
 const coords = poly[0].flat(2);
 const viewerStore = useViewStore();
-const response = await fetch("http://43.142.17.108:9000/dem1.tif");
+const response = await fetch("http://43.142.17.108:9000/turangleixing.tif");
 const arrayBuffer = await response.arrayBuffer();
 const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
 const image = await tiff.getImage();
@@ -53,10 +53,11 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div class="legend">
+  <div></div>
+  <!-- <div class="legend">
     <div class="top">1598.7m</div>
     <div class="bottom">155.8m</div>
-  </div>
+  </div> -->
 </template>
 <style scoped>
 .legend {
