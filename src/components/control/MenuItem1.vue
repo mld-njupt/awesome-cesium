@@ -26,8 +26,8 @@ onMounted(() => {
       polyline: {
         positions: Cartesian3.fromDegreesArray(lineArr),
         show: true,
-        material: Color.fromCssColorString("#0A93FC"),
-        width: 5,
+        material: Color.fromCssColorString("#00AEEF"),
+        width: 2,
         clampToGround: true,
         eyeOffset: new Cartesian3(0, 0, -100),
         zIndex: 4,

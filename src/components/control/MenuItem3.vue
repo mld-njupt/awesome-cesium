@@ -94,21 +94,28 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div class="legend">
+  <div class="legend-wrap">
+    <div class="legend"></div>
     <div class="text-wrap">
       <div class="text-item" :key="item" v-for="item in legends">
         {{ item }}
       </div>
     </div>
-    <!-- <div class="1"></div>
-    <div class="2">155.8m</div> -->
   </div>
 </template>
 <style scoped>
-.legend {
+.legend-wrap {
   position: fixed;
   bottom: 80px;
-  right: 85px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.8);
+}
+.legend {
   width: 45px;
   height: 170px;
   background-image: url("../../assets/土地图例.png");
@@ -116,12 +123,10 @@ onBeforeUnmount(() => {
   background-repeat: no-repeat;
 }
 .text-wrap {
+  height: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: fixed;
-  bottom: 80px;
-  right: 10px;
   height: 170px;
 }
 .text-item {

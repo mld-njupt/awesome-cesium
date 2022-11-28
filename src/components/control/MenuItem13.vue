@@ -92,7 +92,8 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div class="legend">
+  <div class="legend-wrap">
+    <div class="legend"></div>
     <div class="text-wrap">
       <div class="text-item" :key="item" v-for="item in legends">
         {{ item }}
@@ -101,10 +102,18 @@ onBeforeUnmount(() => {
   </div>
 </template>
 <style scoped>
-.legend {
+.legend-wrap {
   position: fixed;
   bottom: 80px;
-  right: 82px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.8);
+}
+.legend {
   width: 45px;
   height: 150px;
   background-image: url("../../assets/土壤图例.png");
@@ -115,9 +124,6 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: fixed;
-  bottom: 80px;
-  right: 10px;
   height: 150px;
 }
 .text-item {
