@@ -14,7 +14,7 @@ onMounted(() => {
       positions: Cartesian3.fromDegreesArray(coords),
       width: 5,
       material: Color.YELLOW,
-      zIndex: 1,
+      zIndex: 2,
     },
   });
   viewer.scene.requestRender();

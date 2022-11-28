@@ -7,6 +7,7 @@ import {
   Cartesian3,
   ScreenSpaceEventType,
   IonImageryProvider,
+  MapboxStyleImageryProvider,
 } from "cesium";
 import ControlItem from "../components/ControlItem.vue";
 import LocationItem from "../components/LocationItem.vue";
@@ -42,7 +43,13 @@ onMounted(() => {
     scene3DOnly: true, //如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源
     navigationInstructionsInitiallyVisible: false,
     showRenderLoopErrors: false, //是否显示渲染错误
-    imageryProvider: new IonImageryProvider({ assetId: 4 }),
+    // imageryProvider: new IonImageryProvider({ assetId: 4 }),
+    imageryProvider: new MapboxStyleImageryProvider({
+      username: "mld-nj",
+      styleId: "clb0khdkv004a14rxkumct99r",
+      accessToken:
+        "pk.eyJ1IjoibWxkLW5qIiwiYSI6ImNrbG0xeTF0MjAzZXMycG1mNHgwOTI1MTYifQ.gCNpd2DiVypcH1a8g-iiYA",
+    }),
   });
   viewer.scene.fxaa = false;
   viewer.scene.postProcessStages.fxaa.enabled = false;
