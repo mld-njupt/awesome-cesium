@@ -8,7 +8,7 @@ import {
 import { useViewStore } from "../../stores/earth";
 import poly from "../../assets/data/liuyu";
 const coords = poly[0].flat(2);
-const layer = ref({});
+let layer = null;
 const viewerStore = useViewStore();
 // const response = await fetch("http://43.142.17.108:9000/dem3.tif");
 // const arrayBuffer = await response.arrayBuffer();
@@ -40,13 +40,13 @@ onMounted(() => {
     subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
     show: true,
   });
-  layer.value = imageryLayers.addImageryProvider(osmImageryProvider);
+  layer = imageryLayers.addImageryProvider(osmImageryProvider);
   viewer.scene.requestRender();
 });
 onBeforeUnmount(() => {
   const viewer = viewerStore.cesiumViewer;
-  console.log(layer.value);
-  viewer.scene.imageryLayers.remove(layer.value);
+  console.log(layer);
+  viewer.imageryLayers.remove(layer);
   viewer.scene.requestRender();
 });
 </script>
