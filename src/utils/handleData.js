@@ -1,17 +1,26 @@
-const handleData = (preData, key) => {
+const handleData = (preData, key1, key2) => {
   let timeData = [],
     resData = [];
   preData.map((value) => {
-    if (!timeData.includes(value["时间"])) {
-      timeData.push(value["时间"]);
-      resData.push(value[key]);
+    if (!timeData.includes(value[key2])) {
+      timeData.push(value[key2]);
+      resData.push(value[key1]);
     }
   });
   timeData = timeData.map((v) => {
-    const tempArr = v.split("");
-    tempArr.splice(4, 0, ".");
-    tempArr.splice(7, 0, ".");
-    return tempArr.join("");
+    const len = v.length;
+    if (len === 8) {
+      const tempArr = v.split("");
+      tempArr.splice(4, 0, ".");
+      tempArr.splice(7, 0, ".");
+      return tempArr.join("");
+    } else if (len === 6) {
+      const tempArr = v.split("");
+      tempArr.splice(4, 0, ".");
+      return tempArr.join("");
+    } else {
+      return v;
+    }
   });
   return { timeData: timeData, resData: resData };
 };

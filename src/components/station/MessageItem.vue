@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { useViewStore } from "../../stores/earth";
+import { useSimuStore } from "../../stores/simulation";
 import {
   ScreenSpaceEventHandler,
   defined,
@@ -23,6 +24,7 @@ import {
 import { shuiwei, yuliang, qixiang } from "../../assets/data/station_data";
 import handleData from "../../utils/handleData";
 import VChart from "vue-echarts";
+import moment from "moment";
 
 use([
   CanvasRenderer,
@@ -37,29 +39,27 @@ use([
   UniversalTransition,
   BarChart,
 ]);
-
+const viewerStore = useViewStore();
+const simuStore = useSimuStore();
 const station_msg = ref();
 const showConfig = ref({
   chart: false,
   msg: true,
 });
 const showPosition = ref();
+const showSimuPosition = ref();
+const simuDataCfg = ref({
+  type: "daily",
+  frequency: "day",
+});
 const showLoading = ref(false);
 const option = ref({
-  // title: {
-  //   text: "Rainfall vs Evaporation",
-  //   left: "center",
-  // },
   tooltip: {
     trigger: "axis",
     axisPointer: {
       animation: false,
     },
   },
-  // legend: {
-  //   data: ["Evaporation", "Rainfall"],
-  //   left: 10,
-  // },
   toolbox: {
     feature: {
       dataZoom: {
@@ -117,7 +117,6 @@ const option = ref({
     data: [],
   },
 });
-const viewerStore = useViewStore();
 const handleZoom = (t) => {
   if (t.end - t.start <= 5) {
     option.value.series.type = "bar";
@@ -129,6 +128,67 @@ const handleZoom = (t) => {
     if (option.value.series.type == "line") return;
     option.value.series.type = "line";
   }
+};
+const handleSel = () => {
+  showLoading.value = true;
+  fetch(
+    `http://43.142.17.108:9001/api/simulate/${simuDataCfg.value.type}/${
+      simuDataCfg.value.frequency
+    }/${moment(simuStore.simuData.start.toString()).format(
+      "YYYYMMDD"
+    )}/${moment(simuStore.simuData.end.toString()).format("YYYYMMDD")}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const { timeData, resData } = handleData(data, "amount", "full_date");
+      option.value.xAxis.data = timeData;
+      option.value.series.data = resData;
+      if (simuDataCfg.value.type === "daily") {
+        option.value.yAxis.name = "径流";
+        option.value.series.name = "径流";
+        option.value.yAxis.max = 730;
+        showLoading.value = false;
+      } else if (simuDataCfg.value.type === "dailysand") {
+        option.value.yAxis.name = "泥沙";
+        option.value.series.name = "泥沙";
+        option.value.yAxis.max = 1.3;
+        showLoading.value = false;
+      } else if (
+        simuDataCfg.value.type === "dailyTN" &&
+        simuDataCfg.value.frequency === "month"
+      ) {
+        option.value.yAxis.max = 0.15;
+        showLoading.value = false;
+      } else if (
+        simuDataCfg.value.type === "dailyTN" &&
+        simuDataCfg.value.frequency === "year"
+      ) {
+        option.value.yAxis.max = 0.05;
+        showLoading.value = false;
+      } else if (simuDataCfg.value.type === "dailyTN") {
+        option.value.yAxis.name = "总氮";
+        option.value.series.name = "总氮";
+        option.value.yAxis.max = 1.7;
+        showLoading.value = false;
+      } else if (
+        simuDataCfg.value.type === "dailyTP" &&
+        simuDataCfg.value.frequency === "month"
+      ) {
+        option.value.yAxis.max = 2;
+        showLoading.value = false;
+      } else if (
+        simuDataCfg.value.type === "dailyTP" &&
+        simuDataCfg.value.frequency === "year"
+      ) {
+        option.value.yAxis.max = 2;
+        showLoading.value = false;
+      } else if (simuDataCfg.value.type === "dailyTP") {
+        option.value.yAxis.name = "总磷";
+        option.value.series.name = "总磷";
+        option.value.yAxis.max = 11.2;
+        showLoading.value = false;
+      }
+    });
 };
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
@@ -167,7 +227,7 @@ onMounted(() => {
             )
               .then((response) => response.json())
               .then((data) => {
-                const { timeData, resData } = handleData(data, "雨量");
+                const { timeData, resData } = handleData(data, "雨量", "时间");
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
                 option.value.yAxis.name = "雨量";
@@ -186,7 +246,7 @@ onMounted(() => {
             )
               .then((response) => response.json())
               .then((data) => {
-                const { timeData, resData } = handleData(data, "水位");
+                const { timeData, resData } = handleData(data, "水位", "时间");
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
                 option.value.yAxis.name = "水位";
@@ -208,7 +268,11 @@ onMounted(() => {
             )
               .then((response) => response.json())
               .then((data) => {
-                const { timeData, resData } = handleData(data, "测站电压");
+                const { timeData, resData } = handleData(
+                  data,
+                  "测站电压",
+                  "时间"
+                );
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
                 showLoading.value = false;
@@ -217,8 +281,26 @@ onMounted(() => {
           default:
             break;
         }
-        showPosition.value = e.position;
-        showInfo(e.position);
+        if (pickedObject.id.id.includes("simu")) {
+          showSimuPosition.value = e.position;
+          fetch(
+            `http://43.142.17.108:9001/api/simulate/${simuDataCfg.value.type}/${simuDataCfg.value.frequency}/20150204/20180507`
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const { timeData, resData } = handleData(
+                data,
+                "amount",
+                "full_date"
+              );
+              option.value.xAxis.data = timeData;
+              option.value.series.data = resData;
+              showSimuInfo(e.position);
+            });
+        } else {
+          showPosition.value = e.position;
+          showInfo(e.position);
+        }
       }
 
       // viewer.trackedEntity = viewer.entities.getById(pickedObject.id.id);
@@ -235,6 +317,13 @@ onMounted(() => {
       );
       showInfo(position);
     }
+    if (showSimuPosition.value) {
+      const position = SceneTransforms.wgs84ToWindowCoordinates(
+        viewer.scene,
+        cartesian_2
+      );
+      showSimuInfo(position);
+    }
   });
   const info = document.getElementById("info");
   function showInfo(position) {
@@ -242,17 +331,24 @@ onMounted(() => {
     info.style.left = position.x + 50 + "px";
     info.style.top = position.y - 200 + "px";
   }
-
+  const simuInfo = document.getElementById("simu-info");
+  function showSimuInfo(position) {
+    simuInfo.style.display = "block";
+    simuInfo.style.left = position.x + 50 + "px";
+    simuInfo.style.top = position.y - 200 + "px";
+  }
   function hideInfo() {
     info.style.display = "none";
+    simuInfo.style.display = "none";
     showPosition.value = false;
+    showSimuInfo.value = false;
   }
   fetch(
     "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
   )
     .then((response) => response.json())
     .then((data) => {
-      const { timeData, resData } = handleData(data, "雨量");
+      const { timeData, resData } = handleData(data, "雨量", "时间");
       option.value.xAxis.data = timeData;
       option.value.series.data = resData;
     });
@@ -299,6 +395,39 @@ const showMsg = () => {
       ></v-chart>
     </div>
   </div>
+  <div id="simu-info">
+    <div class="content">
+      <div class="select-wrap">
+        <a-select
+          ref="select"
+          v-model:value="simuDataCfg.type"
+          style="width: 120px"
+          placeholder="请选择类型"
+          @change="handleSel('type')"
+        >
+          <a-select-option value="daily">径流</a-select-option>
+          <a-select-option value="dailysand">泥沙</a-select-option>
+          <a-select-option value="dailyTN">总氮</a-select-option>
+          <a-select-option value="dailyTP">总磷</a-select-option>
+        </a-select>
+        <a-select
+          ref="select"
+          v-model:value="simuDataCfg.frequency"
+          style="width: 120px"
+          placeholder="请选择频率"
+          @change="handleSel('frequency')"
+        >
+          <a-select-option value="day">逐日</a-select-option>
+          <a-select-option value="month">逐月</a-select-option>
+          <a-select-option value="year">逐年</a-select-option>
+        </a-select>
+      </div>
+      <div v-if="showLoading" class="loading">
+        <a-spin size="large" />
+      </div>
+      <v-chart class="chart content-item" :option="option"></v-chart>
+    </div>
+  </div>
 </template>
 <style scoped>
 #info {
@@ -311,7 +440,27 @@ const showMsg = () => {
   /* border: 2px solid greenyellow; */
   border-radius: 4px;
 }
-
+#simu-info {
+  position: fixed;
+  width: 500px;
+  height: 400px;
+  z-index: 1000;
+  /* display: none; */
+  left: 400px;
+  top: 200px;
+  background: rgba(255, 255, 255, 0.8);
+  /* border: 2px solid greenyellow; */
+  border-radius: 4px;
+}
+.select-wrap {
+  width: 260px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 40px;
+  /* margin: 0 auto; */
+}
 .tab {
   width: 100%;
   height: 50px;
