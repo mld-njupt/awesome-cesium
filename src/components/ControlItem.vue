@@ -11,6 +11,7 @@ import {
 import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
 import SubItem4 from "../components/control/SubItem4.vue";
+import MenuItem9 from "./control/MenuItem9.vue";
 import MenuItem8 from "../components/control/MenuItem8.vue";
 import MenuItem7 from "./control/MenuItem7.vue";
 import MenuItem6 from "./control/MeunItem6.vue";
@@ -66,6 +67,9 @@ const handleClick = (e) => {
     case "10":
       showDrawer("reservoir");
       break;
+    case "9":
+      showDrawer("simu");
+      break;
     case "8":
       showDrawer("forecast");
       break;
@@ -120,6 +124,11 @@ const forecastrVis = ref(false);
 const closeForeVis = () => {
   forecastrVis.value = false;
 };
+//预报相关
+const simuVis = ref(false);
+const closeSimuVis = () => {
+  simuVis.value = false;
+};
 //调度规则相关
 const ruleVis = ref(false);
 const closeRuleVis = () => {
@@ -148,6 +157,9 @@ const showDrawer = (key) => {
       break;
     case "forecast":
       forecastrVis.value = true;
+      break;
+    case "simu":
+      simuVis.value = true;
       break;
     case "rule":
       ruleVis.value = true;
@@ -218,8 +230,8 @@ watch(
             <AlertOutlined />
           </template>
           <template #title>预报预警</template>
+          <a-menu-item key="9">模拟</a-menu-item>
           <a-menu-item key="8">预报</a-menu-item>
-          <a-menu-item key="9">预警</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub4">
           <template #icon>
@@ -242,6 +254,7 @@ watch(
       @close="closeForeVis"
       :visible="forecastrVis"
     />
+    <MenuItem9 v-if="simuVis" @close="closeSimuVis" :visible="simuVis" />
     <MenuItem7 v-if="ruleVis" @close="closeRuleVis" :visible="ruleVis" />
     <MenuItem6
       v-if="projectVis"

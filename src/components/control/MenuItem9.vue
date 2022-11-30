@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { notification } from "ant-design-vue";
 import { useSimuStore } from "../../stores/simulation";
 const emit = defineEmits(["close"]);
@@ -21,8 +21,10 @@ const onFinish = (values) => {
   console.log("simuStore.simuData:", simuStore.simuData);
 };
 onMounted(() => {
-  simuStore.simuData.start = "";
-  simuStore.simuData.end = "";
+  onMounted(() => {
+    simuStore.simuData.start = "";
+    simuStore.simuData.end = "";
+  });
 });
 const onClose = () => {
   simuStore.simuData.showSimu = true;
@@ -31,7 +33,7 @@ const onClose = () => {
 </script>
 <template>
   <a-drawer
-    title="预报"
+    title="模拟"
     :width="350"
     :visible="props.visible"
     :body-style="{ paddingBottom: '80px' }"
@@ -54,13 +56,22 @@ const onClose = () => {
           <a-date-picker v-model:value="simuStore.simuData.end" />
         </a-form-item>
         <a-form-item label="降雨量设置">
-          <a-input v-model:value="simuStore.simuData.rainfall" />
+          <a-input
+            v-model:value="simuStore.simuData.rainfall"
+            :disabled="!!simuStore.simuData.start && !!simuStore.simuData.end"
+          />
         </a-form-item>
         <a-form-item label="蒸发量设置">
-          <a-input v-model:value="simuStore.simuData.evaporation" />
+          <a-input
+            v-model:value="simuStore.simuData.evaporation"
+            :disabled="!!simuStore.simuData.start && !!simuStore.simuData.end"
+          />
         </a-form-item>
         <a-form-item label="气温设置">
-          <a-input v-model:value="simuStore.simuData.temperature" />
+          <a-input
+            v-model:value="simuStore.simuData.temperature"
+            :disabled="!!simuStore.simuData.start && !!simuStore.simuData.end"
+          />
         </a-form-item>
       </a-space>
       <div class="button-wrap">

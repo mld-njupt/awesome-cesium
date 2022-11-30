@@ -78,7 +78,7 @@ onMounted(() => {
       material: new ImageMaterialProperty({
         image: canvas, //使用贴图的方式将结果贴到面上
       }),
-      zIndex: 2,
+      zIndex: 5,
     },
   });
   viewer.scene.requestRender();

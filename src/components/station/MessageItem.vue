@@ -106,7 +106,7 @@ const option = ref({
   yAxis: {
     name: "雨量",
     type: "value",
-    max: 20,
+    max: 220,
   },
 
   series: {
@@ -134,9 +134,11 @@ const handleSel = () => {
   fetch(
     `http://43.142.17.108:9001/api/simulate/${simuDataCfg.value.type}/${
       simuDataCfg.value.frequency
-    }/${moment(simuStore.simuData.start.toString()).format(
+    }/${moment(simuStore.simuData.start.toString() || "20100203").format(
       "YYYYMMDD"
-    )}/${moment(simuStore.simuData.end.toString()).format("YYYYMMDD")}`
+    )}/${moment(simuStore.simuData.end.toString() || "20120304").format(
+      "YYYYMMDD"
+    )}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -209,6 +211,7 @@ onMounted(() => {
       defined(pickedObject.id) &&
       !pickedObject.id.id.includes("polyline")
     ) {
+      console.log(pickedObject.id.id);
       if (!viewer.entities.getById(pickedObject.id.id)._polygon) {
         const station_type = viewer.entities
           .getById(pickedObject.id.id)
@@ -232,7 +235,7 @@ onMounted(() => {
                 option.value.series.data = resData;
                 option.value.yAxis.name = "雨量";
                 option.value.series.name = "雨量";
-                option.value.yAxis.max = 20;
+                option.value.yAxis.max = 220;
                 showLoading.value = false;
               });
             break;
@@ -293,11 +296,20 @@ onMounted(() => {
                 "amount",
                 "full_date"
               );
+              option.value.yAxis.name = "径流";
+              option.value.series.name = "径流";
+              option.value.yAxis.max = 730;
               option.value.xAxis.data = timeData;
               option.value.series.data = resData;
+              if (showPosition.value) {
+                hideInfo();
+              }
               showSimuInfo(e.position);
             });
         } else {
+          if (showSimuPosition.value) {
+            hideInfo();
+          }
           showPosition.value = e.position;
           showInfo(e.position);
         }
@@ -341,7 +353,7 @@ onMounted(() => {
     info.style.display = "none";
     simuInfo.style.display = "none";
     showPosition.value = false;
-    showSimuInfo.value = false;
+    showSimuPosition.value = false;
   }
   fetch(
     "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
@@ -396,36 +408,40 @@ const showMsg = () => {
     </div>
   </div>
   <div id="simu-info">
+    <div class="select-wrap">
+      <a-select
+        ref="select"
+        v-model:value="simuDataCfg.type"
+        style="width: 120px"
+        placeholder="请选择类型"
+        @change="handleSel('type')"
+      >
+        <a-select-option value="daily">径流</a-select-option>
+        <a-select-option value="dailysand">泥沙</a-select-option>
+        <a-select-option value="dailyTN">总氮</a-select-option>
+        <a-select-option value="dailyTP">总磷</a-select-option>
+      </a-select>
+      <a-select
+        ref="select"
+        v-model:value="simuDataCfg.frequency"
+        style="width: 120px"
+        placeholder="请选择频率"
+        @change="handleSel('frequency')"
+      >
+        <a-select-option value="day">逐日</a-select-option>
+        <a-select-option value="month">逐月</a-select-option>
+        <a-select-option value="year">逐年</a-select-option>
+      </a-select>
+    </div>
     <div class="content">
-      <div class="select-wrap">
-        <a-select
-          ref="select"
-          v-model:value="simuDataCfg.type"
-          style="width: 120px"
-          placeholder="请选择类型"
-          @change="handleSel('type')"
-        >
-          <a-select-option value="daily">径流</a-select-option>
-          <a-select-option value="dailysand">泥沙</a-select-option>
-          <a-select-option value="dailyTN">总氮</a-select-option>
-          <a-select-option value="dailyTP">总磷</a-select-option>
-        </a-select>
-        <a-select
-          ref="select"
-          v-model:value="simuDataCfg.frequency"
-          style="width: 120px"
-          placeholder="请选择频率"
-          @change="handleSel('frequency')"
-        >
-          <a-select-option value="day">逐日</a-select-option>
-          <a-select-option value="month">逐月</a-select-option>
-          <a-select-option value="year">逐年</a-select-option>
-        </a-select>
-      </div>
       <div v-if="showLoading" class="loading">
         <a-spin size="large" />
       </div>
-      <v-chart class="chart content-item" :option="option"></v-chart>
+      <v-chart
+        class="content-item"
+        :option="option"
+        @datazoom="handleZoom"
+      ></v-chart>
     </div>
   </div>
 </template>
@@ -445,9 +461,9 @@ const showMsg = () => {
   width: 500px;
   height: 400px;
   z-index: 1000;
-  /* display: none; */
-  left: 400px;
-  top: 200px;
+  display: none;
+  /* left: 400px;
+  top: 200px; */
   background: rgba(255, 255, 255, 0.8);
   /* border: 2px solid greenyellow; */
   border-radius: 4px;
@@ -462,7 +478,7 @@ const showMsg = () => {
   /* margin: 0 auto; */
 }
 .tab {
-  width: 100%;
+  width: 500px;
   height: 50px;
   display: flex;
   align-items: center;
@@ -478,13 +494,13 @@ const showMsg = () => {
 }
 
 .content {
-  width: 100%;
+  width: 500px;
   height: 350px;
   position: relative;
 }
 
 .content-item {
-  width: 100%;
+  width: 500px;
   height: 350px;
   overflow: auto;
 }
@@ -496,7 +512,7 @@ const showMsg = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 500px;
   height: 100%;
   z-index: 998;
 }

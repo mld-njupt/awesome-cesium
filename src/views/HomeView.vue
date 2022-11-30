@@ -6,20 +6,22 @@ import {
   SceneMode,
   Cartesian3,
   ScreenSpaceEventType,
-  IonImageryProvider,
   MapboxStyleImageryProvider,
 } from "cesium";
 import ControlItem from "../components/ControlItem.vue";
 import LocationItem from "../components/LocationItem.vue";
 import StationItem from "../components/StationItem.vue";
 import LiuYu from "../components/Liuyu.vue";
+import ShuiKu from "../components/ShuiKu.vue";
 import { useViewStore } from "../stores/earth";
+import { useSimuStore } from "../stores/simulation";
 import { ExportOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 // import polygon from "../assets/test/model_area.json";
 const router = useRouter();
 const containerRef = ref();
 const view = useViewStore();
+const simuStore = useSimuStore();
 const logout = () => {
   localStorage.removeItem("isAuth");
   router.push("/login");
@@ -88,6 +90,7 @@ onMounted(() => {
   <LocationItem v-if="view.cesiumViewer" />
   <StationItem v-if="view.cesiumViewer" />
   <LiuYu v-if="view.cesiumViewer" />
+  <ShuiKu v-if="view.cesiumViewer && simuStore.simuData.showSimu" />
 </template>
 
 <style scoped>

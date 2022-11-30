@@ -6,6 +6,7 @@ import {
   Cartesian3,
   Math,
   ImageMaterialProperty,
+  Color,
 } from "cesium";
 import kriging from "../../kriging";
 import data1 from "../../assets/test/data1";
@@ -240,6 +241,7 @@ const handleTimeChange = (index) => {
 };
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
+  viewer.entities.remove(viewer.entities.getById("polygon/liuyu"));
   isLoading.value = true;
   drawKriging(viewer, lats, lngs, values[0], coords, poly).then(() => {
     isLoading.value = false;
@@ -252,6 +254,21 @@ function removeEntity() {
   viewer.scene.requestRender();
 }
 onBeforeUnmount(() => {
+  const viewer = viewerStore.cesiumViewer;
+  //添加掩膜
+  viewer.entities.add({
+    id: "polygon/liuyu",
+    polygon: {
+      hierarchy: {
+        positions: Cartesian3.fromDegreesArray(coords),
+      },
+      show: true,
+      fill: true,
+      material: Color.WHITE.withAlpha(0.3),
+      clampToGround: true, //开启贴地
+      zIndex: 4,
+    },
+  });
   removeEntity();
 });
 </script>

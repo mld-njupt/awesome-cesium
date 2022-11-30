@@ -1,10 +1,6 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from "vue";
-import {
-  Cartesian3,
-  ImageMaterialProperty,
-  UrlTemplateImageryProvider,
-} from "cesium";
+import { Cartesian3, Color, UrlTemplateImageryProvider } from "cesium";
 import { useViewStore } from "../../stores/earth";
 import poly from "../../assets/data/liuyu";
 const coords = poly[0].flat(2);
@@ -33,12 +29,15 @@ const viewerStore = useViewStore();
 // ctx.putImageData(imageData, 0, 0);
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
+  //移除掩膜
+  viewer.entities.remove(viewer.entities.getById("polygon/liuyu"));
   const imageryLayers = viewer.scene.imageryLayers;
 
   const osmImageryProvider = new UrlTemplateImageryProvider({
     url: "http://43.142.17.108:9000/dem/{z}/{x}/{y}.png",
     subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
     show: true,
+    zIndex: 5,
   });
   layer = imageryLayers.addImageryProvider(osmImageryProvider);
   viewer.scene.requestRender();
@@ -47,6 +46,20 @@ onBeforeUnmount(() => {
   const viewer = viewerStore.cesiumViewer;
   console.log(layer);
   viewer.imageryLayers.remove(layer);
+  //添加掩膜
+  viewer.entities.add({
+    id: "polygon/liuyu",
+    polygon: {
+      hierarchy: {
+        positions: Cartesian3.fromDegreesArray(coords),
+      },
+      show: true,
+      fill: true,
+      material: Color.WHITE.withAlpha(0.3),
+      clampToGround: true, //开启贴地
+      zIndex: 4,
+    },
+  });
   viewer.scene.requestRender();
 });
 </script>

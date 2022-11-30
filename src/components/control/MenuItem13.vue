@@ -13,6 +13,7 @@ const colors = [
   { r: 255, g: 144, b: 179 },
   { r: 254, g: 252, b: 54 },
   { r: 219, g: 110, b: 101 },
+  { r: 219, g: 110, b: 101 },
 ];
 const legends = [
   "黄棕壤",
@@ -26,7 +27,7 @@ const legends = [
 ];
 const coords = poly[0].flat(2);
 const viewerStore = useViewStore();
-const response = await fetch("http://43.142.17.108:9000/turangleixing.tif");
+const response = await fetch("http://43.142.17.108:9000/turangleixing1.tif");
 const arrayBuffer = await response.arrayBuffer();
 const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
 const image = await tiff.getImage();
@@ -47,12 +48,12 @@ for (let i = 0; i < imageData.data.length / 4; i += 1) {
     imageData.data[i * 4 + 0] = dataMap.get(red[i]).r;
     imageData.data[i * 4 + 1] = dataMap.get(red[i]).g;
     imageData.data[i * 4 + 2] = dataMap.get(red[i]).b;
-    imageData.data[i * 4 + 3] = red[i] === 255 ? 0 : 255;
+    imageData.data[i * 4 + 3] = 255;
   } else {
     imageData.data[i * 4 + 0] = colors[colorIndex];
     imageData.data[i * 4 + 1] = colors[colorIndex];
     imageData.data[i * 4 + 2] = colors[colorIndex];
-    imageData.data[i * 4 + 3] = red[i] === 255 ? 0 : 255;
+    imageData.data[i * 4 + 3] = 255;
     dataMap.set(red[i], colors[colorIndex]);
     dataMap.set(green[i], colors[colorIndex]);
     dataMap.set(blue[i], colors[colorIndex]);
@@ -76,7 +77,7 @@ onMounted(() => {
       material: new ImageMaterialProperty({
         image: canvas, //使用贴图的方式将结果贴到面上
       }),
-      zIndex: 2,
+      zIndex: 5,
     },
   });
   viewer.scene.requestRender();

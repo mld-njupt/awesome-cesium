@@ -10,7 +10,7 @@ import {
 } from "cesium";
 import { onMounted, onBeforeUnmount } from "vue";
 import { useViewStore } from "../../stores/earth";
-const props = defineProps(["position", "id", "name"]);
+const props = defineProps(["position", "id", "name", "color", "size"]);
 const viewerStore = useViewStore();
 function addEntity(height = 500, position) {
   const viewer = viewerStore.cesiumViewer;
@@ -19,10 +19,10 @@ function addEntity(height = 500, position) {
     position: Cartesian3.fromDegrees(...position, height),
     point: {
       show: true,
-      pixelSize: 17,
+      pixelSize: props.size || 17,
       scale: 1,
       heightReference: HeightReference.CLAMP_TO_GROUND,
-      color: Color.ORANGE,
+      color: props.color || Color.ORANGE,
       // scaleByDistance: new NearFarScalar(10000, 1, 20000, 0.3),
       // translucencyByDistance: new NearFarScalar(10000, 1, 20000, 0.2),
       // distanceDisplayCondition: new DistanceDisplayCondition(0, 20000),
