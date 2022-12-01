@@ -346,8 +346,8 @@ onMounted(() => {
   const simuInfo = document.getElementById("simu-info");
   function showSimuInfo(position) {
     simuInfo.style.display = "block";
-    simuInfo.style.left = position.x + 50 + "px";
-    simuInfo.style.top = position.y - 200 + "px";
+    simuInfo.style.left = position.x - 300 + "px";
+    simuInfo.style.top = position.y - 500 + "px";
   }
   function hideInfo() {
     info.style.display = "none";

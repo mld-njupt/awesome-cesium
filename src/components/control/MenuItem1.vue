@@ -30,7 +30,7 @@ onMounted(() => {
         width: 2,
         clampToGround: true,
         eyeOffset: new Cartesian3(0, 0, -100),
-        zIndex: 5,
+        zIndex: 7,
       },
     });
   });

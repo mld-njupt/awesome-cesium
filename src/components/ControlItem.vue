@@ -229,7 +229,7 @@ watch(
           <template #icon>
             <AlertOutlined />
           </template>
-          <template #title>预报预警</template>
+          <template #title>模拟预报</template>
           <a-menu-item key="9">模拟</a-menu-item>
           <a-menu-item key="8">预报</a-menu-item>
         </a-sub-menu>

@@ -20,7 +20,7 @@ onMounted(() => {
       fill: true,
       material: Color.fromCssColorString("#C3D8E9"),
       clampToGround: true, //开启贴地
-      zIndex: 5,
+      zIndex: 6,
     },
   });
   viewer.scene.requestRender();
