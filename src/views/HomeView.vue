@@ -13,6 +13,7 @@ import LocationItem from "../components/LocationItem.vue";
 import StationItem from "../components/StationItem.vue";
 import LiuYu from "../components/Liuyu.vue";
 import ShuiKu from "../components/ShuiKu.vue";
+import MessageItem from "../components/MessageItem.vue";
 import { useViewStore } from "../stores/earth";
 import { useSimuStore } from "../stores/simulation";
 import { ExportOutlined } from "@ant-design/icons-vue";
@@ -89,6 +90,7 @@ onMounted(() => {
   <ControlItem v-if="view.cesiumViewer" />
   <LocationItem v-if="view.cesiumViewer" />
   <StationItem v-if="view.cesiumViewer" />
+  <MessageItem v-if="view.cesiumViewer" />
   <LiuYu v-if="view.cesiumViewer" />
   <ShuiKu v-if="view.cesiumViewer && simuStore.simuData.showSimu" />
 </template>

@@ -12,6 +12,7 @@ import { RouterView } from "vue-router";
 .app-content {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 * {
   user-select: none;

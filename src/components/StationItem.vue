@@ -10,7 +10,7 @@ import {
 import PointItem from "./station/PointItem.vue";
 import TriangleItem from "./station/TriangleItem.vue";
 import WetherIem from "./station/WetherIem.vue";
-import MessageItem from "./station/MessageItem.vue";
+// import MessageItem from "./station/MessageItem.vue";
 import InterItem from "./station/InterItem.vue";
 const checked = ref({
   //雨量
@@ -299,7 +299,7 @@ onMounted(() => {
       :position="[118.2144, 30.0017]"
     />
     <InterItem v-if="checked.checked4" />
-    <MessageItem />
+    <!-- <MessageItem /> -->
   </div>
 </template>
 <style scoped>

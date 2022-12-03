@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from "vue";
-import { useViewStore } from "../../stores/earth";
-import { useSimuStore } from "../../stores/simulation";
+import { useViewStore } from "../stores/earth";
+import { useSimuStore } from "../stores/simulation";
 import {
   ScreenSpaceEventHandler,
   defined,
   ScreenSpaceEventType,
-  SceneTransforms,
+  // SceneTransforms,
 } from "cesium";
 import { onMounted } from "vue";
 import { use } from "echarts/core";
@@ -21,8 +21,8 @@ import {
   LegendComponent,
   DataZoomComponent,
 } from "echarts/components";
-import { shuiwei, yuliang, qixiang } from "../../assets/data/station_data";
-import handleData from "../../utils/handleData";
+import { shuiwei, yuliang, qixiang } from "../assets/data/station_data";
+import handleData from "../utils/handleData";
 import VChart from "vue-echarts";
 import moment from "moment";
 
@@ -39,6 +39,59 @@ use([
   UniversalTransition,
   BarChart,
 ]);
+const vDrag = (el) => {
+  const oDiv = el; // 当前元素
+  // const minTop = oDiv.getAttribute("drag-min-top");
+  const ifMoveSizeArea = 20;
+  oDiv.onmousedown = (e) => {
+    let target = oDiv;
+    while (
+      window.getComputedStyle(target).position !== "absolute" &&
+      target !== document.body
+    ) {
+      target = target.parentElement;
+    }
+
+    document.onselectstart = () => {
+      return false;
+    };
+    if (!target.getAttribute("init_x")) {
+      target.setAttribute("init_x", target.offsetLeft);
+      target.setAttribute("init_y", target.offsetTop);
+    }
+
+    const initX = parseInt(target.getAttribute("init_x"));
+    const initY = parseInt(target.getAttribute("init_y"));
+
+    // 鼠标按下，计算当前元素距离可视区的距离
+    const disX = e.clientX - target.offsetLeft;
+    const disY = e.clientY - target.offsetTop;
+    document.onmousemove = (e) => {
+      // 通过事件委托，计算移动的距离
+      // 因为浏览器里并不能直接取到并且使用clientX、clientY,所以使用事件委托在内部做完赋值
+      const l = e.clientX - disX;
+      const t = e.clientY - disY;
+      // 计算移动当前元素的位置，并且给该元素样式中的left和top值赋值
+      target.style.left = l + "px";
+      target.style.top = t + "px";
+      if (
+        Math.abs(l - initX) > ifMoveSizeArea ||
+        Math.abs(t - initY) > ifMoveSizeArea
+      ) {
+        target.setAttribute("dragged", "");
+      } else {
+        target.removeAttribute("dragged");
+      }
+    };
+    document.onmouseup = () => {
+      document.onmousemove = null;
+      document.onmouseup = null;
+      document.onselectstart = null;
+    };
+    // return false不加的话可能导致黏连，拖到一个地方时div粘在鼠标上不下来，相当于onmouseup失效
+    return false;
+  };
+};
 const viewerStore = useViewStore();
 const simuStore = useSimuStore();
 const station_msg = ref();
@@ -197,14 +250,14 @@ onMounted(() => {
   const scene = viewer.scene;
   const handler = new ScreenSpaceEventHandler(scene.canvas);
   // let click_point, c, target_position,
-  let cartesian_2;
+  // let cartesian_2;
   //注册鼠标点击事件
   handler.setInputAction(function (e) {
     const pickedObject = scene.pick(e.position, 3, 3);
     // 屏幕坐标转世界坐标——关键点
-    const ellipsoid = viewer.scene.globe.ellipsoid;
-    const cartesian = viewer.camera.pickEllipsoid(e.position, ellipsoid);
-    cartesian_2 = cartesian;
+    // const ellipsoid = viewer.scene.globe.ellipsoid;
+    // const cartesian = viewer.camera.pickEllipsoid(e.position, ellipsoid);
+    // cartesian_2 = cartesian;
     if (
       defined(pickedObject) &&
       pickedObject &&
@@ -285,7 +338,12 @@ onMounted(() => {
             break;
         }
         if (pickedObject.id.id.includes("simu")) {
+          if (showPosition.value) {
+            hideInfo();
+          }
+          showSimuInfo(e.position);
           showSimuPosition.value = e.position;
+          showLoading.value = true;
           fetch(
             `http://43.142.17.108:9001/api/simulate/${simuDataCfg.value.type}/${simuDataCfg.value.frequency}/20150204/20180507`
           )
@@ -301,10 +359,7 @@ onMounted(() => {
               option.value.yAxis.max = 730;
               option.value.xAxis.data = timeData;
               option.value.series.data = resData;
-              if (showPosition.value) {
-                hideInfo();
-              }
-              showSimuInfo(e.position);
+              showLoading.value = false;
             });
         } else {
           if (showSimuPosition.value) {
@@ -321,22 +376,22 @@ onMounted(() => {
       // viewer.trackedEntity = undefined;
     }
   }, ScreenSpaceEventType.LEFT_CLICK);
-  viewer.scene.postRender.addEventListener(() => {
-    if (showPosition.value) {
-      const position = SceneTransforms.wgs84ToWindowCoordinates(
-        viewer.scene,
-        cartesian_2
-      );
-      showInfo(position);
-    }
-    if (showSimuPosition.value) {
-      const position = SceneTransforms.wgs84ToWindowCoordinates(
-        viewer.scene,
-        cartesian_2
-      );
-      showSimuInfo(position);
-    }
-  });
+  // viewer.scene.postRender.addEventListener(() => {
+  //   if (showPosition.value) {
+  //     const position = SceneTransforms.wgs84ToWindowCoordinates(
+  //       viewer.scene,
+  //       cartesian_2
+  //     );
+  //     showInfo(position);
+  //   }
+  //   if (showSimuPosition.value) {
+  //     const position = SceneTransforms.wgs84ToWindowCoordinates(
+  //       viewer.scene,
+  //       cartesian_2
+  //     );
+  //     showSimuInfo(position);
+  //   }
+  // });
   const info = document.getElementById("info");
   function showInfo(position) {
     info.style.display = "block";
@@ -346,7 +401,8 @@ onMounted(() => {
   const simuInfo = document.getElementById("simu-info");
   function showSimuInfo(position) {
     simuInfo.style.display = "block";
-    simuInfo.style.left = position.x - 300 + "px";
+    // simuInfo.style.left = `-${window.innerWidth / 2}px`;
+    simuInfo.style.left = position.x - 400 + "px";
     simuInfo.style.top = position.y - 500 + "px";
   }
   function hideInfo() {
@@ -354,6 +410,8 @@ onMounted(() => {
     simuInfo.style.display = "none";
     showPosition.value = false;
     showSimuPosition.value = false;
+    // console.log(window.innerWidth);
+    // simuInfo.style.left = `-${window.innerWidth / 2}px`;
   }
   fetch(
     "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
@@ -376,7 +434,7 @@ const showMsg = () => {
 };
 </script>
 <template>
-  <div id="info">
+  <div id="info" v-drag>
     <div class="tab">
       <div class="tab-item" v-on:click="showMsg">站点信息</div>
       <div class="tab-item" v-on:click="showChart">监测曲线</div>
@@ -407,7 +465,7 @@ const showMsg = () => {
       ></v-chart>
     </div>
   </div>
-  <div id="simu-info">
+  <div id="simu-info" v-drag>
     <div class="select-wrap">
       <a-select
         ref="select"
@@ -446,8 +504,12 @@ const showMsg = () => {
   </div>
 </template>
 <style scoped>
+html,
+body {
+  position: relative !important;
+}
 #info {
-  position: fixed;
+  position: absolute;
   width: 500px;
   height: 400px;
   z-index: 1000;
@@ -457,13 +519,11 @@ const showMsg = () => {
   border-radius: 4px;
 }
 #simu-info {
-  position: fixed;
+  position: absolute;
   width: 500px;
   height: 400px;
   z-index: 1000;
   display: none;
-  /* left: 400px;
-  top: 200px; */
   background: rgba(255, 255, 255, 0.8);
   /* border: 2px solid greenyellow; */
   border-radius: 4px;
