@@ -10,8 +10,9 @@ import {
 import PointItem from "./station/PointItem.vue";
 import TriangleItem from "./station/TriangleItem.vue";
 import WetherIem from "./station/WetherIem.vue";
-// import MessageItem from "./station/MessageItem.vue";
+import { useSimuStore } from "../stores/simulation";
 import InterItem from "./station/InterItem.vue";
+const simuStore = useSimuStore();
 const checked = ref({
   //雨量
   checked1: false,
@@ -209,6 +210,13 @@ onMounted(() => {
       }
     }
   }, ScreenSpaceEventType.LEFT_CLICK);
+  handler.setInputAction(function (e) {
+    const pickedObject = scene.pick(e.position, 3, 3);
+    if (!defined(pickedObject)) {
+      //处理掉模拟结果
+      simuStore.simuData.showSimu = false;
+    }
+  }, ScreenSpaceEventType.RIGHT_CLICK);
 });
 </script>
 <template>

@@ -276,6 +276,7 @@ onBeforeUnmount(() => {
   <TimeSlider @on-change="handleTimeChange" />
   <div v-if="isLoading" class="loading-wrap"><a-spin /></div>
   <div class="legend"></div>
+  <div class="unit">mm</div>
 </template>
 <style scoped>
 .loading-wrap {
@@ -299,5 +300,13 @@ onBeforeUnmount(() => {
   background-image: url("../../assets/legend.png");
   background-size: cover;
   background-repeat: no-repeat;
+}
+.unit {
+  position: fixed;
+  bottom: 320px;
+  right: 10px;
+  font-size: 8px;
+  color: black;
+  font-weight: 700;
 }
 </style>

@@ -345,7 +345,13 @@ onMounted(() => {
           showSimuPosition.value = e.position;
           showLoading.value = true;
           fetch(
-            `http://43.142.17.108:9001/api/simulate/${simuDataCfg.value.type}/${simuDataCfg.value.frequency}/20150204/20180507`
+            `http://43.142.17.108:9001/api/simulate/${simuDataCfg.value.type}/${
+              simuDataCfg.value.frequency
+            }/${moment(
+              simuStore.simuData.start.toString() || "20100203"
+            ).format("YYYYMMDD")}/${moment(
+              simuStore.simuData.end.toString() || "20120304"
+            ).format("YYYYMMDD")}`
           )
             .then((response) => response.json())
             .then((data) => {
@@ -434,8 +440,8 @@ const showMsg = () => {
 };
 </script>
 <template>
-  <div id="info" v-drag>
-    <div class="tab">
+  <div id="info">
+    <div class="tab" v-drag>
       <div class="tab-item" v-on:click="showMsg">站点信息</div>
       <div class="tab-item" v-on:click="showChart">监测曲线</div>
     </div>
@@ -465,8 +471,8 @@ const showMsg = () => {
       ></v-chart>
     </div>
   </div>
-  <div id="simu-info" v-drag>
-    <div class="select-wrap">
+  <div id="simu-info">
+    <div class="select-wrap" v-drag>
       <a-select
         ref="select"
         v-model:value="simuDataCfg.type"
@@ -529,19 +535,21 @@ body {
   border-radius: 4px;
 }
 .select-wrap {
-  width: 260px;
+  width: 500px;
   height: 50px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-left: 40px;
-  /* margin: 0 auto; */
+  /* justify-content: space-between; */
+  padding-left: 40px;
+  cursor: grab;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .tab {
   width: 500px;
   height: 50px;
   display: flex;
   align-items: center;
+  cursor: grab;
 }
 
 .tab-item {
