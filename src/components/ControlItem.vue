@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons-vue";
 import { useViewStore } from "../stores/earth";
 import { Cartesian3 } from "cesium";
-import SubItem4 from "../components/control/SubItem4.vue";
+import MenuItem10 from "./control/MenuItem10.vue";
 import MenuItem9 from "./control/MenuItem9.vue";
 import MenuItem8 from "../components/control/MenuItem8.vue";
 import MenuItem7 from "./control/MenuItem7.vue";
@@ -223,7 +223,6 @@ watch(
           <a-menu-item key="4">基本信息</a-menu-item>
           <a-menu-item key="5">特征曲线</a-menu-item>
           <a-menu-item key="6">水利工程</a-menu-item>
-          <a-menu-item key="7">调度规则</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub3">
           <template #icon>
@@ -238,13 +237,12 @@ watch(
             <SettingOutlined />
           </template>
           <template #title>水库调度</template>
-          <a-menu-item key="10">底孔闸</a-menu-item>
-          <a-menu-item key="11">泄洪洞闸</a-menu-item>
-          <a-menu-item key="12">发电引水隧洞</a-menu-item>
+          <a-menu-item key="7">调度规则</a-menu-item>
+          <a-menu-item key="10">调度方案</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </div>
-    <SubItem4
+    <MenuItem10
       v-if="reservoirVis"
       @close="closeResVis"
       :visible="reservoirVis"

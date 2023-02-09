@@ -25,6 +25,7 @@ import { shuiwei, yuliang, qixiang } from "../assets/data/station_data";
 import handleData from "../utils/handleData";
 import VChart from "vue-echarts";
 import moment from "moment";
+import ExcelJs from "exceljs";
 
 use([
   CanvasRenderer,
@@ -115,11 +116,38 @@ const option = ref({
   },
   toolbox: {
     feature: {
-      dataZoom: {
-        yAxisIndex: "none",
+      myDownload: {
+        show: true,
+        title: "下载数据",
+        icon: "path://M921.84736468 997.93033544H101.54506534c-24.68943392 0-44.71162586-20.00838352-44.71162584-44.71162585V631.455181c0-24.70324234 20.02219194-44.71162586 44.71162584-44.71162585s44.71162586 20.00838352 44.71162586 44.71162585v277.05190275h730.87904765V631.455181c0-24.70324234 20.02219194-44.71162586 44.71162583-44.71162585 24.68943392 0 44.71162586 20.00838352 44.71162586 44.71162585V953.21870959c0 24.70324234-20.02219194 44.71162586-44.71162586 44.71162585z M511.69621502 839.9897621c-24.68943392 0-44.71162586-20.00838352-44.71162585-44.71162585V70.54383027c0-24.70324234 20.02219194-44.71162586 44.71162585-44.71162586s44.71162586 20.00838352 44.71162585 44.71162586v724.73430598c0 24.70324234-20.02219194 44.71162586-44.71162585 44.71162585z M511.69621502 869.73307344c-14.37455297 0-27.92060144-6.93182094-36.30230524-18.61373431L323.62569491 639.87831001c-14.41597819-20.04980875-9.84539506-47.998027 10.21822209-62.41400518 20.02219194-14.37455297 47.94279339-9.85920347 62.3863884 10.21822208l115.47971803 160.70225499 115.45210121-160.68844659c14.443595-20.09123397 42.37800485-24.60658347 62.38638839-10.23203048 20.04980875 14.41597819 24.62039188 42.33657964 10.21822208 62.40019679l-151.75440644 211.2272207a44.65639221 44.65639221 0 0 1-36.31611365 18.64135112z",
+        onclick: function () {
+          const data = option.value.xAxis.data.map((v, i) => {
+            return [v, option.value.series.data[i]];
+          });
+          const workbook = new ExcelJs.Workbook(); // 創建試算表檔案
+          const sheet = workbook.addWorksheet("工作表範例1"); //在檔案中新增工作表 參數放自訂名稱
+
+          sheet.addTable({
+            // 在工作表裡面指定位置、格式並用columns與rows屬性填寫內容
+            name: "table名稱", // 表格內看不到的，算是key值，讓你之後想要針對這個table去做額外設定的時候，可以指定到這個table
+            ref: "A1", // 從A1開始
+            columns: [{ name: "时间" }, { name: `${option.value.yAxis.name}` }],
+            rows: data,
+          });
+
+          // 表格裡面的資料都填寫完成之後，訂出下載的callback function
+          // 異步的等待他處理完之後，創建url與連結，觸發下載
+          workbook.xlsx.writeBuffer().then((content) => {
+            const link = document.createElement("a");
+            const blobData = new Blob([content], {
+              type: "application/vnd.ms-excel;charset=utf-8;",
+            });
+            link.download = "监测数据.xlsx";
+            link.href = URL.createObjectURL(blobData);
+            link.click();
+          });
+        },
       },
-      restore: {},
-      saveAsImage: {},
     },
   },
   axisPointer: {
@@ -164,23 +192,24 @@ const option = ref({
 
   series: {
     name: "雨量",
-    type: "line",
+    type: "bar",
     symbolSize: 8,
     // prettier-ignore
     data: [],
   },
 });
 const handleZoom = (t) => {
-  if (t.end - t.start <= 5) {
-    option.value.series.type = "bar";
-    option.value.dataZoom[0].start = t.start;
-    option.value.dataZoom[0].end = t.end;
-    option.value.dataZoom[1].start = t.start;
-    option.value.dataZoom[1].end = t.end;
-  } else {
-    if (option.value.series.type == "line") return;
-    option.value.series.type = "line";
-  }
+  console.log(t);
+  // if (t.end - t.start <= 5) {
+  //   option.value.series.type = "bar";
+  //   option.value.dataZoom[0].start = t.start;
+  //   option.value.dataZoom[0].end = t.end;
+  //   option.value.dataZoom[1].start = t.start;
+  //   option.value.dataZoom[1].end = t.end;
+  // } else {
+  //   if (option.value.series.type == "line") return;
+  //   option.value.series.type = "line";
+  // }
 };
 const handleSel = () => {
   showLoading.value = true;
@@ -408,8 +437,8 @@ onMounted(() => {
   function showSimuInfo(position) {
     simuInfo.style.display = "block";
     // simuInfo.style.left = `-${window.innerWidth / 2}px`;
-    simuInfo.style.left = position.x - 400 + "px";
-    simuInfo.style.top = position.y - 500 + "px";
+    simuInfo.style.left = position.x - 200 + "px";
+    simuInfo.style.top = position.y - 400 + "px";
   }
   function hideInfo() {
     info.style.display = "none";

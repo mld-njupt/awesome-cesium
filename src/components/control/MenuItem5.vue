@@ -261,7 +261,7 @@ const option3 = ref({
   // },
   grid: {
     left: "3%",
-    right: "4%",
+    right: "8%",
     bottom: "3%",
     containLabel: true,
   },
@@ -274,11 +274,16 @@ const option3 = ref({
     type: "value",
     boundaryGap: false,
     interval: 1000, // 步长
+    name: "万m^3",
+    nameTextStyle: {
+      nameLocation: "top",
+    },
     max: 7000,
     min: 0,
   },
   yAxis: {
     type: "value",
+    name: "水位",
     max: 45,
     min: 21,
   },
@@ -773,7 +778,7 @@ const option3 = ref({
 <template>
   <a-drawer
     title="特征曲线"
-    :width="820"
+    :width="840"
     :visible="props.visible"
     :body-style="{ paddingBottom: '80px' }"
     :footer-style="{ textAlign: 'right' }"
@@ -794,7 +799,7 @@ const option3 = ref({
 </template>
 <style scoped>
 .chart {
-  width: 700px;
+  width: 800px;
   height: 600px;
 }
 .sel-wrap {
