@@ -9,6 +9,7 @@ import {
   MenuOutlined,
 } from "@ant-design/icons-vue";
 import { useViewStore } from "../stores/earth";
+import { useLayerStore } from "../stores/layer";
 import { Cartesian3 } from "cesium";
 import MenuItem10 from "./control/MenuItem10.vue";
 import MenuItem9 from "./control/MenuItem9.vue";
@@ -32,8 +33,9 @@ const dashboardVis = ref(true);
 const handleDashboard = () => {
   dashboardVis.value = !dashboardVis.value;
 };
-// 放大
+
 const viewerStore = useViewStore();
+const layerStore = useLayerStore();
 function zoomIn() {
   const viewer = viewerStore.cesiumViewer;
   let position = viewer.camera.position;
@@ -267,8 +269,12 @@ watch(
     />
     <MenuItem1 v-if="drainageVis === 4" />
     <Suspense> <MenuItem2 v-if="drainageVis === 2" /></Suspense>
-    <Suspense> <MenuItem3 v-if="drainageVis === 1" /></Suspense>
-    <Suspense> <MenuItem13 v-if="drainageVis === 0" /></Suspense>
+    <Suspense>
+      <MenuItem3 v-if="drainageVis === 1 && !layerStore.showLayer"
+    /></Suspense>
+    <Suspense>
+      <MenuItem13 v-if="drainageVis === 0 && !layerStore.showLayer"
+    /></Suspense>
   </div>
 </template>
 <style scoped>

@@ -10,6 +10,10 @@ export const useSimuStore = defineStore({
       evaporation: "",
       temperature: "",
       showSimu: false,
+      isSave: false,
+      isComputed: false,
+      //1是模拟 2是预报
+      flag: 1,
     },
   }),
   actions: {},

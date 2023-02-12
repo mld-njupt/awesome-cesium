@@ -215,6 +215,9 @@ onMounted(() => {
     if (!defined(pickedObject)) {
       //处理掉模拟结果
       simuStore.simuData.showSimu = false;
+      simuStore.simuData.isSave = false;
+      simuStore.simuData.end = "";
+      simuStore.simuData.start = "";
     }
   }, ScreenSpaceEventType.RIGHT_CLICK);
 });
