@@ -293,10 +293,18 @@ const onResult = () => {
         <a-space direction="vertical" :size="12">
           <div style="display: flex; justify-content: space-between">
             <a-form-item label="起始时间" style="width: 300px">
-              <a-date-picker v-model:value="scheduleData.start" />
+              <a-date-picker
+                v-model:value="scheduleData.start"
+                format="YYYY-MM-DD HH"
+                :show-time="{ format: 'HH' }"
+              />
             </a-form-item>
             <a-form-item label="终止时间" style="width: 300px">
-              <a-date-picker v-model:value="scheduleData.end" />
+              <a-date-picker
+                v-model:value="scheduleData.end"
+                format="YYYY-MM-DD HH"
+                :show-time="{ format: 'HH' }"
+              />
             </a-form-item>
 
             <a-button type="primary" style="margin-left: -20px" ghost>
@@ -333,7 +341,7 @@ const onResult = () => {
           </div>
         </a-space>
         <a-progress v-if="showProgress" :percent="defaultPercent" />
-        <div class="button-wrap">
+        <div class="button-wrap" style="width: 88%; margin: 0 auto">
           <a-form-item>
             <a-button
               type="primary"

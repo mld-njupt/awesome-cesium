@@ -115,12 +115,20 @@ const onClose = () => {
           </div>
           <div>
             <a-form-item label="起始时间" style="width: 300px">
-              <a-date-picker v-model:value="simuStore.simuData.start" />
+              <a-date-picker
+                v-model:value="simuStore.simuData.start"
+                format="YYYY-MM-DD HH"
+                :show-time="{ format: 'HH' }"
+              />
             </a-form-item>
           </div>
           <div>
             <a-form-item label="终止时间" style="width: 300px">
-              <a-date-picker v-model:value="simuStore.simuData.end" />
+              <a-date-picker
+                v-model:value="simuStore.simuData.end"
+                format="YYYY-MM-DD HH"
+                :show-time="{ format: 'HH' }"
+              />
             </a-form-item>
           </div>
           <div style="display: flex">

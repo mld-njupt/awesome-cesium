@@ -476,7 +476,7 @@ onMounted(() => {
             );
           });
           const timeData = resData.map((v) => {
-            return v["年"] + v["月"] + v["日"] + ":" + v["时"];
+            return v["年"] + "." + v["月"] + "." + v["日"] + ":" + v["时"];
           });
           const data = resData.map((v) => {
             return v["流量(m³/s)"];
