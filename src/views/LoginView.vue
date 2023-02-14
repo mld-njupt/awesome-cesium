@@ -15,6 +15,7 @@ const onFinish = (values) => {
   if (values.username === "admin" && values.password === "123456") {
     localStorage.setItem("isAuth", true);
     router.push("/");
+    location.reload();
   } else {
     notification.open({
       type: "error",

@@ -1,6 +1,6 @@
 <script setup>
 import ColumnItem from "../ColumnItem.vue";
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { PieChart, LineChart, BarChart } from "echarts/charts";
@@ -16,6 +16,7 @@ import {
 import VChart from "vue-echarts";
 import { notification } from "ant-design-vue";
 import { ShareAltOutlined } from "@ant-design/icons-vue";
+import moment from "moment";
 use([
   CanvasRenderer,
   PieChart,
@@ -30,29 +31,29 @@ use([
   BarChart,
 ]);
 const time1 = [
-  "2023.6.10:0",
-  "2023.6.10:1",
-  "2023.6.10:2",
-  "2023.6.10:3",
-  "2023.6.10:4",
-  "2023.6.10:5",
-  "2023.6.10:6",
-  "2023.6.10:7",
-  "2023.6.10:8",
-  "2023.6.10:9",
-  "2023.6.10:10",
-  "2023.6.10:11",
-  "2023.6.10:12",
-  "2023.6.10:13",
-  "2023.6.10:14",
-  "2023.6.11:15",
-  "2023.6.10:16",
-  "2023.6.10:17",
-  "2023.6.10:18",
-  "2023.6.10:19",
-  "2023.6.10:20",
-  "2023.6.10:21",
-  "2023.6.10:22",
+  "2023.6.1:0",
+  "2023.6.1:1",
+  "2023.6.1:2",
+  "2023.6.1:3",
+  "2023.6.1:4",
+  "2023.6.1:5",
+  "2023.6.1:6",
+  "2023.6.1:7",
+  "2023.6.1:8",
+  "2023.6.1:9",
+  "2023.6.1:10",
+  "2023.6.1:11",
+  "2023.6.1:12",
+  "2023.6.1:13",
+  "2023.6.1:14",
+  "2023.6.1:15",
+  "2023.6.1:16",
+  "2023.6.1:17",
+  "2023.6.1:18",
+  "2023.6.1:19",
+  "2023.6.1:20",
+  "2023.6.1:21",
+  "2023.6.1:22",
 ];
 const data1 = [
   201, 202.24, 202.85, 203.24, 203.53, 203.77, 203.94, 204.01, 204.02, 203.96,
@@ -113,14 +114,11 @@ const time3 = [
   "2023.3.30:20",
   "2023.3.30:21",
   "2023.3.30:22",
-  "2023.3.31:23",
-  "2023.3.32:0",
-  "2023.3.33:1",
 ];
 const data3 = [
   197, 198.02, 198.53, 199.12, 199.61, 199.85, 200.02, 200.09, 200.1, 200.04,
   199.94, 199.76, 199.55, 199.33, 199.11, 198.88, 198.64, 198.39, 198.15, 197.9,
-  197.65, 197.38, 197.12, 197.1, 197.09, 197.05,
+  197.65, 197.38, 197.12,
 ];
 const emit = defineEmits(["close"]);
 const props = defineProps(["visible"]);
@@ -133,16 +131,21 @@ const spanRef = ref({
 });
 const pillarRef = ref({
   first: 100,
+});
+const waterRef = ref({
+  first: 100,
   second: 0,
   third: 0,
   fourth: 0,
 });
 const scheduleData = reactive({
+  name: "",
   start: "",
   end: "",
   rain: "",
   water: "",
 });
+const schemeRef = ref([]);
 const option = ref({
   tooltip: {
     trigger: "axis",
@@ -211,8 +214,34 @@ const option = ref({
 const onClose = () => {
   emit("close");
 };
+const onSave = () => {
+  notification["success"]({
+    message: "保存成功",
+  });
+  let scheme = localStorage.getItem("dispatch-scheme");
+  if (scheme) {
+    scheme = JSON.parse(scheme);
+  } else {
+    scheme = [];
+  }
+  scheme = [
+    ...scheme,
+    {
+      name: scheduleData.name,
+      start: scheduleData.start.toString(),
+      end: scheduleData.end.toString(),
+      rain: scheduleData.rain,
+      water: scheduleData.water,
+    },
+  ];
+  schemeRef.value = scheme;
+  localStorage.setItem("dispatch-scheme", JSON.stringify(scheme));
+};
 const onFinish = () => {
   showProgress.value = true;
+  if (defaultPercent.value >= 100) {
+    defaultPercent.value = 0;
+  }
   const timer = setInterval(() => {
     const percent = defaultPercent.value;
     defaultPercent.value = percent > 100 ? 100 : percent + 5;
@@ -227,13 +256,14 @@ const onFinish = () => {
   }, [3100]);
 };
 const onResult = () => {
-  if (scheduleData.rain == "62" && scheduleData.water == "201") {
+  if (scheduleData.rain == "60" && scheduleData.water == "201") {
     spanRef.value.first = "10小时";
     spanRef.value.second = "24小时";
-    pillarRef.value.first = 100;
-    pillarRef.value.second = 0;
-    pillarRef.value.third = 0;
-    pillarRef.value.fourth = 0;
+    pillarRef.value.first = 0;
+    waterRef.value.first = 2230;
+    waterRef.value.second = 241.9;
+    waterRef.value.third = 0;
+    waterRef.value.fourth = 0;
     option.value.xAxis.data = time1;
     option.value.series.data = data1;
     option.value.yAxis.max = Math.max(...data1);
@@ -241,10 +271,11 @@ const onResult = () => {
   } else if (scheduleData.rain == "62" && scheduleData.water == "197") {
     spanRef.value.first = "20小时";
     spanRef.value.second = "20小时";
-    pillarRef.value.first = 60;
-    pillarRef.value.second = 0;
-    pillarRef.value.third = 0;
-    pillarRef.value.fourth = 0;
+    pillarRef.value.first = 40;
+    waterRef.value.first = 2370.3;
+    waterRef.value.second = 201.6;
+    waterRef.value.third = 0;
+    waterRef.value.fourth = 0;
     option.value.xAxis.data = time2;
     option.value.series.data = data2;
     option.value.yAxis.max = Math.max(...data2);
@@ -252,10 +283,11 @@ const onResult = () => {
   } else if (scheduleData.rain == "49" && scheduleData.water == "197") {
     spanRef.value.first = "23小时";
     spanRef.value.second = "26小时";
-    pillarRef.value.first = 40;
-    pillarRef.value.second = 0;
-    pillarRef.value.third = 0;
-    pillarRef.value.fourth = 0;
+    pillarRef.value.first = 60;
+    waterRef.value.first = 1704.4;
+    waterRef.value.second = 262.1;
+    waterRef.value.third = 0;
+    waterRef.value.fourth = 0;
     option.value.xAxis.data = time3;
     option.value.series.data = data3;
     option.value.yAxis.max = Math.max(...data3);
@@ -263,10 +295,11 @@ const onResult = () => {
   } else {
     spanRef.value.first = "10小时";
     spanRef.value.second = "24小时";
-    pillarRef.value.first = 100;
-    pillarRef.value.second = 0;
-    pillarRef.value.third = 0;
-    pillarRef.value.fourth = 0;
+    pillarRef.value.first = 0;
+    waterRef.value.first = 2230;
+    waterRef.value.second = 241.9;
+    waterRef.value.third = 0;
+    waterRef.value.fourth = 0;
     option.value.xAxis.data = time1;
     option.value.series.data = data1;
     option.value.yAxis.max = Math.max(...data1);
@@ -274,6 +307,39 @@ const onResult = () => {
   }
   showResult.value = true;
 };
+const handleChange = (e, v) => {
+  const scheme = schemeRef.value.filter((item) => {
+    return v.value == item.name;
+  })[0];
+  // console.log(scheme);
+  scheduleData.name = scheme.name;
+  scheduleData.start = moment(scheme.start);
+  scheduleData.end = moment(scheme.end);
+  scheduleData.water = scheme.water;
+  scheduleData.rain = scheme.rain;
+  // console.log(scheduleData);
+};
+// let timer;
+// onMounted(() => {
+//   timer = setInterval(() => {
+//     document.getElementsByClassName("ant-picker-header-view")[1].innerHTML =
+//       "hour";
+//     document.getElementsByClassName("ant-picker-header-view")[3].innerHTML =
+//       "hour";
+//     // console.log(document.getElementsByClassName("ant-picker-header-view"));
+//   }, 100);
+// });
+// onBeforeUnmount(() => {
+//   clearInterval(timer);
+// });
+onMounted(() => {
+  let scheme = localStorage.getItem("dispatch-scheme");
+  if (scheme) {
+    scheme = JSON.parse(scheme);
+    schemeRef.value = scheme;
+    console.log(schemeRef.value);
+  }
+});
 </script>
 <template>
   <a-drawer
@@ -291,6 +357,23 @@ const onResult = () => {
         :wrapper-col="{ span: 16 }"
       >
         <a-space direction="vertical" :size="12">
+          <div style="display: flex; justify-content: space-between">
+            <a-form-item label="情景名称" style="width: 300px">
+              <a-input style="width: 200px" v-model:value="scheduleData.name" />
+            </a-form-item>
+            <a-form-item style="width: 300px">
+              <a-select style="width: 200px" @change="handleChange">
+                <a-select-option
+                  :value="item.name"
+                  :key="index"
+                  v-for="(item, index) in schemeRef"
+                  >{{ item.name }}</a-select-option
+                >
+                <!-- <a-select-option value="lucy">Lucy</a-select-option>
+                <a-select-option value="Yiminghe">yiminghe</a-select-option> -->
+              </a-select>
+            </a-form-item>
+          </div>
           <div style="display: flex; justify-content: space-between">
             <a-form-item label="起始时间" style="width: 300px">
               <a-date-picker
@@ -320,7 +403,6 @@ const onResult = () => {
                 v-model:value="scheduleData.rain"
               />
             </a-form-item>
-
             <a-button type="primary" style="margin-left: 20px" ghost>
               <share-alt-outlined />
               链接数据
@@ -343,17 +425,7 @@ const onResult = () => {
         <a-progress v-if="showProgress" :percent="defaultPercent" />
         <div class="button-wrap" style="width: 88%; margin: 0 auto">
           <a-form-item>
-            <a-button
-              type="primary"
-              @click="
-                () => {
-                  notification['success']({
-                    message: '保存成功',
-                  });
-                }
-              "
-              >保存设置</a-button
-            >
+            <a-button type="primary" @click="onSave">保存设置</a-button>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="onFinish">进行计算</a-button>
@@ -369,27 +441,36 @@ const onResult = () => {
           <div class="pillar-content">
             <div class="res-item">
               <div class="item-content">
-                <ColumnItem :height="pillarRef.first" />
+                <ColumnItem
+                  :height="pillarRef.first"
+                  v-bind:key="pillarRef.first"
+                />
+                <div class="item-label">
+                  {{ `开\n度\n${((100 - pillarRef.first) / 100) * 5}\nm` }}
+                </div>
               </div>
               <div class="item-title">泄洪洞</div>
             </div>
             <div class="res-item">
               <div class="item-content">
-                <ColumnItem :height="pillarRef.second" />
+                <ColumnItem :height="0" />
+                <div class="item-label"></div>
               </div>
-              <div class="item-title">发电/供水</div>
+              <div class="item-title" style="left: -4%">发电/供水</div>
             </div>
             <div class="res-item">
               <div class="item-content">
-                <ColumnItem :height="pillarRef.third" />
+                <ColumnItem :height="100" />
+                <div class="item-label"></div>
               </div>
-              <div class="item-title">底孔闸</div>
+              <div class="item-title" style="left: 8%">底孔闸</div>
             </div>
             <div class="res-item">
               <div class="item-content">
-                <ColumnItem :height="pillarRef.fourth" />
+                <ColumnItem :height="100" />
+                <div class="item-label"></div>
               </div>
-              <div class="item-title">溢流坝</div>
+              <div class="item-title" style="left: 8%">溢流坝</div>
             </div>
           </div>
           <div class="pillar-label"></div>
@@ -398,7 +479,7 @@ const onResult = () => {
           <div class="span-label">开启时长</div>
           <div class="span-content">
             <div class="span-item">{{ spanRef.first }}</div>
-            <div class="span-item">{{ spanRef.second }}</div>
+            <div class="span-item" style="left: -2%">{{ spanRef.second }}</div>
             <div class="span-item"></div>
             <div class="span-item"></div>
           </div>
@@ -407,10 +488,14 @@ const onResult = () => {
         <div class="water-wrap">
           <div class="water-label">调度水量</div>
           <div class="water-content">
-            <div class="water-item" style="text-align: left">645m³/s</div>
-            <div class="water-item" style="text-align: center">645m³/s</div>
-            <div class="water-item">645m³/s</div>
-            <div class="water-item">645m³/s</div>
+            <div class="water-item">
+              {{ `${waterRef.first}m³/s` }}
+            </div>
+            <div class="water-item" style="left: -2%">
+              {{ `${waterRef.second}m³/s` }}
+            </div>
+            <div class="water-item">{{ `${waterRef.third}m³/s` }}</div>
+            <div class="water-item">{{ `${waterRef.fourth}m³/s` }}</div>
           </div>
           <div class="water-label"></div>
         </div>
@@ -432,10 +517,22 @@ const onResult = () => {
 .res-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 }
 .item-title {
+  width: 70px;
+  /* text-align: center; */
   top: -170px;
+}
+.item-content {
+  display: flex;
+  align-items: center;
+}
+.item-label {
+  width: 14px;
+  top: -80px;
+  margin-left: 16px;
+  white-space: pre-wrap;
 }
 .pillar-wrap {
   width: 100%;
@@ -445,6 +542,7 @@ const onResult = () => {
 }
 .pillar-label {
   width: 10%;
+  top: -85px;
 }
 .pillar-content {
   flex: 1;
@@ -489,8 +587,8 @@ const onResult = () => {
   align-items: center;
 }
 .water-item {
-  width: 60px;
-  text-align: right;
+  width: 70px;
+  /* text-align: right; */
 }
 .chart {
   top: -140px;

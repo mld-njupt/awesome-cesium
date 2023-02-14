@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onBeforeUnmount } from "vue";
 import { notification } from "ant-design-vue";
 import { useSimuStore } from "../../stores/simulation";
 import { useViewStore } from "../../stores/earth";
@@ -53,12 +53,21 @@ const onFinish = () => {
     }
   }, [3100]);
 };
-
+// let timer;
 onMounted(() => {
+  // timer = setInterval(() => {
+  //   document.getElementsByClassName("ant-picker-header-view")[1].innerHTML =
+  //     "hour";
+  //   document.getElementsByClassName("ant-picker-header-view")[3].innerHTML =
+  //     "hour";
+  //   // console.log(document.getElementsByClassName("ant-picker-header-view"));
+  // }, 100);
   simuStore.simuData.start = "";
   simuStore.simuData.end = "";
 });
-
+// onBeforeUnmount(() => {
+//   clearInterval(timer);
+// });
 const onClose = () => {
   if (!simuStore.simuData.isSave) {
     notification["warn"]({
@@ -109,7 +118,7 @@ const onClose = () => {
       >
         <a-space direction="vertical" :size="12">
           <div>
-            <a-form-item label="方案名称" style="width: 300px">
+            <a-form-item label="情景名称" style="width: 300px">
               <a-input style="width: 200px" />
             </a-form-item>
           </div>

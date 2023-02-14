@@ -2,10 +2,12 @@
 import { ref } from "vue";
 import { useViewStore } from "../stores/earth";
 import { useSimuStore } from "../stores/simulation";
+import { useClickStore } from "../stores/click";
 import {
   ScreenSpaceEventHandler,
   defined,
   ScreenSpaceEventType,
+  Color
   // SceneTransforms,
 } from "cesium";
 import { onMounted } from "vue";
@@ -96,6 +98,7 @@ const vDrag = (el) => {
 };
 const viewerStore = useViewStore();
 const simuStore = useSimuStore();
+const clickStore = useClickStore();
 const station_msg = ref();
 //控制普通弹窗的tab显示
 const showConfig = ref({
@@ -155,6 +158,36 @@ const option = ref({
             link.href = URL.createObjectURL(blobData);
             link.click();
           });
+        },
+      },
+      myClose: {
+        show: true,
+        title: "关闭弹窗",
+        icon: "path://M886.528 908.032c-28.096 28.096-73.856 28.096-102.016 0L138.304 261.824c-28.096-28.16-28.16-73.856 0-102.016 28.032-28.16 73.792-28.16 102.08 0l646.144 646.144C914.624 834.24 914.752 879.872 886.528 908.032L886.528 908.032zM885.76 261.504 239.616 907.648c-28.224 28.224-73.92 28.224-102.08 0-28.16-28.096-28.16-73.728 0.064-102.016L783.744 159.552c28.224-28.16 73.984-28.16 102.016-0.064C913.984 187.648 913.856 233.344 885.76 261.504L885.76 261.504z",
+        onclick: function () {
+          hideInfo();
+          const clickStack = clickStore.clickStack;
+          const viewer = viewerStore.cesiumViewer;
+          if (clickStack.length == 0) return;
+          const prevEntityMsg = clickStack.pop();
+          if (prevEntityMsg) {
+            if (prevEntityMsg.id.includes("yuliang")) {
+              //雨量站
+              prevEntityMsg.entity._point._pixelSize._value = 17;
+              prevEntityMsg.entity._label._fillColor._value =
+                Color.fromCssColorString("#000000");
+              viewer._container.style.cursor = "default";
+              viewer.scene.requestRender();
+            } else {
+              //水位站和气象站都用此即可
+              const prevEntity = viewer.entities.getById(prevEntityMsg.id);
+              prevEntity._billboard._scale._value = prevEntityMsg.prev;
+              prevEntityMsg.entity._label._fillColor._value =
+                Color.fromCssColorString("#000000");
+              viewer._container.style.cursor = "default";
+              viewer.scene.requestRender();
+            }
+          }
         },
       },
     },
@@ -245,25 +278,25 @@ const defineTime = () => {
 };
 const defineForeTime = () => {
   let start = moment(
-    simuStore.simuData.start.toString() || "20230616"
-  ).isBefore(moment("2023-06-20"))
-    ? moment(simuStore.simuData.start.toString() || "20230616")
-    : moment("2023-06-16");
-  start = moment(simuStore.simuData.start.toString() || "20230616").isAfter(
-    moment("2023.06.16")
+    simuStore.simuData.start.toString() || "20230301"
+  ).isBefore(moment("2023-03-05"))
+    ? moment(simuStore.simuData.start.toString() || "20230301")
+    : moment("2023-03-01");
+  start = moment(simuStore.simuData.start.toString() || "20230301").isAfter(
+    moment("2023.03.01")
   )
     ? start
-    : moment("2023.06.16");
-  let end = moment(simuStore.simuData.end.toString() || "20230620").isBefore(
-    moment("2023-06-20")
+    : moment("2023.03.01");
+  let end = moment(simuStore.simuData.end.toString() || "20230305").isBefore(
+    moment("2023-03-05")
   )
-    ? moment(simuStore.simuData.end.toString() || "20230620")
-    : moment("2023-06-20");
-  end = moment(simuStore.simuData.end.toString() || "20230620").isAfter(
-    moment("2023.06.16")
+    ? moment(simuStore.simuData.end.toString() || "20230305")
+    : moment("2023-03-05");
+  end = moment(simuStore.simuData.end.toString() || "20230305").isAfter(
+    moment("2023.03.01")
   )
     ? end
-    : moment("2023.06.16");
+    : moment("2023.03.01");
   return { start, end };
 };
 // const handleSel = () => {
@@ -329,6 +362,8 @@ const defineForeTime = () => {
 //       }
 //     });
 // };
+//外部toolbox需要调用
+let hideInfo;
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   const scene = viewer.scene;
@@ -540,15 +575,16 @@ onMounted(() => {
     foreInfo.style.left = position.x - 200 + "px";
     foreInfo.style.top = position.y - 400 + "px";
   }
-  function hideInfo() {
+  hideInfo = () => {
     info.style.display = "none";
     simuInfo.style.display = "none";
     foreInfo.style.display = "none";
     showPosition.value = false;
     showSimuPosition.value = false;
+    showForeInfo.value = false;
     // console.log(window.innerWidth);
     // simuInfo.style.left = `-${window.innerWidth / 2}px`;
-  }
+  };
   fetch(
     "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
   )
@@ -693,7 +729,7 @@ const handleSimuTab = (type) => {
     </div>
   </div>
   <div id="fore-info">
-    <div class="fore-tab" v-drag style="text-align: center">预报结果</div>
+    <div class="fore-tab" v-drag style="text-align: center">入库流量</div>
     <div class="content">
       <v-chart class="content-item" :option="option"></v-chart>
     </div>

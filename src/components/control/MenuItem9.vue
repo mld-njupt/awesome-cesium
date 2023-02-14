@@ -109,7 +109,7 @@ const onClose = () => {
       >
         <a-space direction="vertical" :size="12">
           <div>
-            <a-form-item label="方案名称" style="width: 300px">
+            <a-form-item label="情景名称" style="width: 300px">
               <a-input style="width: 200px" />
             </a-form-item>
           </div>

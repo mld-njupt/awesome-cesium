@@ -1,7 +1,14 @@
 <script setup>
+import { ref, onBeforeMount } from "vue";
 const props = defineProps(["height"]);
-const displayType = props.height == 0 ? "none" : "block";
-console.log(displayType)
+const displayType = ref("block");
+onBeforeMount(() => {
+  if (props.height == 0) {
+    displayType.value = "none";
+  } else {
+    displayType.value = "block";
+  }
+});
 </script>
 <template>
   <div class="lui-column-bg" style="top: -90px">

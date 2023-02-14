@@ -11,8 +11,10 @@ import PointItem from "./station/PointItem.vue";
 import TriangleItem from "./station/TriangleItem.vue";
 import WetherIem from "./station/WetherIem.vue";
 import { useSimuStore } from "../stores/simulation";
+import { useClickStore } from "../stores/click";
 import InterItem from "./station/InterItem.vue";
 const simuStore = useSimuStore();
+const clickStore = useClickStore();
 const checked = ref({
   //雨量
   checked1: false,
@@ -24,7 +26,7 @@ const checked = ref({
   checked4: false,
 });
 const moveStack = ref([]);
-const clickStack = ref([]);
+// const clickStack = ref([]);
 const viewerStore = useViewStore();
 //站点三角形标志
 const canvas = document.createElement("canvas");
@@ -40,9 +42,10 @@ image.src = canvas.toDataURL("image/jpg");
 onMounted(() => {
   const viewer = viewerStore.cesiumViewer;
   const scene = viewer.scene;
+  const clickStack = clickStore.clickStack;
   const handler = new ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(function (movement) {
-    if (clickStack.value.length > 0) return;
+    if (clickStack.length > 0) return;
     // console.log(clickStack.value.length);
     let pickedObject = viewer.scene.pick(movement.endPosition);
     let pickEntity;
@@ -123,8 +126,8 @@ onMounted(() => {
     let pickEntity;
     if (defined(pickedObject) && pickedObject.id !== "") {
       const station_type = pickedObject.id.id.split("/")[0];
-      if (clickStack.value.length > 0) {
-        const prevEntityMsg = clickStack.value.pop();
+      if (clickStack.length > 0) {
+        const prevEntityMsg = clickStack.pop();
         if (prevEntityMsg) {
           if (prevEntityMsg.id.includes("yuliang")) {
             //雨量站
@@ -149,7 +152,7 @@ onMounted(() => {
             Color.fromCssColorString("#0093ef");
           viewer._container.style.cursor = "pointer";
           viewer.scene.requestRender();
-          clickStack.value.push({
+          clickStack.push({
             entity: pickedObject.id,
             id: pickedObject.id.id,
             prev: 17,
@@ -163,7 +166,7 @@ onMounted(() => {
             Color.fromCssColorString("#0093ef");
           viewer._container.style.cursor = "pointer";
           viewer.scene.requestRender();
-          clickStack.value.push({
+          clickStack.push({
             entity: pickedObject.id,
             id: pickedObject.id.id,
             prev: 1,
@@ -177,7 +180,7 @@ onMounted(() => {
             Color.fromCssColorString("#0093ef");
           viewer._container.style.cursor = "pointer";
           viewer.scene.requestRender();
-          clickStack.value.push({
+          clickStack.push({
             entity: pickedObject.id,
             id: pickedObject.id.id,
             prev: 1,
@@ -188,8 +191,8 @@ onMounted(() => {
           break;
       }
     } else {
-      if (clickStack.value.length == 0) return;
-      const prevEntityMsg = clickStack.value.pop();
+      if (clickStack.length == 0) return;
+      const prevEntityMsg = clickStack.pop();
       if (prevEntityMsg) {
         if (prevEntityMsg.id.includes("yuliang")) {
           //雨量站
