@@ -1,10 +1,11 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineComponent } from "vue";
 import { notification } from "ant-design-vue";
 import { useSimuStore } from "../../stores/simulation";
 import { useViewStore } from "../../stores/earth";
 import { Cartesian3 } from "cesium";
 import ExcelJs from "exceljs";
+import { SmileOutlined, MehOutlined } from "@ant-design/icons-vue";
 const emit = defineEmits(["close"]);
 const props = defineProps(["visible"]);
 const formRef = ref();
@@ -86,6 +87,100 @@ const onClose = () => {
     link.click();
   });
 };
+const handleChange = (value) => {
+  console.log(`selected ${value}`);
+};
+const options1 = ref([
+  {
+    value: "降雨过程表",
+    label: "降雨过程表",
+  },
+  {
+    value: "雨量日报表",
+    label: "雨量日报表",
+  },
+  {
+    value: "时段最大降水量表",
+    label: "时段最大降水量表",
+  },
+  {
+    value: "降水量摘录表",
+    label: "降水量摘录表",
+  },
+  {
+    value: "逐日雨量对照表",
+    label: "逐日雨量对照表",
+  },
+  {
+    value: "累计雨量报表",
+    label: "累计雨量报表",
+  },  {
+    value: "逐日雨量表",
+    label: "逐日雨量表",
+  },
+  {
+    value: "月年降水量统计表",
+    label: "月年降水量统计表",
+  },
+  {
+    value: "多年平均降水量统计表",
+    label: "多年平均降水量统计表",
+  },  {
+    value: "水位日报表",
+    label: "水位日报表",
+  },
+  {
+    value: "水位日报表（含对应库容）",
+    label: "水位日报表（含对应库容）",
+  },
+  {
+    value: "水位月报表（日平均水位）",
+    label: "水位月报表（日平均水位）",
+  },  {
+    value: "水位月报表（8：00整点水位）",
+    label: "水位月报表（8：00整点水位）",
+  },
+  {
+    value: "逐日平均水位表",
+    label: "逐日平均水位表",
+  },
+  {
+    value: "泄洪流量计算表",
+    label: "泄洪流量计算表",
+  },  {
+    value: "入库流量计算表",
+    label: "入库流量计算表",
+  },
+  {
+    value: "各月逐日流量表",
+    label: "各月逐日流量表",
+  },
+  {
+    value: "逐日平均流量表",
+    label: "逐日平均流量表",
+  },  {
+    value: "水量平衡计算表",
+    label: "水量平衡计算表",
+  },
+  {
+    value: "水文要素摘录表",
+    label: "水文要素摘录表",
+  },
+  {
+    value: "日均水位频率表",
+    label: "日均水位频率表",
+  },
+  {
+    value: "温湿度月报表",
+    label: "温湿度月报表",
+  }
+]);
+const options2 = ref([
+  {
+    value: "lucy",
+    label: "Lucy",
+  },
+]);
 </script>
 <template>
   <a-drawer
@@ -111,106 +206,18 @@ const onClose = () => {
         <a-space direction="vertical" :size="12">
           <div style="width: 450px">
             <a-form-item label="报表类型" style="width: 300px">
-              <div class="demo-dropdown-wrap">
-                <a-dropdown-button
-                  @click="handleButtonClick"
-                  style="width: 300px"
+              <a-space>
+                <a-select
+                  v-model:value="value1"
+                  style="width: 250px"
+                  :options="options1"
+                  @change="handleChange"
                 >
-                  请选择报表类型
-                  <template #overlay>
-                    <a-menu @click="handleMenuClick">
-                      <a-menu-item key="1">
-                        <UserOutlined />
-                        降雨过程表
-                      </a-menu-item>
-                      <a-menu-item key="2">
-                        <UserOutlined />
-                        雨量日报表
-                      </a-menu-item>
-                      <a-menu-item key="3">
-                        <UserOutlined />
-                        时段最大降水量表
-                      </a-menu-item>
-                      <a-menu-item key="4">
-                        <UserOutlined />
-                        降水量摘录表
-                      </a-menu-item>
-                      <a-menu-item key="5">
-                        <UserOutlined />
-                        逐日雨量对照表
-                      </a-menu-item>
-                      <a-menu-item key="6">
-                        <UserOutlined />
-                        累计雨量报表
-                      </a-menu-item>
-                      <a-menu-item key="7">
-                        <UserOutlined />
-                        逐日雨量表
-                      </a-menu-item>
-                      <a-menu-item key="8">
-                        <UserOutlined />
-                        月年降水量统计表
-                      </a-menu-item>
-                      <a-menu-item key="9">
-                        <UserOutlined />
-                        多年平均降水量统计表
-                      </a-menu-item>
-                      <a-menu-item key="10">
-                        <UserOutlined />
-                        水位日报表
-                      </a-menu-item>
-                      <a-menu-item key="11">
-                        <UserOutlined />
-                        水位日报表（含对应库容）
-                      </a-menu-item>
-                      <a-menu-item key="12">
-                        <UserOutlined />
-                        水位月报表（日平均水位）
-                      </a-menu-item>
-                      <a-menu-item key="13">
-                        <UserOutlined />
-                        水位月报表（8：00整点水位）
-                      </a-menu-item>
-                      <a-menu-item key="14">
-                        <UserOutlined />
-                        逐日平均水位表
-                      </a-menu-item>
-                      <a-menu-item key="15">
-                        <UserOutlined />
-                        泄洪流量计算表
-                      </a-menu-item>
-                      <a-menu-item key="16">
-                        <UserOutlined />
-                        入库流量计算表
-                      </a-menu-item>
-                      <a-menu-item key="17">
-                        <UserOutlined />
-                        各月逐日流量表
-                      </a-menu-item>
-                      <a-menu-item key="18">
-                        <UserOutlined />
-                        逐日平均流量表
-                      </a-menu-item>
-                      <a-menu-item key="19">
-                        <UserOutlined />
-                        水量平衡计算表
-                      </a-menu-item>
-                      <a-menu-item key="20">
-                        <UserOutlined />
-                        水文要素摘录表
-                      </a-menu-item>
-                      <a-menu-item key="21">
-                        <UserOutlined />
-                        日均水位频率表
-                      </a-menu-item>
-                      <a-menu-item key="22">
-                        <UserOutlined />
-                        温湿度月报表
-                      </a-menu-item>
-                    </a-menu>
-                  </template>
-                </a-dropdown-button>
-              </div>
+                  <template #suffixIcon
+                    ><smile-outlined class="ant-select-suffix"
+                  /></template>
+                </a-select>
+              </a-space>
             </a-form-item>
           </div>
           <div>
