@@ -310,7 +310,7 @@ onMounted(() => {
       v-if="checked.checked2"
       :id="'shuiwei/1'"
       :name="'丰乐'"
-      :position="[118.2144, 30.0017]"
+      :position="[118.24636, 29.899213]"
     />
     <WetherIem
       v-if="checked.checked3"
