@@ -688,6 +688,23 @@ const handleSimuTab = (type) => {
           >
         </a-descriptions>
       </div>
+      <a-form-item
+        label="起始时间"
+        style="width: 237px"
+        v-if="showConfig.chart"
+        id="time1"
+      >
+        <a-date-picker v-model:value="simuStore.simuData.start" />
+      </a-form-item>
+      <a-form-item
+        label="终止时间"
+        style="width: 237px"
+        v-if="showConfig.chart"
+        id="time2"
+      >
+        <a-date-picker v-model:value="simuStore.simuData.end" />
+      </a-form-item>
+
       <v-chart
         class="chart content-item"
         v-if="showConfig.chart"
@@ -879,6 +896,19 @@ body {
   justify-content: center;
   width: 500px;
   height: 100%;
-  z-index: 998;
+  z-index: 99;
+}
+#time1 {
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  z-index: 100;
+}
+
+#time2 {
+  position: absolute;
+  top: 2px;
+  right: 42px;
+  z-index: 100;
 }
 </style>

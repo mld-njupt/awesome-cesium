@@ -306,6 +306,12 @@ onMounted(() => {
       :name="'尾水'"
       :position="[118.2483, 29.9211]"
     />
+    <TriangleItem
+      v-if="checked.checked2"
+      :id="'shuiwei/1'"
+      :name="'丰乐'"
+      :position="[118.2144, 30.0017]"
+    />
     <WetherIem
       v-if="checked.checked3"
       :id="'qixiang/0'"

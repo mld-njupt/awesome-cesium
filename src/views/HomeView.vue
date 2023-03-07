@@ -11,7 +11,7 @@ import {
 import ControlItem from "../components/ControlItem.vue";
 import LocationItem from "../components/LocationItem.vue";
 import StationItem from "../components/StationItem.vue";
-import LiuYu from "../components/Liuyu.vue";
+import LiuYu from "../components/LiuYu.vue";
 import ShuiKu from "../components/ShuiKu.vue";
 import MessageItem from "../components/MessageItem.vue";
 import { useViewStore } from "../stores/earth";

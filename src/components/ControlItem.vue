@@ -22,6 +22,7 @@ import MenuItem2 from "./control/MenuItem2.vue";
 import MenuItem5 from "./control/MenuItem5.vue";
 import MenuItem3 from "./control/MenuItem3.vue";
 import MenuItem13 from "./control/MenuItem13.vue";
+import MenuItem12 from "./control/MenuItem12.vue";
 import {
   DoubleLeftOutlined,
   PlusOutlined,
@@ -87,6 +88,9 @@ const handleClick = (e) => {
     case "4":
       showDrawer("message");
       break;
+    case "12":
+      showDrawer("consol");
+      break;
     case "13":
       //100
       drainageVis.value = 0;
@@ -141,6 +145,11 @@ const projectVis = ref(false);
 const closeProjectVis = () => {
   projectVis.value = false;
 };
+//资料整编相关
+const consolidation = ref(false);
+const closeconsolidation = () => {
+  consolidation.value = false;
+};
 //基本信息相关
 const messageVis = ref(false);
 const closeMessageVis = () => {
@@ -174,6 +183,9 @@ const showDrawer = (key) => {
       break;
     case "curve":
       curveVis.value = true;
+      break;
+    case "consol":
+    consolidation.value = true;
       break;
     default:
       break;
@@ -225,6 +237,7 @@ watch(
           <a-menu-item key="4">基本信息</a-menu-item>
           <a-menu-item key="5">特征曲线</a-menu-item>
           <a-menu-item key="6">水利工程</a-menu-item>
+          <a-menu-item key="12">报表整编</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub3">
           <template #icon>
@@ -260,6 +273,11 @@ watch(
       v-if="projectVis"
       @close="closeProjectVis"
       :visible="projectVis"
+    />
+    <MenuItem12
+      v-if="consolidation"
+      @close="closeconsolidation"
+      :visible="consolidation"
     />
     <MenuItem5 v-if="curveVis" @close="closeCurveVis" :visible="curveVis" />
     <MenuItem4
