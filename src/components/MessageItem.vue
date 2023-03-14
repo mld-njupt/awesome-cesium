@@ -407,25 +407,25 @@ const defineTime = () => {
 };
 const defineForeTime = () => {
   let start = moment(
-    simuStore.simuData.start.toString() || "20230301"
-  ).isBefore(moment("2023-03-05"))
-    ? moment(simuStore.simuData.start.toString() || "20230301")
-    : moment("2023-03-01");
-  start = moment(simuStore.simuData.start.toString() || "20230301").isAfter(
-    moment("2023.03.01")
+    simuStore.simuData.start.toString() || "20230616"
+  ).isBefore(moment("2023-06-20"))
+    ? moment(simuStore.simuData.start.toString() || "20230616")
+    : moment("2023-06-16");
+  start = moment(simuStore.simuData.start.toString() || "20230616").isAfter(
+    moment("2023.06.16")
   )
     ? start
-    : moment("2023.03.01");
-  let end = moment(simuStore.simuData.end.toString() || "20230305").isBefore(
-    moment("2023-03-05")
+    : moment("2023.06.16");
+  let end = moment(simuStore.simuData.end.toString() || "20230620").isBefore(
+    moment("2023-06-20")
   )
-    ? moment(simuStore.simuData.end.toString() || "20230305")
-    : moment("2023-03-05");
-  end = moment(simuStore.simuData.end.toString() || "20230305").isAfter(
-    moment("2023.03.01")
+    ? moment(simuStore.simuData.end.toString() || "20230620")
+    : moment("2023-06-20");
+  end = moment(simuStore.simuData.end.toString() || "20230620").isAfter(
+    moment("2023.06.16")
   )
     ? end
-    : moment("2023.03.01");
+    : moment("2023.06.16");
   return { start, end };
 };
 // const handleSel = () => {
