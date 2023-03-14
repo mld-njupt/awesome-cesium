@@ -105,6 +105,7 @@ const showConfig = ref({
   chart: false,
   msg: true,
 });
+const selectType = ref("");
 //控制模拟和预报弹窗的tab显示
 const showSimuConfig = ref({
   flow: true,
@@ -241,7 +242,8 @@ const option = ref({
   },
 });
 const handleZoom = (t) => {
-  console.log(t);
+  // console.log(t);
+
   // if (t.end - t.start <= 5) {
   //   option.value.series.type = "bar";
   //   option.value.dataZoom[0].start = t.start;
@@ -253,6 +255,133 @@ const handleZoom = (t) => {
   //   option.value.series.type = "line";
   // }
 };
+const selectTime = () => {
+  // console.log(selectType);
+  //console.log(selectType.value);
+  // console.log(option.value.dataZoom[0].start);
+  // option.value.dataZoom[0].start = 100;
+
+  switch (selectType.value) {
+    case "yuliang":
+      // station_msg.value = yuliang[station_id];
+      option.value.xAxis.data = [];
+      option.value.series.data = [];
+      option.value.yAxis.name = "雨量";
+      option.value.series.name = "雨量";
+      option.value.yAxis.max = 220;
+      showLoading.value = true;
+      //  console.log(simuStore.simuData.end.format(
+      //           "YYYYMMDD"
+      //         ))
+      //  console.log(simuStore.simuData.start.format(
+      //           "YYYYMMDD"
+      //         ))
+      if (simuStore.simuData.end.format(
+        "YYYYMMDD"
+      ) > 20221007) {
+        alert("时间范围溢出")
+
+      }
+      if (simuStore.simuData.start.format(
+        "YYYYMMDD"
+      ) < 20000000) {
+        alert("时间范围过小")
+
+      }
+
+      fetch(
+        // "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
+        `http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/${simuStore.simuData.start.format(
+          "YYYYMMDD"
+        )}/${simuStore.simuData.end.format("YYYYMMDD")}/14978`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const { timeData, resData } = handleData(data, "雨量", "时间");
+          option.value.series.type = "bar";
+          option.value.xAxis.data = timeData;
+          option.value.series.data = resData;
+          option.value.yAxis.min = 0;
+          showLoading.value = false;
+        });
+      break;
+    case "shuiwei":
+      //  station_msg.value = shuiwei[station_id];
+      option.value.xAxis.data = [];
+      option.value.series.data = [];
+      option.value.yAxis.name = "水位";
+      option.value.series.name = "水位";
+      option.value.yAxis.max = 210;
+      option.value.yAxis.min = 180;
+      showLoading.value = true;
+      if (simuStore.simuData.end.format(
+        "YYYYMMDD"
+      ) > 20080716) {
+        alert("时间范围溢出")
+
+      }
+      if (simuStore.simuData.start.format(
+        "YYYYMMDD"
+      ) < 20000000) {
+        alert("时间范围过小")
+
+      }
+      fetch(
+        "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E6%B0%B4%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const { timeData, resData } = handleData(data, "水位", "时间");
+          option.value.series.type = "line";
+          option.value.xAxis.data = timeData;
+          option.value.series.data = resData;
+          showLoading.value = false;
+        });
+      break;
+    case "qixiang":
+      //  station_msg.value = qixiang[station_id];
+      option.value.xAxis.data = [];
+      option.value.series.data = [];
+      option.value.yAxis.name = "测站电压";
+      option.value.series.name = "测站电压";
+      showLoading.value = true;
+      if (simuStore.simuData.end.format(
+        "YYYYMMDD"
+      ) > 20170203) {
+        alert("时间范围溢出")
+        
+
+      }
+      if (simuStore.simuData.start.format(
+        "YYYYMMDD"
+      ) < 20050813) {
+        alert("时间范围过小")
+
+      }
+      fetch(
+        "http://43.142.17.108:9001/api/monitor/%E7%94%B5%E5%8E%8B%E6%B8%A9%E5%BA%A6%E8%A1%A8/1/20000101/20221010/100000"
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const { timeData, resData } = handleData(
+            data,
+            "测站电压",
+            "时间"
+          );
+          option.value.series.type = "line";
+          option.value.xAxis.data = timeData;
+          option.value.series.data = resData;
+          option.value.yAxis.max = 18;
+          option.value.yAxis.min = 8;
+          showLoading.value = false;
+        });
+      break;
+    default:
+      break;
+  }
+}
+
+
 const defineTime = () => {
   let start = moment(
     simuStore.simuData.start.toString() || "20000101"
@@ -390,9 +519,11 @@ onMounted(() => {
         const station_id = viewer.entities
           .getById(pickedObject.id.id)
           ._id.split("/")[1];
+        selectType.value = station_type
         switch (station_type) {
           case "yuliang":
             station_msg.value = yuliang[station_id];
+
             option.value.xAxis.data = [];
             option.value.series.data = [];
             option.value.yAxis.name = "雨量";
@@ -401,6 +532,7 @@ onMounted(() => {
             showLoading.value = true;
             fetch(
               "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
+
             )
               .then((response) => response.json())
               .then((data) => {
@@ -408,6 +540,7 @@ onMounted(() => {
                 option.value.series.type = "bar";
                 option.value.xAxis.data = timeData;
                 option.value.series.data = resData;
+                option.value.yAxis.min = 0;
                 showLoading.value = false;
               });
             break;
@@ -506,7 +639,7 @@ onMounted(() => {
           const resData = fore_all_data.filter((v) => {
             return (
               parseInt(v["日"]) >=
-                parseInt(start.format("YYYYMMDD").slice(-2)) ||
+              parseInt(start.format("YYYYMMDD").slice(-2)) ||
               parseInt(v["日"]) <= parseInt(end.format("YYYYMMDD").slice(-2))
             );
           });
@@ -630,8 +763,7 @@ const handleSimuTab = (type) => {
     showLoading.value = true;
     const { start, end } = defineTime();
     fetch(
-      `http://43.142.17.108:9001/api/monitor/水库降雨流量/${
-        paramsMap[type]
+      `http://43.142.17.108:9001/api/monitor/水库降雨流量/${paramsMap[type]
       }/${start.format("YYYYMMDD")}/${end.format("YYYYMMDD")}/14978`
     )
       .then((response) => response.json())
@@ -657,16 +789,10 @@ const handleSimuTab = (type) => {
 <template>
   <div id="info">
     <div class="tab" v-drag>
-      <div
-        v-on:click="showMsg"
-        :class="showConfig.msg ? 'tab-item active' : 'tab-item'"
-      >
+      <div v-on:click="showMsg" :class="showConfig.msg ? 'tab-item active' : 'tab-item'">
         站点信息
       </div>
-      <div
-        v-on:click="showChart"
-        :class="showConfig.chart ? 'tab-item active' : 'tab-item'"
-      >
+      <div v-on:click="showChart" :class="showConfig.chart ? 'tab-item active' : 'tab-item'">
         监测曲线
       </div>
     </div>
@@ -675,62 +801,30 @@ const handleSimuTab = (type) => {
         <a-spin size="large" />
       </div>
       <div class="msg content-item" v-if="showConfig.msg">
-        <a-descriptions
-          bordered
-          :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
-          size="small"
-        >
-          <a-descriptions-item
-            v-for="(value, key) in station_msg"
-            :label="key"
-            :key="key"
-            >{{ value }}</a-descriptions-item
-          >
+        <a-descriptions bordered :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" size="small">
+          <a-descriptions-item v-for="(value, key) in station_msg" :label="key" :key="key">{{ value
+          }}</a-descriptions-item>
         </a-descriptions>
       </div>
-      <a-form-item
-        label="起始时间"
-        style="width: 237px"
-        v-if="showConfig.chart"
-        id="time1"
-      >
-        <a-date-picker v-model:value="simuStore.simuData.start" />
+      <a-form-item label="起始时间" style="width: 237px" v-if="showConfig.chart" id="time1">
+        <a-date-picker v-model:value="simuStore.simuData.start" @change="selectTime" />
       </a-form-item>
-      <a-form-item
-        label="终止时间"
-        style="width: 237px"
-        v-if="showConfig.chart"
-        id="time2"
-      >
-        <a-date-picker v-model:value="simuStore.simuData.end" />
+      <a-form-item label="终止时间" style="width: 237px" v-if="showConfig.chart" id="time2">
+        <a-date-picker v-model:value="simuStore.simuData.end" @change="selectTime" />
       </a-form-item>
 
-      <v-chart
-        class="chart content-item"
-        v-if="showConfig.chart"
-        :option="option"
-        @datazoom="handleZoom"
-      ></v-chart>
+      <v-chart class="chart content-item" v-if="showConfig.chart" :option="option" @datazoom="handleZoom"></v-chart>
     </div>
   </div>
   <div id="simu-info">
     <div class="tab" v-drag>
-      <div
-        @click="handleSimuTab('flow')()"
-        :class="showSimuConfig.flow ? 'simu-tab-item active' : 'simu-tab-item'"
-      >
+      <div @click="handleSimuTab('flow')()" :class="showSimuConfig.flow ? 'simu-tab-item active' : 'simu-tab-item'">
         入库流量
       </div>
-      <div
-        @click="handleSimuTab('water')()"
-        :class="showSimuConfig.water ? 'simu-tab-item active' : 'simu-tab-item'"
-      >
+      <div @click="handleSimuTab('water')()" :class="showSimuConfig.water ? 'simu-tab-item active' : 'simu-tab-item'">
         入库水量
       </div>
-      <div
-        @click="handleSimuTab('silt')()"
-        :class="showSimuConfig.silt ? 'simu-tab-item active' : 'simu-tab-item'"
-      >
+      <div @click="handleSimuTab('silt')()" :class="showSimuConfig.silt ? 'simu-tab-item active' : 'simu-tab-item'">
         泥沙
       </div>
     </div>
@@ -738,11 +832,8 @@ const handleSimuTab = (type) => {
       <div v-if="showLoading" class="loading">
         <a-spin size="large" />
       </div>
-      <v-chart
-        class="content-item"
-        :option="option"
-        @datazoom="handleZoom"
-      ></v-chart>
+      <v-chart class="content-item" :option="option" @datazoom="handleZoom"></v-chart>
+      <!--     -->
     </div>
   </div>
   <div id="fore-info">
@@ -752,48 +843,49 @@ const handleSimuTab = (type) => {
     </div>
   </div>
   <!-- <div id="simu-info">
-    <div class="select-wrap" v-drag>
-      <a-select
-        ref="select"
-        v-model:value="simuDataCfg.type"
-        style="width: 120px"
-        placeholder="请选择类型"
-        @change="handleSel('type')"
-      >
-        <a-select-option value="daily">径流</a-select-option>
-        <a-select-option value="dailysand">泥沙</a-select-option>
-        <a-select-option value="dailyTN">总氮</a-select-option>
-        <a-select-option value="dailyTP">总磷</a-select-option>
-      </a-select>
-      <a-select
-        ref="select"
-        v-model:value="simuDataCfg.frequency"
-        style="width: 120px"
-        placeholder="请选择频率"
-        @change="handleSel('frequency')"
-      >
-        <a-select-option value="day">逐日</a-select-option>
-        <a-select-option value="month">逐月</a-select-option>
-        <a-select-option value="year">逐年</a-select-option>
-      </a-select>
-    </div>
-    <div class="content">
-      <div v-if="showLoading" class="loading">
-        <a-spin size="large" />
-      </div>
-      <v-chart
-        class="content-item"
-        :option="option"
-        @datazoom="handleZoom"
-      ></v-chart>
-    </div>
-  </div> -->
+        <div class="select-wrap" v-drag>
+          <a-select
+            ref="select"
+            v-model:value="simuDataCfg.type"
+            style="width: 120px"
+            placeholder="请选择类型"
+            @change="handleSel('type')"
+          >
+            <a-select-option value="daily">径流</a-select-option>
+            <a-select-option value="dailysand">泥沙</a-select-option>
+            <a-select-option value="dailyTN">总氮</a-select-option>
+            <a-select-option value="dailyTP">总磷</a-select-option>
+          </a-select>
+          <a-select
+            ref="select"
+            v-model:value="simuDataCfg.frequency"
+            style="width: 120px"
+            placeholder="请选择频率"
+            @change="handleSel('frequency')"
+          >
+            <a-select-option value="day">逐日</a-select-option>
+            <a-select-option value="month">逐月</a-select-option>
+            <a-select-option value="year">逐年</a-select-option>
+          </a-select>
+        </div>
+        <div class="content">
+          <div v-if="showLoading" class="loading">
+            <a-spin size="large" />
+          </div>
+          <v-chart
+            class="content-item"
+            :option="option"
+            @datazoom="handleZoom"
+          ></v-chart>
+        </div>
+      </div> -->
 </template>
 <style scoped>
 html,
 body {
   position: relative !important;
 }
+
 #info {
   position: absolute;
   width: 500px;
@@ -804,6 +896,7 @@ body {
   /* border: 2px solid greenyellow; */
   border-radius: 4px;
 }
+
 #simu-info {
   position: absolute;
   width: 500px;
@@ -814,6 +907,7 @@ body {
   /* border: 2px solid greenyellow; */
   border-radius: 4px;
 }
+
 #fore-info {
   position: absolute;
   width: 500px;
@@ -824,6 +918,7 @@ body {
   /* border: 2px solid greenyellow; */
   border-radius: 4px;
 }
+
 .fore-tab {
   width: 100%;
   height: 50px;
@@ -833,6 +928,7 @@ body {
 
   background-color: rgba(0, 0, 0, 0.25);
 }
+
 /* .select-wrap {
   width: 500px;
   height: 50px;
@@ -858,6 +954,7 @@ body {
   line-height: 50px;
   background-color: rgba(0, 0, 0, 0.25);
 }
+
 .simu-tab-item {
   width: 33.3%;
   height: 50px;
@@ -866,15 +963,19 @@ body {
   line-height: 50px;
   background-color: rgba(0, 0, 0, 0.25);
 }
+
 .active {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
 .tab-item:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
 .simu-tab-item:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
 .content {
   width: 500px;
   height: 350px;
@@ -886,9 +987,11 @@ body {
   height: 350px;
   overflow: auto;
 }
+
 .msg {
   z-index: 999;
 }
+
 .loading {
   position: absolute;
   display: flex;
@@ -898,6 +1001,7 @@ body {
   height: 100%;
   z-index: 99;
 }
+
 #time1 {
   position: absolute;
   top: 2px;
