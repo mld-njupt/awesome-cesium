@@ -300,11 +300,23 @@ onMounted(() => {
       :name="'蒸发站'"
       :position="[118.2567, 29.89155]"
     />
+    <PointItem
+      v-if="checked.checked1"
+      :id="'yuliang/5'"
+      :name="'丰乐'"
+      :position="[118.24636, 29.899213]"
+    />
+    <PointItem
+      v-if="checked.checked1"
+      :id="'yuliang/6'"
+      :name="'尾水'"
+      :position="[118.247711, 29.896816]"
+    />
     <TriangleItem
       v-if="checked.checked2"
       :id="'shuiwei/0'"
       :name="'尾水'"
-      :position="[118.2483, 29.9211]"
+      :position="[118.247711, 29.896816]"
     />
     <TriangleItem
       v-if="checked.checked2"
