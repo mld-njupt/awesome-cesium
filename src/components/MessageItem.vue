@@ -7,7 +7,7 @@ import {
   ScreenSpaceEventHandler,
   defined,
   ScreenSpaceEventType,
-  Color
+  Color,
   // SceneTransforms,
 } from "cesium";
 import { onMounted } from "vue";
@@ -243,7 +243,6 @@ const option = ref({
 });
 const handleZoom = (t) => {
   // console.log(t);
-
   // if (t.end - t.start <= 5) {
   //   option.value.series.type = "bar";
   //   option.value.dataZoom[0].start = t.start;
@@ -276,22 +275,16 @@ const selectTime = () => {
       //  console.log(simuStore.simuData.start.format(
       //           "YYYYMMDD"
       //         ))
-      if (simuStore.simuData.end.format(
-        "YYYYMMDD"
-      ) > 20221007) {
-        alert("时间范围溢出")
-
+      if (simuStore.simuData.end.format("YYYYMMDD") > 20221007) {
+        alert("时间范围溢出");
       }
-      if (simuStore.simuData.start.format(
-        "YYYYMMDD"
-      ) < 20000000) {
-        alert("时间范围过小")
-
+      if (simuStore.simuData.start.format("YYYYMMDD") < 20000000) {
+        alert("时间范围过小");
       }
 
       fetch(
-        // "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
-        `http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/${simuStore.simuData.start.format(
+        // "http://127.0.0.1:9005/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
+        `http://127.0.0.1:9005/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/${simuStore.simuData.start.format(
           "YYYYMMDD"
         )}/${simuStore.simuData.end.format("YYYYMMDD")}/14978`
       )
@@ -314,20 +307,14 @@ const selectTime = () => {
       option.value.yAxis.max = 210;
       option.value.yAxis.min = 180;
       showLoading.value = true;
-      if (simuStore.simuData.end.format(
-        "YYYYMMDD"
-      ) > 20080716) {
-        alert("时间范围溢出")
-
+      if (simuStore.simuData.end.format("YYYYMMDD") > 20080716) {
+        alert("时间范围溢出");
       }
-      if (simuStore.simuData.start.format(
-        "YYYYMMDD"
-      ) < 20000000) {
-        alert("时间范围过小")
-
+      if (simuStore.simuData.start.format("YYYYMMDD") < 20000000) {
+        alert("时间范围过小");
       }
       fetch(
-        "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E6%B0%B4%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
+        "http://127.0.0.1:9005/api/monitor/%E6%A0%87%E5%87%86%E6%B0%B4%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
       )
         .then((response) => response.json())
         .then((data) => {
@@ -345,29 +332,18 @@ const selectTime = () => {
       option.value.yAxis.name = "测站电压";
       option.value.series.name = "测站电压";
       showLoading.value = true;
-      if (simuStore.simuData.end.format(
-        "YYYYMMDD"
-      ) > 20170203) {
-        alert("时间范围溢出")
-        
-
+      if (simuStore.simuData.end.format("YYYYMMDD") > 20170203) {
+        alert("时间范围溢出");
       }
-      if (simuStore.simuData.start.format(
-        "YYYYMMDD"
-      ) < 20050813) {
-        alert("时间范围过小")
-
+      if (simuStore.simuData.start.format("YYYYMMDD") < 20050813) {
+        alert("时间范围过小");
       }
       fetch(
-        "http://43.142.17.108:9001/api/monitor/%E7%94%B5%E5%8E%8B%E6%B8%A9%E5%BA%A6%E8%A1%A8/1/20000101/20221010/100000"
+        "http://127.0.0.1:9005/api/monitor/%E7%94%B5%E5%8E%8B%E6%B8%A9%E5%BA%A6%E8%A1%A8/1/20000101/20221010/100000"
       )
         .then((response) => response.json())
         .then((data) => {
-          const { timeData, resData } = handleData(
-            data,
-            "测站电压",
-            "时间"
-          );
+          const { timeData, resData } = handleData(data, "测站电压", "时间");
           option.value.series.type = "line";
           option.value.xAxis.data = timeData;
           option.value.series.data = resData;
@@ -379,8 +355,7 @@ const selectTime = () => {
     default:
       break;
   }
-}
-
+};
 
 const defineTime = () => {
   let start = moment(
@@ -431,7 +406,7 @@ const defineForeTime = () => {
 // const handleSel = () => {
 //   showLoading.value = true;
 //   fetch(
-//     `http://43.142.17.108:9001/api/simulate/${simuDataCfg.value.type}/${
+//     `http://127.0.0.1:9005/api/simulate/${simuDataCfg.value.type}/${
 //       simuDataCfg.value.frequency
 //     }/${moment(simuStore.simuData.start.toString() || "20100203").format(
 //       "YYYYMMDD"
@@ -501,6 +476,7 @@ onMounted(() => {
   // let cartesian_2;
   //注册鼠标点击事件
   handler.setInputAction(function (e) {
+    const today = moment().format("YYYYMMDD");
     const pickedObject = scene.pick(e.position, 3, 3);
     // 屏幕坐标转世界坐标——关键点
     // const ellipsoid = viewer.scene.globe.ellipsoid;
@@ -519,11 +495,10 @@ onMounted(() => {
         const station_id = viewer.entities
           .getById(pickedObject.id.id)
           ._id.split("/")[1];
-        selectType.value = station_type
+        selectType.value = station_type;
         switch (station_type) {
           case "yuliang":
             station_msg.value = yuliang[station_id];
-
             option.value.xAxis.data = [];
             option.value.series.data = [];
             option.value.yAxis.name = "雨量";
@@ -531,8 +506,7 @@ onMounted(() => {
             option.value.yAxis.max = 220;
             showLoading.value = true;
             fetch(
-              "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
-
+              `http://127.0.0.1:9005/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/2/20000101/${today}/100000`
             )
               .then((response) => response.json())
               .then((data) => {
@@ -554,7 +528,7 @@ onMounted(() => {
             option.value.yAxis.min = 180;
             showLoading.value = true;
             fetch(
-              "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E6%B0%B4%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
+              `http://127.0.0.1:9005/api/monitor/%E6%A0%87%E5%87%86%E6%B0%B4%E6%83%85%E8%A1%A8/7/20000101/${today}/100000`
             )
               .then((response) => response.json())
               .then((data) => {
@@ -573,7 +547,7 @@ onMounted(() => {
             option.value.series.name = "测站电压";
             showLoading.value = true;
             fetch(
-              "http://43.142.17.108:9001/api/monitor/%E7%94%B5%E5%8E%8B%E6%B8%A9%E5%BA%A6%E8%A1%A8/1/20000101/20221010/100000"
+              `http://127.0.0.1:9005/api/monitor/%E7%94%B5%E5%8E%8B%E6%B8%A9%E5%BA%A6%E8%A1%A8/1/20000101/20221010/100000`
             )
               .then((response) => response.json())
               .then((data) => {
@@ -605,25 +579,13 @@ onMounted(() => {
           showLoading.value = true;
           const { start, end } = defineTime();
           fetch(
-            `http://43.142.17.108:9001/api/monitor/水库降雨流量/输出入库流量/${start.format(
+            `http://127.0.0.1:9005/api/monitor/水库降雨流量/输出入库流量/${start.format(
               "YYYYMMDD"
             )}/${end.format("YYYYMMDD")}/14978`
           )
             .then((response) => response.json())
             .then((data) => {
-              const { timeData, resData } = handleData(
-                data,
-                "输出入库流量",
-                "时间"
-              );
-              option.value.yAxis.name = "入库流量m³/s";
-              option.value.series.name = "入库流量";
-              option.value.series.type = "line";
-              option.value.yAxis.max = Math.max(...resData);
-              option.value.yAxis.min = Math.min(...resData);
-              option.value.xAxis.data = timeData;
-              option.value.series.data = resData;
-              showLoading.value = false;
+              console.log(data);
             });
         } else if (
           pickedObject.id.id.includes("simu") &&
@@ -639,7 +601,7 @@ onMounted(() => {
           const resData = fore_all_data.filter((v) => {
             return (
               parseInt(v["日"]) >=
-              parseInt(start.format("YYYYMMDD").slice(-2)) ||
+                parseInt(start.format("YYYYMMDD").slice(-2)) ||
               parseInt(v["日"]) <= parseInt(end.format("YYYYMMDD").slice(-2))
             );
           });
@@ -718,8 +680,9 @@ onMounted(() => {
     // console.log(window.innerWidth);
     // simuInfo.style.left = `-${window.innerWidth / 2}px`;
   };
+  const today = moment().format("YYYYMMDD");
   fetch(
-    "http://43.142.17.108:9001/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/20221010/100000"
+    `http://127.0.0.1:9005/api/monitor/%E6%A0%87%E5%87%86%E9%9B%A8%E6%83%85%E8%A1%A8/1/20000101/${today}/100000`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -763,7 +726,8 @@ const handleSimuTab = (type) => {
     showLoading.value = true;
     const { start, end } = defineTime();
     fetch(
-      `http://43.142.17.108:9001/api/monitor/水库降雨流量/${paramsMap[type]
+      `http://127.0.0.1:9005/api/monitor/水库降雨流量/${
+        paramsMap[type]
       }/${start.format("YYYYMMDD")}/${end.format("YYYYMMDD")}/14978`
     )
       .then((response) => response.json())
@@ -789,10 +753,16 @@ const handleSimuTab = (type) => {
 <template>
   <div id="info">
     <div class="tab" v-drag>
-      <div v-on:click="showMsg" :class="showConfig.msg ? 'tab-item active' : 'tab-item'">
+      <div
+        v-on:click="showMsg"
+        :class="showConfig.msg ? 'tab-item active' : 'tab-item'"
+      >
         站点信息
       </div>
-      <div v-on:click="showChart" :class="showConfig.chart ? 'tab-item active' : 'tab-item'">
+      <div
+        v-on:click="showChart"
+        :class="showConfig.chart ? 'tab-item active' : 'tab-item'"
+      >
         监测曲线
       </div>
     </div>
@@ -801,30 +771,68 @@ const handleSimuTab = (type) => {
         <a-spin size="large" />
       </div>
       <div class="msg content-item" v-if="showConfig.msg">
-        <a-descriptions bordered :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" size="small">
-          <a-descriptions-item v-for="(value, key) in station_msg" :label="key" :key="key">{{ value
-          }}</a-descriptions-item>
+        <a-descriptions
+          bordered
+          :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
+          size="small"
+        >
+          <a-descriptions-item
+            v-for="(value, key) in station_msg"
+            :label="key"
+            :key="key"
+            >{{ value }}</a-descriptions-item
+          >
         </a-descriptions>
       </div>
-      <a-form-item label="起始时间" style="width: 237px" v-if="showConfig.chart" id="time1">
-        <a-date-picker v-model:value="simuStore.simuData.start" @change="selectTime" />
+      <a-form-item
+        label="起始时间"
+        style="width: 237px"
+        v-if="showConfig.chart"
+        id="time1"
+      >
+        <a-date-picker
+          v-model:value="simuStore.simuData.start"
+          @change="selectTime"
+        />
       </a-form-item>
-      <a-form-item label="终止时间" style="width: 237px" v-if="showConfig.chart" id="time2">
-        <a-date-picker v-model:value="simuStore.simuData.end" @change="selectTime" />
+      <a-form-item
+        label="终止时间"
+        style="width: 237px"
+        v-if="showConfig.chart"
+        id="time2"
+      >
+        <a-date-picker
+          v-model:value="simuStore.simuData.end"
+          @change="selectTime"
+        />
       </a-form-item>
 
-      <v-chart class="chart content-item" v-if="showConfig.chart" :option="option" @datazoom="handleZoom"></v-chart>
+      <v-chart
+        class="chart content-item"
+        v-if="showConfig.chart"
+        :option="option"
+        @datazoom="handleZoom"
+      ></v-chart>
     </div>
   </div>
   <div id="simu-info">
     <div class="tab" v-drag>
-      <div @click="handleSimuTab('flow')()" :class="showSimuConfig.flow ? 'simu-tab-item active' : 'simu-tab-item'">
+      <div
+        @click="handleSimuTab('flow')()"
+        :class="showSimuConfig.flow ? 'simu-tab-item active' : 'simu-tab-item'"
+      >
         入库流量
       </div>
-      <div @click="handleSimuTab('water')()" :class="showSimuConfig.water ? 'simu-tab-item active' : 'simu-tab-item'">
+      <div
+        @click="handleSimuTab('water')()"
+        :class="showSimuConfig.water ? 'simu-tab-item active' : 'simu-tab-item'"
+      >
         入库水量
       </div>
-      <div @click="handleSimuTab('silt')()" :class="showSimuConfig.silt ? 'simu-tab-item active' : 'simu-tab-item'">
+      <div
+        @click="handleSimuTab('silt')()"
+        :class="showSimuConfig.silt ? 'simu-tab-item active' : 'simu-tab-item'"
+      >
         泥沙
       </div>
     </div>
@@ -832,7 +840,11 @@ const handleSimuTab = (type) => {
       <div v-if="showLoading" class="loading">
         <a-spin size="large" />
       </div>
-      <v-chart class="content-item" :option="option" @datazoom="handleZoom"></v-chart>
+      <v-chart
+        class="content-item"
+        :option="option"
+        @datazoom="handleZoom"
+      ></v-chart>
       <!--     -->
     </div>
   </div>
