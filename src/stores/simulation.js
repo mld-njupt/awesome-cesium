@@ -15,6 +15,14 @@ export const useSimuStore = defineStore({
       //1是模拟 2是预报
       flag: 1,
     },
+    forecastpicture: {
+      isShow:false,
+      state:1
+    },
+    forecastpicture2: {
+      isShow:false,
+      state:1
+    },
   }),
   actions: {},
 });

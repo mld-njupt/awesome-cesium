@@ -4,6 +4,7 @@ import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { PieChart, LineChart, BarChart } from "echarts/charts";
+import ForecastPicture from "../ForecastPicture.vue";
 import { UniversalTransition } from "echarts/features";
 import {
   TitleComponent,
@@ -31,98 +32,252 @@ use([
   BarChart,
 ]);
 const time1 = [
-  "2023.6.10:0",
-  "2023.6.10:1",
-  "2023.6.10:2",
-  "2023.6.10:3",
-  "2023.6.10:4",
-  "2023.6.10:5",
-  "2023.6.10:6",
-  "2023.6.10:7",
-  "2023.6.10:8",
-  "2023.6.10:9",
-  "2023.6.10:10",
-  "2023.6.10:11",
-  "2023.6.10:12",
-  "2023.6.10:13",
-  "2023.6.10:14",
-  "2023.6.10:15",
-  "2023.6.10:16",
-  "2023.6.10:17",
-  "2023.6.10:18",
-  "2023.6.10:19",
-  "2023.6.10:20",
-  "2023.6.10:21",
-  "2023.6.10:22",
+  "2023.6.30:0",
+  "2023.6.30:1",
+  "2023.6.30:2",
+  "2023.6.30:3",
+  "2023.6.30:4",
+  "2023.6.30:5",
+  "2023.6.30:6",
+  "2023.6.30:7",
+  "2023.6.30:8",
+  "2023.6.30:9",
+  "2023.6.30:10",
+  "2023.6.30:11",
+  "2023.6.30:12",
+  "2023.6.30:13",
+  "2023.6.30:14",
+  "2023.6.30:15",
+  "2023.6.30:16",
+  "2023.6.30:17",
+  "2023.6.30:18",
+  "2023.6.30:19",
+  "2023.6.30:20",
+  "2023.6.30:21",
+  "2023.6.30:22",
+  "2023.6.30:23",
+  "2023.6.30:23",
+  "2023.7.0:0",
 ];
 const data1 = [
-  201, 202.24, 202.85, 203.24, 203.53, 203.77, 203.94, 204.01, 204.02, 203.96,
-  203.86, 203.68, 203.47, 203.25, 203.03, 202.8, 202.56, 202.31, 202.07, 201.82,
-  201.57, 201.3, 201.04,
+201,
+202.24,
+202.85,
+203.24,
+203.53,
+203.77,
+203.94,
+204.01,
+204.02,
+203.96,
+203.86,
+203.68,
+203.47,
+203.25,
+203.03,
+202.98,
+202.9,
+202.8,
+202.56,
+202.31,
+202.07,
+201.82,
+201.57,
+201.3,
+201.04,
+
 ];
 const time2 = [
-  "2023.4.12:0",
-  "2023.4.12:1",
-  "2023.4.12:2",
-  "2023.4.12:3",
-  "2023.4.12:4",
-  "2023.4.12:5",
-  "2023.4.12:6",
-  "2023.4.12:7",
-  "2023.4.12:8",
-  "2023.4.12:9",
-  "2023.4.12:10",
-  "2023.4.12:11",
-  "2023.4.12:12",
-  "2023.4.12:13",
-  "2023.4.12:14",
-  "2023.4.12:15",
-  "2023.4.12:16",
-  "2023.4.12:17",
-  "2023.4.12:18",
-  "2023.4.12:19",
-  "2023.4.12:20",
-  "2023.4.12:21",
-  "2023.4.12:22",
+  "2023.3.12:0",
+  "2023.3.12:1",
+  "2023.3.12:2",
+  "2023.3.12:3",
+  "2023.3.12:4",
+  "2023.3.12:5",
+  "2023.3.12:6",
+  "2023.3.12:7",
+  "2023.3.12:8",
+  "2023.3.12:9",
+  "2023.3.12:10",
+  "2023.3.12:11",
+  "2023.3.12:12",
+  "2023.3.12:13",
+  "2023.3.12:14",
+  "2023.3.12:15",
+  "2023.3.12:16",
+  "2023.3.12:17",
+  "2023.3.12:18",
+  "2023.3.12:19",
+  "2023.3.12:20",
+  "2023.3.12:21",
+  "2023.3.12:22",
+  "2023.3.12:23",
 ];
 const data2 = [
-  197, 197.46, 198.47, 199.06, 199.55, 199.69, 199.9, 200.14, 200.26, 199.88,
-  199.68, 199.4, 199.3, 199.17, 198.85, 198.62, 198.48, 198.23, 197.9, 197.74,
-  197.39, 197.22, 196.96,
+197,
+197.46,
+198.47,
+199.06,
+199.55,
+199.69,
+199.9,
+200.14,
+200.26,
+199.88,
+199.68,
+199.4,
+199.3,
+199.17,
+199.1,
+198.85,
+198.62,
+198.48,
+198.23,
+197.9,
+197.74,
+197.39,
+197.22,
+196.96,
+
 ];
 const time3 = [
-  "2023.4.28:0",
-  "2023.4.28:1",
-  "2023.4.28:2",
-  "2023.4.28:3",
-  "2023.4.28:4",
-  "2023.4.28:5",
-  "2023.4.28:6",
-  "2023.4.28:7",
-  "2023.4.28:8",
-  "2023.4.28:9",
-  "2023.4.28:10",
-  "2023.4.28:11",
-  "2023.4.28:12",
-  "2023.4.28:13",
-  "2023.4.28:14",
-  "2023.4.28:15",
-  "2023.4.28:16",
-  "2023.4.28:17",
-  "2023.4.28:18",
-  "2023.4.28:19",
-  "2023.4.28:20",
-  "2023.4.28:21",
-  "2023.4.28:22",
-  "2023.4.28:23",
-  "2023.4.29:0",
-  "2023.4.29:1",
+  "2023.3.30:0",
+  "2023.3.30:1",
+  "2023.3.30:2",
+  "2023.3.30:3",
+  "2023.3.30:4",
+  "2023.3.30:5",
+  "2023.3.30:6",
+  "2023.3.30:7",
+  "2023.3.30:8",
+  "2023.3.30:9",
+  "2023.3.30:10",
+  "2023.3.30:11",
+  "2023.3.30:12",
+  "2023.3.30:13",
+  "2023.3.30:14",
+  "2023.3.30:15",
+  "2023.3.30:16",
+  "2023.3.30:17",
+  "2023.3.30:18",
+  "2023.3.30:19",
+  "2023.3.30:20",
+  "2023.3.30:21",
+  "2023.3.30:22",
+  "2023.3.30:23",
+  "2023.3.31:0",
+  "2023.3.31:1",
 ];
 const data3 = [
-  197, 198.02, 198.53, 199.12, 199.61, 199.85, 200.02, 200.09, 200.1, 200.04,
-  199.94, 199.76, 199.55, 199.33, 199.11, 198.88, 198.64, 198.39, 198.15, 197.9,
-  197.65, 197.38, 197.12, 197.1, 197.09, 197.05,
+197,
+198.02,
+198.53,
+199.12,
+199.61,
+199.85,
+200.02,
+200.09,
+200.1,
+200.04,
+199.94,
+199.76,
+199.55,
+199.33,
+199.11,
+198.88,
+198.64,
+198.39,
+198.15,
+197.9,
+197.65,
+197.38,
+197.12,
+197.1,
+197.09,
+197.05,
+
 ];
+const data4 = [
+198.930396,
+199.530156,
+200.129916,
+200.809644,
+200.81964,
+200.989572,
+201.039552,
+201.189492,
+201.399408,
+201.46938,
+202.31904,
+203.428596,
+204.098328,
+204.1683,
+204.048348,
+203.938392,
+203.808444,
+203.56854,
+203.31864,
+203.058744,
+202.788852,
+202.51896,
+202.229076,
+201.939192,
+201.649308,
+201.349428,
+201.059544,
+200.789652,
+
+];
+const time4 = [
+  "2023.7.6:20",
+  "2023.7.6:21",
+  "2023.7.6:22",
+  "2023.7.6:23",
+  "2023.7.7:1",
+  "2023.7.7:2",
+  "2023.7.7:3",
+  "2023.7.7:4",
+  "2023.7.7:5",
+  "2023.7.7:6",
+  "2023.7.7:7",
+  "2023.7.7:8",
+  "2023.7.7:9",
+  "2023.7.7:10",
+  "2023.7.7:11",
+  "2023.7.7:12",
+  "2023.7.7:13",
+  "2023.7.7:14",
+  "2023.7.7:15",
+  "2023.7.7:16",
+  "2023.7.7:17",
+  "2023.7.7:18",
+  "2023.7.7:19",
+  "2023.7.7:20",
+  "2023.7.7:21",
+  "2023.7.7:22",
+  "2023.7.7:23",
+  "2023.7.8:0",
+];
+
+const jindutiaoshow1=ref(true)
+const jindutiaoshow2=ref(false)
+const qian20=()=>{
+  if( scheduleData.rain == "197" && scheduleData.water == "201"){
+    pillarRef.value.first=0
+        pillarRef.value.fujia='6米'
+spanRef.value.first = "20小时";
+  }
+  
+}
+const hou8=()=>{
+  if( scheduleData.rain == "197" && scheduleData.water == "201"){
+    pillarRef.value.first=50
+    pillarRef.value.fujia='3米'
+     spanRef.value.first = "8小时";
+
+  }
+
+}
 const emit = defineEmits(["close"]);
 const props = defineProps(["visible"]);
 const defaultPercent = ref(0);
@@ -134,6 +289,7 @@ const spanRef = ref({
 });
 const pillarRef = ref({
   first: 100,
+  fujia:'',
 });
 const waterRef = ref({
   first: 100,
@@ -258,23 +414,30 @@ const onFinish = () => {
     }
   }, [3100]);
 };
+
+
 const onResult = () => {
-  if (scheduleData.rain == "60" && scheduleData.water == "201") {
-    spanRef.value.first = "10小时";
-    spanRef.value.second = "24小时";
-    pillarRef.value.first = 0;
-    waterRef.value.first = 2230;
-    waterRef.value.second = 241.9;
+  if (scheduleData.rain == "179" && scheduleData.water == "201") {
+    spanRef.value.first = "26小时";
+    spanRef.value.second = "提前开启48小时";
+    pillarRef.value.first = 50;
+    pillarRef.value.fujia='3米'
+    waterRef.value.first = 2927;
+    waterRef.value.second = 483.8;
     waterRef.value.third = 0;
     waterRef.value.fourth = 0;
     option.value.xAxis.data = time1;
     option.value.series.data = data1;
     option.value.yAxis.max = Math.max(...data1);
     option.value.yAxis.min = Math.min(...data1);
-  } else if (scheduleData.rain == "62" && scheduleData.water == "197") {
+    jindutiaoshow2.value=false
+ 
+
+  } else if (scheduleData.rain == "120" && scheduleData.water == "197") {
     spanRef.value.first = "20小时";
     spanRef.value.second = "20小时";
-    pillarRef.value.first = 40;
+    pillarRef.value.first = 50;
+      pillarRef.value.fujia='3米'
     waterRef.value.first = 2370.3;
     waterRef.value.second = 201.6;
     waterRef.value.third = 0;
@@ -283,10 +446,14 @@ const onResult = () => {
     option.value.series.data = data2;
     option.value.yAxis.max = Math.max(...data2);
     option.value.yAxis.min = Math.min(...data2);
+      jindutiaoshow2.value=false
+ jindutiaoshow1.value=true
+   
   } else if (scheduleData.rain == "49" && scheduleData.water == "197") {
     spanRef.value.first = "23小时";
     spanRef.value.second = "26小时";
-    pillarRef.value.first = 60;
+    pillarRef.value.first = 33;
+      pillarRef.value.fujia='2米'
     waterRef.value.first = 1704.4;
     waterRef.value.second = 262.1;
     waterRef.value.third = 0;
@@ -295,18 +462,48 @@ const onResult = () => {
     option.value.series.data = data3;
     option.value.yAxis.max = Math.max(...data3);
     option.value.yAxis.min = Math.min(...data3);
-  } else {
+     jindutiaoshow2.value=false
+      jindutiaoshow1.value=true
+  }
+  else if (scheduleData.rain == "197" && scheduleData.water == "201") {
+    spanRef.value.first = "20小时";
+    spanRef.value.second = "提前开启48小时";
+    pillarRef.value.first = 0;
+    pillarRef.value.fujia='6米'
+    waterRef.value.first = 5522.7;
+    waterRef.value.second = 766;
+    waterRef.value.third = 0;
+    waterRef.value.fourth = 0;
+    option.value.xAxis.data = time4;
+    option.value.series.data = data4;
+    option.value.yAxis.max = Math.max(...data4);
+    option.value.yAxis.min = Math.min(...data4);
+    jindutiaoshow1.value=false
+    jindutiaoshow2.value=true
+     jindutiaoshow1.value=true
+  }  else {
+   
+  
     spanRef.value.first = "10小时";
     spanRef.value.second = "24小时";
     pillarRef.value.first = 0;
     waterRef.value.first = 2230;
     waterRef.value.second = 241.9;
     waterRef.value.third = 0;
+      pillarRef.value.fujia='3米'
     waterRef.value.fourth = 0;
     option.value.xAxis.data = time1;
     option.value.series.data = data1;
     option.value.yAxis.max = Math.max(...data1);
     option.value.yAxis.min = Math.min(...data1);
+      jindutiaoshow2.value=false
+       jindutiaoshow1.value=true
+ 
+
+  // 单个样式
+//ss[0].style.background="rgb(black);"
+
+    // jindutiao2.style.background =rgb(68, 114, 196);
   }
   showResult.value = true;
 };
@@ -335,7 +532,9 @@ const handleChange = (e, v) => {
 // onBeforeUnmount(() => {
 //   clearInterval(timer);
 // });
+ const value = ref(1);
 onMounted(() => {
+
   let scheme = localStorage.getItem("dispatch-scheme");
   if (scheme) {
     scheme = JSON.parse(scheme);
@@ -354,11 +553,14 @@ onMounted(() => {
     @close="onClose"
   >
     <div class="drawer-wrap">
+  
       <a-form
         name="dynamic_form_nest_item"
         :label-col="{ span: 8 }"
         :wrapper-col="{ span: 16 }"
       >
+
+  
         <a-space direction="vertical" :size="12">
           <div style="display: flex; justify-content: space-between">
             <a-form-item label="情景名称" style="width: 300px">
@@ -439,6 +641,21 @@ onMounted(() => {
         </div>
       </a-form>
       <div v-if="showResult" class="res-wrap">
+   <!--    <span>00</span> <span id="time1"  @click="qian20"></span> <span id="time2" v-if="jindutiaoshow1" class="time2"> </span> <span id="time3" v-if="jindutiaoshow2" @click="hou8"> </span> -->
+      <!-- <p class="time1"></p><p class="time2"></p> -->
+      <div class="timeaxis">
+        <span class="jindu"  > 调度进度</span>
+        <span class="zero">0%
+
+           </span>
+           <span id="time1"  @click="qian20"></span>
+         <span id="time2" v-if="jindutiaoshow1" class="time2"></span>
+       <span id="time3" v-if="jindutiaoshow2" @click="hou8"></span>
+           <span class="hundred">100%</span>
+           
+           </div>
+      <div class="xian"></div>
+      <div class="biaoti"> <span>泄洪洞</span><span>发电/供水</span><span>底孔闸</span><span>溢流坝</span></div>
         <div class="pillar-wrap">
           <div class="pillar-label"></div>
           <div class="pillar-content">
@@ -448,61 +665,80 @@ onMounted(() => {
                   :height="pillarRef.first"
                   v-bind:key="pillarRef.first"
                 />
-                <div class="item-label">
-                  {{ `开\n度\n${((100 - pillarRef.first) / 100) * 5}\nm` }}
+                <div class="item-label" style="visibility:hidden;">
+                  {{ `开\n度\n${( pillarRef.first ) }\nm` }}
                 </div>
               </div>
-              <div class="item-title">泄洪洞</div>
+            <!--   <div class="item-title">泄洪洞</div> -->
             </div>
             <div class="res-item">
               <div class="item-content">
                 <ColumnItem :height="0" />
                 <div class="item-label"></div>
               </div>
-              <div class="item-title" style="left: -4%">发电/供水</div>
+             <!--  <div class="item-title" style="left: -4%">发电/供水</div> -->
             </div>
             <div class="res-item">
               <div class="item-content">
                 <ColumnItem :height="100" />
                 <div class="item-label"></div>
               </div>
-              <div class="item-title" style="left: 8%">底孔闸</div>
+             <!--  <div class="item-title" style="left: 8%">底孔闸</div> -->
             </div>
             <div class="res-item">
               <div class="item-content">
                 <ColumnItem :height="100" />
                 <div class="item-label"></div>
               </div>
-              <div class="item-title" style="left: 8%">溢流坝</div>
+              <!-- <div class="item-title" style="left: 8%">溢流坝</div> -->
             </div>
           </div>
           <div class="pillar-label"></div>
         </div>
+         <div class="kaidu">  <div class="span-label">开度</div>
+         
+          <div class="span-content">
+            <div class="span-item">{{pillarRef.fujia}}</div>
+            <div class="span-item" style="left: -2%"></div>
+            <div class="span-item"></div>
+            <div class="span-item"></div>
+          </div> </div>
         <div class="span-wrap">
           <div class="span-label">开启时长</div>
+         
           <div class="span-content">
             <div class="span-item">{{ spanRef.first }}</div>
-            <div class="span-item" style="left: -2%">{{ spanRef.second }}</div>
+            <div class="span-item1" style="left: -2%">{{ spanRef.second }}</div>
             <div class="span-item"></div>
             <div class="span-item"></div>
           </div>
           <div class="span-label"></div>
         </div>
+        <!--  <div class="xian"></div> -->
         <div class="water-wrap">
           <div class="water-label">调度水量</div>
+          
           <div class="water-content">
             <div class="water-item">
               {{ `${waterRef.first}m³/s` }}
             </div>
-            <div class="water-item" style="left: -2%">
+            <div class="water-item" >
               {{ `${waterRef.second}m³/s` }}
             </div>
             <div class="water-item">{{ `${waterRef.third}m³/s` }}</div>
             <div class="water-item">{{ `${waterRef.fourth}m³/s` }}</div>
+            
           </div>
+        
           <div class="water-label"></div>
+          
+         
         </div>
+           
+            <div class="diaodushuiwei">调度水位</div>
+ <div class="xian2"></div>
         <div class="chart-wrap">
+        <!--    <div class="xian2"></div> -->
           <v-chart class="chart" :option="option"></v-chart>
         </div>
       </div>
@@ -510,12 +746,114 @@ onMounted(() => {
   </a-drawer>
 </template>
 <style scoped>
+.biaoti{
+  width: 580px;
+    display: flex;
+  /* flex-direction: column; */
+  justify-content: space-around;
+ /*  align-items: center; */
+ margin-left: -35px;
+}
+.diaodushuiwei{
+  position: relative;
+  top: -115px;
+  left: -300px;
+}
+.xian{
+    width: 650px;
+  height: 1px;
+
+  background: rgb(68, 114, 196);
+  margin-left: -30px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+.xian2{
+    position: relative;
+  top: -170px;
+ /*  left: -300px; */
+    width: 650px;
+  height: 1px;
+  margin-left: -30px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  background: rgb(68, 114, 196);
+ /*  margin-top: 15px;
+  margin-bottom: 25px; */
+}
+.jindu{
+  position: relative;
+  left: -189px;
+}
+.hundred{
+  position: relative;
+left: 10px;
+
+}
+.zero{
+
+position: relative;
+left: -10px;
+
+
+}
+.timeaxis{
+   display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+  margin-left: -68px;
+}
+#time1{
+display: inline-block;
+text-align: center;
+line-height: 17px;
+font-weight:bold;/*加粗*/
+font-size: 2px;
+  width: 70px;
+  height: 14px;
+  background: rgb(68, 114, 196);
+
+}
+#time2{
+  display: inline-block;
+
+  width: 30px;
+  height: 14px;
+  background: rgb(68, 114, 196);
+
+}
+#time1:hover{
+  cursor: pointer;
+  
+          
+}
+#time2:hover{
+  cursor: pointer;
+
+}
+#time3{
+  
+ /*  float: left; */
+  width: 30px;
+  height: 14px;
+  background: rgb(255, 192, 0);
+/*   margin-bottom: 30px;
+  margin-left: 40px; */
+}
+#time3:hover{
+  cursor: pointer;
+
+}
+
+
 .res-wrap {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  margin-left: 28px;
 }
 .res-item {
   display: flex;
@@ -560,6 +898,14 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
 }
+.kaidu {
+  top: -160px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
 .span-label {
   width: 10%;
 }
@@ -572,6 +918,11 @@ onMounted(() => {
 .span-item {
   width: 50px;
   text-align: center;
+}
+.span-item1 {
+  width:100px;
+  text-align: center;
+  margin-left: 5px;
 }
 .water-wrap {
   top: -150px;
@@ -593,9 +944,14 @@ onMounted(() => {
   width: 70px;
   /* text-align: right; */
 }
+.chart-wrap{
+   width: 600px;
+  height: 400px;
+}
 .chart {
-  top: -140px;
-  width: 500px;
-  height: 350px;
+  top: -203px;
+
+  width: 630px;
+  height: 400px;
 }
 </style>

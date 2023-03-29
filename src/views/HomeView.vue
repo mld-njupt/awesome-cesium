@@ -14,6 +14,11 @@ import StationItem from "../components/StationItem.vue";
 import LiuYu from "../components/LiuYu.vue";
 import ShuiKu from "../components/ShuiKu.vue";
 import MessageItem from "../components/MessageItem.vue";
+// import ForecastPicture from "../components/ForecastPicture.vue";
+// import ForecastPicture2 from "../components/ForecastPicture2.vue";
+import FPMessageItem from "../components/FPMessageItem.vue";
+/* import WaterLevel from "../components/WaterLevel.vue"; */
+import WaterLevel from "../components/WaterLevel.vue";
 import { useViewStore } from "../stores/earth";
 import { useSimuStore } from "../stores/simulation";
 import { ExportOutlined } from "@ant-design/icons-vue";
@@ -91,11 +96,16 @@ onMounted(() => {
   <LocationItem v-if="view.cesiumViewer" />
   <StationItem v-if="view.cesiumViewer" />
   <MessageItem v-if="view.cesiumViewer" />
+  <WaterLevel v-if="view.cesiumViewer" />
+  <FPMessageItem v-if="view.cesiumViewer&&(simuStore.forecastpicture.isShow||simuStore.forecastpicture2.isShow)" />
+  <!-- <ForecastPicture  v-if="simuStore.forecastpicture.isShow" />
+  <ForecastPicture2  v-if="simuStore.forecastpicture2.isShow" /> -->
   <LiuYu v-if="view.cesiumViewer" />
   <ShuiKu v-if="view.cesiumViewer && simuStore.simuData.showSimu" />
 </template>
 
 <style scoped>
+
 .header {
   position: fixed;
   z-index: 999;
