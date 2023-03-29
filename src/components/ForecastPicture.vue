@@ -61,12 +61,13 @@ const option = ref({
 
           
           },
-          legend: {
-            icon: 'rect',
-    data: ['观测值','模拟值'],
-    right: '7%',
-    top:'4%',
-  },
+  //         legend: {
+  //           orient: 'vertical',
+  //           icon: 'rect',
+  //   data: ['观测值','模拟值'],
+  //   right: '13%',
+  //   top:'0.5%',
+  // },
   tooltip: {
     trigger: "axis",
     axisPointer: {
@@ -208,44 +209,44 @@ const option = ref({
 233.247445984,
 ],
   },
-  {
-    name: "观测值",
-    type: "line",
-   /*  symbolSize: 18, */
-    // prettier-ignore
-    lineStyle : {
+//   {
+//     name: "观测值",
+//     type: "line",
+//    /*  symbolSize: 18, */
+//     // prettier-ignore
+//     lineStyle : {
                    
-                   // width : 4,
-                    type : 'solid',
-                },
-    data: [47.9921,
-49.10512,
-58.58,
-54.89,
-50.1,
-46.6,
-43.55,
-44.56,
-99.4,
-120.3,
-565.4,
-1073,
-1261,
-880,
-631,
-471,
-392,
-385,
-319,
-277,
-301.8,
-197,
-233.45,
-204.4,
-187.5,
+//                    // width : 4,
+//                     type : 'solid',
+//                 },
+//     data: [47.9921,
+// 49.10512,
+// 58.58,
+// 54.89,
+// 50.1,
+// 46.6,
+// 43.55,
+// 44.56,
+// 99.4,
+// 120.3,
+// 565.4,
+// 1073,
+// 1261,
+// 880,
+// 631,
+// 471,
+// 392,
+// 385,
+// 319,
+// 277,
+// 301.8,
+// 197,
+// 233.45,
+// 204.4,
+// 187.5,
 
-],
-  },
+// ],
+//   },
   
 ] ,
 
@@ -626,7 +627,7 @@ onMounted(() => {
           "YYYY-MM-DD"
         )=="2023-06-30"){
       option.value.xAxis.data=data630
-      option.value.series[1].data=guanceshuzu630
+     /*  option.value.series[1].data=guanceshuzu630 */
       option.value.series[0].data=monishuzu630
 
     }
@@ -634,7 +635,7 @@ onMounted(() => {
           "YYYY-MM-DD"
         )=="2023-04-29"){
     option.value.xAxis.data=data429
-      option.value.series[1].data=guanceshuzu429
+    /*   option.value.series[1].data=guanceshuzu429 */
       option.value.series[0].data=monishuzu429
 
     }
@@ -642,13 +643,13 @@ onMounted(() => {
           "YYYY-MM-DD"
         )=="2023-04-12"){
     option.value.xAxis.data=data412
-      option.value.series[1].data=guanceshuzu412
+     /*  option.value.series[1].data=guanceshuzu412 */
       option.value.series[0].data=monishuzu412
 
     }
     else{
       option.value.xAxis.data=data76
-      option.value.series[1].data=guanceshuzu76
+   /*    option.value.series[1].data=guanceshuzu76 */
       option.value.series[0].data=monishuzu76
     }
 });

@@ -703,8 +703,8 @@ onMounted(() => {
   const info = document.getElementById("info");
   function showInfo(position) {
     info.style.display = "block";
-    info.style.left = position.x + 50 + "px";
-    info.style.top = position.y - 200 + "px";
+/*     info.style.left = position.x + 50 + "px";
+    info.style.top = position.y - 200 + "px"; */
   }
   const simuInfo = document.getElementById("simu-info");
   function showSimuInfo(position) {
@@ -904,6 +904,8 @@ body {
   position: absolute;
   width: 500px;
   height: 400px;
+  top:25%;
+  left: 35%;
   z-index: 1000;
   display: none;
   background: rgba(255, 255, 255, 0.8);

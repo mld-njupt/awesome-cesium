@@ -66,12 +66,12 @@ const option = ref({
             
           
           },
-          legend: {
-            icon: 'rect',
-    data: ['降水设置'],
-    right: '7%',
-    top:'4%',
-  },
+  //         legend: {
+  //           icon: 'rect',
+  //   data: ['降水设置'],
+  //   right: '7%',
+  //   top:'4%',
+  // },
   tooltip: {
     trigger: "axis",
     axisPointer: {

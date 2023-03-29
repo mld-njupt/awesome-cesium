@@ -154,7 +154,7 @@ const dianjijiangshui = () => {
 ],
   },
   yAxis: {
-    name: "mm/d",
+    name: "百分比(%)",
     nameTextStyle: {
             padding: [, 0, 10, -30]    // 四个数字分别为上右下左与原位置距离
         },
@@ -229,7 +229,7 @@ const option2 = ref({
 ],
   },
   yAxis: {
-    name: "mm/d",
+    name: "百分比(%)",
     nameTextStyle: {
             padding: [, 0, 10, -30]    // 四个数字分别为上右下左与原位置距离
         },
@@ -315,7 +315,7 @@ const option2 = ref({
 ],
   },
   yAxis: {
-    name: "mm/d",
+    name: "百分比(%)",
     nameTextStyle: {
             padding: [, 0, 10, -30]    // 四个数字分别为上右下左与原位置距离
         },
@@ -593,8 +593,8 @@ const onClose = () => {
 }
 .zidingyi{
   position: relative;
-  top: 100px;
-  left: 200px;
+  top: 130px;
+  left: 170px;
 }
 .chart1{
     width: 400px;

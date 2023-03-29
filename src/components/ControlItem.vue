@@ -58,7 +58,7 @@ function zoomOut() {
 function reset() {
   const viewer = viewerStore.cesiumViewer;
   viewer.camera.flyTo({
-    destination: Cartesian3.fromDegrees(118.2443, 29.9171, 5000),
+    destination: Cartesian3.fromDegrees(118.1758, 29.997, 50000.0),
   });
 }
 //menu相关

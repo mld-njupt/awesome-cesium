@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { onMounted,ref, onBeforeMount } from "vue";
 const props = defineProps(["height"]);
 const displayType = ref("block");
 const shuiweigaodu = ref(194.86);
@@ -11,6 +11,10 @@ const showModal = () => {
   visible.value = true;
 };
 const handleOk = (e) => {
+ 
+  fetch(`http://43.142.17.108:9000/api/post/setupwaterlevel/${shezhideshuiwei.value}/`)
+  
+
   const dom = document.getElementsByClassName("mi")[0];
   if (shuiweigaodu.value >= shezhideshuiwei.value) {
     jinggaovisible.value = true;
@@ -22,8 +26,20 @@ const handleOk = (e) => {
 };
 const handleOk1 = (e) => {
   jinggaovisible.value = false;
+  
 };
+onMounted(() => {
+
+fetch(" http://43.142.17.108:9001/api/get/setupwaterlevel/")
+  .then((response) => response.json())
+ .then((data) => {
+  console.log(data)
+  shezhideshuiwei.value= data;
+ })
+  
+})
 </script>
+
 <template>
   <div class="shuiwei">
     <span>丰乐站实时水位:</span>
